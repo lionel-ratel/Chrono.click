@@ -69,5 +69,3 @@ git push
 - `cache`, `tmp`, `images`, `files`, `media/cache`
 - `administrator/cache`, `administrator/logs`
 - fichiers `*.log`
-
-## TEST 1
