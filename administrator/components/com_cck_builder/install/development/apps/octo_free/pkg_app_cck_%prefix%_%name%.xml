@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_%prefix%_%name%</name>
+	<packagename>app_cck_%prefix%_%name%</packagename>
+	<packager>%author%</packager>
+	<packagerurl>%author_url%</packagerurl>
+	<copyright>%copyright%</copyright>
+	<license>%license%</license>
+	<creationDate>%creation_date%</creationDate>
+	<description>%description%</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="plugin" id="plg_cck_field_uikit_icon" group="cck_field">plg_cck_field_uikit_icon.zip</file>
+	</files>
+	<languages folder="languages" />
+	<cck_app>
+		<target>%target%</target>
+	</cck_app>
+</extension>

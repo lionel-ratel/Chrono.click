@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CCK_TOOLBOX_TRACKING_DEFAULT_TITLE" option="COM_CCK_TOOLBOX_TRACKING_VIEW_DEFAULT_OPTION">
+		<help key = "..." />
+		<message><![CDATA[COM_CCK_TOOLBOX_TRACKING_DEFAULT_DESC]]></message>
+	</layout>
+
+	<!-- Parameters object. -->
+	<fields name="params" addfieldpath="/libraries/cck/construction/field">
+		<fieldset name="basic" label="COM_CCK_TOOLBOX_CONFIG_FIELDSET_BASIC_OPTIONS">
+			<field name="processing" type="sql" default="" label="COM_CCK_TOOLBOX_PROCESSING" description="COM_CCK_TOOLBOX_PROCESSING_DESC" query="SELECT id, title FROM #__cck_more_processings WHERE published=1 AND type=0 ORDER BY title" key_field="id" value_field="title" class="inputbox">
+				<option value="">JGLOBAL_SELECT_AN_OPTION</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>

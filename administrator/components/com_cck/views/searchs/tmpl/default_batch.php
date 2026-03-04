@@ -1,0 +1,119 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: default_batch.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+?>
+<div class="<?php echo $this->css['batch']; ?>" id="collapseModal"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header">
+        <?php Helper_Display::quickModalTitle( Text::_( 'COM_CCK_BATCH_PROCESS' ) ); ?>
+    </div>
+    <?php if ( $user->authorise( 'core.edit', 'com_cck' ) ) { ?>
+    <div class="modal-body">
+        <p><?php echo Text::_( 'COM_CCK_BATCH_PROCESS_'.$this->vName ); ?></p>
+        <div class="control-group">
+            <div class="control-label">
+                <label for="batch_folder"><?php echo Text::_( 'COM_CCK_SET_APP_FOLDER' ); ?></label>
+            </div>
+            <div class="controls">
+                <?php echo JCckDev::getFormFromHelper( array( 'component'=>'com_cck', 'function'=>'getFolder', 'name'=>'core_folder' ), '', $config, array( 'label'=>_C0_TEXT, 'storage_field'=>'batch_folder', 'css'=>'no-chosen' ) ); ?>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" onclick="" <?php echo $this->html['attr_modal_close']; ?>><?php echo Text::_( 'JCANCEL' ); ?></button>
+        <button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('batchFolder');"><?php echo Text::_( 'COM_CCK_GO' ); ?></button>
+    </div>
+    <?php } ?>
+    <?php if ( $user->authorise( 'core.create', 'com_cck' ) ) { ?>
+    <div class="modal-body">
+        <p><?php echo Text::_( 'COM_CCK_BATCH_PROCESS_'.$this->vName.'_2' ); ?></p>
+        <div class="control-group">
+            <div class="control-label">
+                <label for="duplicate_title"><?php echo Text::_( 'COM_CCK_CHOOSE_A_TITLE' ); ?></label>
+            </div>
+            <div class="controls">
+                <?php echo JCckDev::getForm( $cck['core_dev_text'], '', $config, array( 'label'=>'Title', 'storage_field'=>'duplicate_title' ) ); ?>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" onclick="" <?php echo $this->html['attr_modal_close']; ?>><?php echo Text::_( 'JCANCEL' ); ?></button>
+        <button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('searchs.duplicate');"><?php echo Text::_( 'COM_CCK_GO' ); ?></button>
+    </div>
+    <?php } ?>
+</div></div></div>
+<?php if ( 1 == 1 ) {
+    $options        =   array();
+    $options[]      =   HTMLHelper::_( 'select.option', 0, '- '.Text::_( 'COM_CCK_NONE' ).' -', 'value', 'text' );
+    $options2       =   JCckDatabase::loadObjectList( 'SELECT a.title AS text, a.name AS value FROM #__cck_core_types AS a WHERE a.published = 1 AND a.location NOT IN ("collection") ORDER BY a.title' );
+    if ( count( $options2 ) ) {
+        $options    =   array_merge( $options, $options2 );
+    }
+    $select         =   HTMLHelper::_( 'select.genericlist', $options, 'featured', 'class="form-select inputbox no-chosen"', 'value', 'text', '', 'featured' );
+    $options        =   JCckDatabase::loadObjectList( 'SELECT a.name AS text, a.name AS value FROM #__cck_core_templates AS a WHERE a.published = 1 AND a.mode = 2 ORDER BY a.title' );
+    $select2        =   HTMLHelper::_( 'select.genericlist', $options, 'template_search', 'class="inputbox no-chosen"', 'value', 'text', '', 'template_search' );
+?>
+<div class="<?php echo $this->css['batch']; ?>" id="collapseModal2"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header">
+        <?php Helper_Display::quickModalTitle( Text::_( 'JTOOLBAR_NEW' ).' '.Text::_( 'COM_CCK_'._C4_TEXT ) ); ?>
+    </div>
+    <?php if ( $user->authorise( 'core.create', 'com_cck' ) ) { ?>
+    <div class="modal-body">
+        <div class="control-group">
+            <p><?php echo Text::_( 'COM_CCK_SELECT_WHICH_CONTENT_TYPE' ); ?></p>
+            <div class="control-label">
+                <label></label>
+            </div>
+            <div class="controls">
+                <?php echo $select; ?>
+            </div>
+        </div>
+        <?php if ( count( $templates ) ) { ?>
+        <div class="control-group">
+            <p><?php echo Text::_( 'COM_CCK_SELECT_WHICH_LIST_TEMPLATE' ); ?></p>
+            <div class="sly-wrapper">
+                <div class="sly">
+                    <ul>
+                        <li data-name="" class="active"><?php echo Text::_( 'COM_CCK_NONE' ); ?>
+                            <img src="components/com_cck/assets/images/template_picker_none.png" alt="<?php echo Text::_( 'COM_CCK_NONE' ); ?>" width="175" height="115" />
+                        </li>
+                        <?php
+                        foreach ( $templates as $template ) {
+                            $t  =   '<span style="display:block;">'.$template->title.'</span>';
+                            if ( is_file ( JPATH_SITE.'/templates/'.$template->name.'/template_picker.png' ) ) {
+                                $t  .=   '<img src="../templates/'.$template->name.'/template_picker.png" alt="'.$template->title.'" width="175" height="115" />';
+                            } else {
+                                $t  .=   '<img src="components/com_cck/assets/images/template_picker.png" alt="'.$template->title.'" width="175" height="115" />';
+                            }
+                            echo '<li data-name="'.$template->name.'">'.$t.'</li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <input type="hidden" id="tpl_list" name="tpl_list" value="" />
+        </div>
+        <?php } ?>
+    </div>
+    <div class="modal-footer">
+        <!--
+        <a href="javascript:void(0);" class="btn btn-mini btn-success pull-left" onclick="window.open('https://www.seblod.com/store/extensions?seb_item_category=27', '_blank'); return false;" rel="noopener noreferrer">
+            <?php echo Text::_( 'LIB_CCK_INTEGRATION_GET_MORE_TEMPLATES' ); ?>
+        </a>
+        -->
+        <button class="btn btn-secondary" type="button" onclick="" <?php echo $this->html['attr_modal_close']; ?>><?php echo Text::_( 'JCANCEL' ); ?></button>
+        <button class="btn btn-primary" type="button" onclick="JCck.Dev.addNew();"><?php echo Text::_( 'COM_CCK_CREATE' ); ?></button>
+    </div>
+    <?php } ?>
+</div></div></div>
+<?php } ?>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_o_categories</name>
+	<packagename>app_cck_o_categories</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>December 2022</creationDate>
+	<description>SEBLOD 3.x Categories App - www.seblod.com</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="template" id="tpl_seb_manager_search" client="site">tpl_seb_manager_search.zip</file>
+		<file type="plugin" id="plg_cck_field_typo_php_string" group="cck_field_typo">plg_cck_field_typo_php_string.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

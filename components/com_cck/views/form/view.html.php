@@ -1,0 +1,187 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: view.html.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Session\Session;
+use Joomla\Registry\Registry;
+
+// View
+class CCKViewForm extends HtmlView
+{
+	// display
+	public function display( $tpl = null )
+	{
+		$app					=	Factory::getApplication();
+		$layout					=	$app->input->get( 'tmpl' );
+		$uniqId					=	'';
+
+		if ( $layout == 'component' || $layout == 'raw' ) {
+			$uniqId				=	'_'.$layout;
+		}
+		
+		$preconfig				=	array();
+		$preconfig['action']	=	'';
+		$preconfig['client']	=	'site';
+		$preconfig['formId']	=	'seblod_form'.$uniqId;
+		$preconfig['submit']	=	'JCck.Core.submit'.$uniqId;
+		$preconfig['task']		=	$app->input->get( 'task', '' );
+		$preconfig['type']		=	$app->input->get( 'type', '' );
+		$preconfig['url']		=	'';
+		
+		JCck::loadjQuery();
+		$this->prepareDisplay( $preconfig );
+		
+		parent::display( $tpl );
+	}
+	
+	// prepareDisplay
+	protected function prepareDisplay( $preconfig )
+	{
+		$app				=	Factory::getApplication();
+		$config				=	Factory::getConfig();
+		$this->form			=	$this->get( 'Form' );
+		$this->option		=	$app->input->get( 'option', '' );
+		$this->item			=	$this->get( 'Item' );
+		$this->state		=	$this->get( 'State' );
+		$this->return_page	=	$app->input->getBase64( 'return' );
+		$option				=	$this->option;
+		$params				=	$app->getParams();
+		$session			=	Factory::getSession();
+		$view				=	$this->getName();
+		
+		$live				=	urldecode( $params->get( 'live', '' ) );
+		$variation			=	$params->get( 'variation', '' );
+		
+		// Page
+		$menus	=	$app->getMenu();
+		$menu	=	$menus->getActive();
+		if ( is_object( $menu ) ) {
+			$menu_params	=	new Registry;
+			$menu_params->loadString( $menu->getParams() );
+			if ( ! $menu_params->get( 'page_title', '' ) ) {
+				$params->set( 'page_title', $menu->title );
+			}
+		} else {
+			$params->set( 'page_title', 'Form' );
+		}
+
+		// Set Title
+		$title	=	$params->get( 'page_title', '' );
+		
+		if ( empty( $title ) ) {
+			$title	=	$config->get( 'sitename' );
+		} elseif ( $config->get( 'sitename_pagetitles', 0 ) == 1 ) {
+			$title	=	Text::sprintf( 'JPAGETITLE', $config->get( 'sitename' ), $title );
+		} elseif ( $config->get( 'sitename_pagetitles', 0 ) == 2 ) {
+			$title	=	Text::sprintf( 'JPAGETITLE', $title, $config->get( 'sitename' ) );
+		}
+		$config		=	null;
+		$this->document->setTitle( $title );
+
+		$this->pageclass_sfx	=	htmlspecialchars( $params->get( 'pageclass_sfx', '' ) );
+		$this->raw_rendering	=	$params->get( 'raw_rendering', JCck::getConfig_Param( 'raw_rendering', '1' ) );
+
+		// Prepare
+		jimport( 'cck.base.form.form' );
+		include JPATH_SITE.'/libraries/cck/base/form/form_inc.php';
+		$unique	=	$preconfig['formId'].'_'.@$type->name;
+		
+		$session->set( 'cck_hash_'.$unique, ApplicationHelper::getHash( (int)$id.'|'.@$type->name.'|'.@(int)$config['id'].'|'.@(int)$config['copyfrom_id'] ) );
+		$session->set( 'cck_hash_'.$unique.'_context', json_encode( $config['context'] ) );
+		$session->set( 'cck_task', 'form' );
+
+		// Set Meta
+		$description	=	$params->get( 'menu-meta_description', '' );
+		
+		if ( $description == '' ) {
+			$description	=	$params->get( 'form_desc', @$type->description );
+			$description	=	strip_tags( $description );
+			$description	=	JCckDevHelper::truncate( $description, 200 );
+		}
+		
+		if ( $description ) {
+			$this->document->setDescription( $description );
+		}
+		if ( $params->get( 'menu-meta_keywords', '' ) ) {
+			$this->document->setMetadata( 'keywords', $params->get('menu-meta_keywords', '' ) );
+		}
+		if ( $params->get( 'robots' ) ) {
+			$this->document->setMetadata( 'robots', $params->get( 'robots', '' ) );
+		}
+
+		// Set
+		if ( !is_object( @$options ) ) {
+			$options	=	new Registry;
+		}
+		if ( $params->get( 'display_form_title', '' ) == '2' ) {
+			$this->title			=	'';
+
+			if ( is_object( $type ) ) {
+				$this->title		=	Text::_( 'APP_CCK_FORM_'.$type->name.'_TITLE_'.( ( isset( $config['isNew'] ) && $config['isNew'] ) ? 'ADD' : 'EDIT' ) );
+			}
+		} elseif ( $params->get( 'display_form_title', '' ) == '3' ) {
+			$this->title				=	Text::_( 'COM_CCK_' . str_replace( ' ', '_', trim( $params->get( 'title_form_title', '' ) ) ) );
+		} elseif ( $params->get( 'display_form_title', '' ) == '1' ) {
+			$this->title			=	$params->get( 'title_form_title', '' );
+		} elseif ( $params->get( 'display_form_title', '' ) == '0' ) {
+			$this->title			=		$menu->title;
+		} else {
+			$this->title			=	( isset( $type->title ) ) ? $type->title : '';
+		}
+		$this->show_form_title		=	$params->get( 'show_form_title' );
+		if ( $this->show_form_title == '' ) {
+			$this->show_form_title	=	$options->get( 'show_form_title', '1' );
+			$this->tag_form_title	=	$options->get( 'tag_form_title', 'h1' );
+			$this->class_form_title	=	$options->get( 'class_form_title', JCck::getConfig_Param( 'title_class', '' ) );
+		} elseif ( $this->show_form_title ) {
+			$this->tag_form_title	=	$params->get( 'tag_form_title', 'h1' );
+			$this->class_form_title	=	$params->get( 'class_form_title', JCck::getConfig_Param( 'title_class', '' ) );
+		}
+		$this->show_form_desc		=	$params->get( 'show_form_desc', $options->get( 'show_form_desc', '1' ) );
+		if ( $this->show_form_desc ) {
+			$this->description		=	$params->get( 'form_desc', @$type->description );
+		} else {
+			$this->description		=	'';
+		}
+		if ( $this->description != '' ) {
+			if ( is_object( $menu ) ) {
+				$this->description		=	str_replace( '[note]', $menu->note, $this->description );
+			} else {
+				$this->description		=	str_replace( '[note]', '', $this->description );
+			}
+
+			$this->description	=	JCckDevHelper::replaceLive( $this->description );
+		}
+
+		// Force Titles to be hidden
+		if ( $app->input->get( 'tmpl' ) == 'raw' ) {
+			$params->set( 'show_page_heading', 0 );
+			$this->show_form_title	=	false;
+		}
+		
+		$this->class_desc			=	$params->get( 'class_form_desc', '' );
+		$this->config				=	&$config;
+		$this->data					=	&$data;
+		$this->form_id				=	$preconfig['formId'];
+		$this->id					=	&$id;
+		$this->params				=	&$params;
+		$this->skip					=	( $app->input->get( 'skip' ) ) ? '1' : '0';
+		$this->stage				=	&$stage;
+		$this->tag_desc				=	$params->get( 'tag_form_desc', 'div' );
+		$this->type					=	&$type;
+		$this->unique				=	&$unique;
+	}
+}
+?>

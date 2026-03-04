@@ -1,0 +1,5 @@
+{
+  "constant":"COM_CCK_COCHON_SEARCH_TOTAL",
+  "filename":"override",
+  "en_gb":"<p class=\"total\"><span>%1$s</span><span>Cochons</span></p>"
+}

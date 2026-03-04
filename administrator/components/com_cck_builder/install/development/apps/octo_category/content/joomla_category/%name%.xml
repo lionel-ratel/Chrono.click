@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="joomla_category" version="3.0" folder="content">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<joomla_category type="o_category_root">
+		<parent_id>%core_category:PROJECT%</parent_id>
+		<level />
+		<lft />
+		<rgt />
+		<alias>%name%</alias>
+		<id />
+		<asset_id />
+		<path>%name%</path>
+		<extension>com_content</extension>
+		<title>%TITLE%</title>
+		<note />
+		<description />
+		<published>1</published>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>1</access>
+		<params>{&quot;category_layout&quot;:&quot;&quot;,&quot;image&quot;:&quot;&quot;}</params>
+		<metadesc />
+		<metakey />
+		<metadata>{&quot;author&quot;:&quot;&quot;,&quot;robots&quot;:&quot;&quot;}</metadata>
+		<created_user_id />
+		<created_time />
+		<modified_user_id />
+		<modified_time />
+		<hits>0</hits>
+		<language>*</language>
+		<version />
+	</joomla_category>
+	<acl>{}</acl>
+	<app>%prefix%_%name%</app>
+</cck>

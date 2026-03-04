@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_o_articles</name>
+	<packagename>app_cck_o_articles</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>December 2022</creationDate>
+	<description>SEBLOD 3.x Articles App - www.seblod.com</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="plugin" id="plg_cck_field_upload_image2" group="cck_field">plg_cck_field_upload_image2.zip</file>
+		<file type="plugin" id="plg_cck_field_code_beforerender" group="cck_field">plg_cck_field_code_beforerender.zip</file>
+		<file type="template" id="tpl_seb_manager_search" client="site">tpl_seb_manager_search.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

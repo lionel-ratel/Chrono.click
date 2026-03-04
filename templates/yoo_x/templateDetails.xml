@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="template" version="2.5" method="upgrade">
+	<name>yoo_x</name>
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>Octobre 2020</creationDate>
+	<description>Template Yoo X for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>1.0.1</version>
+	
+	<files>
+		<folder>css</folder>
+		<folder>fields</folder>
+		<folder>images</folder>
+		<folder>includes</folder>
+		<folder>languages</folder>
+		<folder>positions</folder>
+		<folder>variations</folder>
+		
+		<filename>config.php</filename>
+		<filename>index.php</filename>
+		<filename>template_picker.png</filename>
+		<filename>template_preview.png</filename>
+		<filename>template_thumbnail.png</filename>
+		<filename>templateDetails.xml</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.tpl_yoo_x.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.tpl_yoo_x.ini</language>
+	</languages>
+	
+	<positions>
+		<position>main</position>
+	</positions>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="advanced">
+				<field 
+					name="layout_id" 
+					type="cck" 
+					construction="more_yootheme_layout_multiple"
+					class="inputbox"
+					label="TPL_YOO_LAYOUT_ID"
+					description="TPL_YOO_LAYOUT_ID_DESC"
+					default=""
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

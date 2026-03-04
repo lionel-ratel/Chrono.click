@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_o_mail_templates</name>
+	<packagename>app_cck_o_mail_templates</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>November 2020</creationDate>
+	<description>SEBLOD 4.x Mail Templates App - www.seblod.com</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="file" id="files_cck">files_cck.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

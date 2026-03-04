@@ -1,0 +1,103 @@
+@font-face {
+	font-family: 'cck';
+	src:url('../fonts/cck.eot');
+	src:url('../fonts/cck.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/cck.ttf') format('truetype'),
+		url('../fonts/cck.woff') format('woff'),
+		url('../fonts/cck.svg#cck') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class*="myicon-cck-"] {
+	font-family: 'cck';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.page-title [class*="myicon-cck-"] {
+	margin-right: 10px;
+}
+
+#toolbar [class*="myicon-cck-"] {
+	background-color: #e6e6e6;
+	border-radius: 3px 0 0 3px;
+	border-right: 1px solid #b3b3b3;
+	height: auto;
+	line-height: inherit;
+	margin: 0 6px 0 -10px;
+	opacity: 1;
+	text-shadow: none;
+	width: 28px;
+	z-index: -1;
+}
+
+div.sidebar-nav.quick-icons [class*="myicon-cck-"] {
+	margin-right: 9px;
+}
+div#cpanel [class*="myicon-cck-"] {
+	font-size: 48px;
+	margin: 10px 0;
+}
+div#cpanel .icon_small [class*="myicon-cck-"] {
+	font-size: 24px;
+	margin: 10px 0;
+}
+div#cpanel .icon_small_left [class*="myicon-cck-"] {
+	float: left;
+	margin: 3px 0 0 10px;
+}
+div#cpanel .icon_small_right [class*="myicon-cck-"] {
+	float: right;
+	margin: 3px 10px 0 0;
+}
+
+.myicon-cck-template:before {
+	content: "\74";
+}
+.myicon-cck-multisite:before {
+	content: "\6d";
+}
+.myicon-cck-products:before {
+	content: "\70";
+}
+.myicon-cck-resources:before {
+	content: "\72";
+}
+.myicon-cck-search:before {
+	content: "\73";
+}
+.myicon-cck-application:before {
+	content: "\60";
+}
+.myicon-cck-addon:before {
+	content: "\41";
+}
+.myicon-cck-joomla:before {
+	content: "\6a";
+}
+.myicon-cck-plugin:before {
+	content: "\6f";
+}
+.myicon-cck-seblod:before {
+	content: "\53";
+}
+.myicon-cck-variation:before {
+	content: "\76";
+}
+.myicon-cck-community:before {
+	content: "\63";
+}
+.myicon-cck-form:before {
+	content: "\66";
+}
+.myicon-cck-services:before {
+	content: "\56";
+}

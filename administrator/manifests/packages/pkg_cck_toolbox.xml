@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_cck_toolbox</name>
+	<packagename>cck_toolbox</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>October 2014</creationDate>
+	<description>SEBLOD Toolbox Add-on for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>6.0.3</version>
+	
+	<scriptfile>pkg_script.php</scriptfile>
+	
+	<!-- EXTENSIONS -->
+	<files folder="extensions">
+		<!-- START HERE -->
+			<!-- Component -->
+			<file type="component" id="com_cck_toolbox">com_cck_toolbox.zip</file>
+			<!-- Module // Site -->
+			<file type="module" id="mod_cck_processing" client="site">mod_cck_processing.zip</file>
+			<!-- Plugin // CCK Field -->
+			<file type="plugin" id="cck_processing" group="cck_field">plg_cck_field_cck_processing.zip</file>
+			<!-- Plugin // CCK Field Live -->
+			<file type="plugin" id="cck_processing" group="cck_field_live">plg_cck_field_live_cck_processing.zip</file>
+			<!-- Plugin // CCK Field Restriction -->
+			<file type="plugin" id="cck_processing" group="cck_field_restriction">plg_cck_field_restriction_cck_processing.zip</file>
+			<!-- Plugin // CCK Field Typo -->
+			<file type="plugin" id="cck_processing" group="cck_field_typo">plg_cck_field_typo_cck_processing.zip</file>
+			<!-- Plugin // CCK Field Validation -->
+			<file type="plugin" id="cck_processing" group="cck_field_validation">plg_cck_field_validation_cck_processing.zip</file>
+			<!-- Plugin // System -->
+			<file type="plugin" id="cck_toolbox" group="system">plg_system_cck_toolbox.zip</file>
+		<!-- END HERE -->
+	</files>
+
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.pkg_cck_toolbox.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_cck_toolbox.sys.ini</language>
+	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="SEBLOD Toolbox Add-on Updates">http://update.seblod.com/pkg_cck_toolbox.xml</server>
+	</updateservers>
+</extension>

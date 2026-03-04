@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="fields">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<field>
+		<id />
+		<title>%Form% Button Add</title>
+		<name>%prefix%_%form%_button_add</name>
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<type>button_free</type>
+		<description />
+		<published>1</published>
+		<label>Add New</label>
+		<language>*</language>
+		<selectlabel />
+		<display>3</display>
+		<required />
+		<validation />
+		<defaultvalue />
+		<options />
+		<options2>{&quot;icon&quot;:&quot;&quot;,&quot;button_link&quot;:&quot;cck_form&quot;,&quot;button_link_options&quot;:&quot;{\&quot;form\&quot;:\&quot;%prefix%_%form%\&quot;,\&quot;itemid\&quot;:\&quot;\&quot;,\&quot;form_edition\&quot;:\&quot;1\&quot;,\&quot;form_edition_stage\&quot;:\&quot;\&quot;,\&quot;form_fieldname\&quot;:\&quot;\&quot;,\&quot;redirection\&quot;:\&quot;\&quot;,\&quot;redirection_custom\&quot;:\&quot;\&quot;,\&quot;attributes\&quot;:\&quot;\&quot;,\&quot;class\&quot;:\&quot;o-btn-1 o-btn-auto\&quot;,\&quot;target\&quot;:\&quot;\&quot;,\&quot;target_params\&quot;:\&quot;\&quot;,\&quot;rel\&quot;:\&quot;\&quot;,\&quot;title\&quot;:\&quot;\&quot;,\&quot;title_custom\&quot;:\&quot;\&quot;,\&quot;state\&quot;:\&quot;1\&quot;,\&quot;tmpl\&quot;:\&quot;\&quot;,\&quot;custom\&quot;:\&quot;\&quot;,\&quot;no_access\&quot;:\&quot;0\&quot;}&quot;,&quot;alt_link_text&quot;:&quot;&quot;,&quot;alt_link&quot;:&quot;&quot;,&quot;alt_link_options&quot;:&quot;&quot;,&quot;alt2_link_text&quot;:&quot;&quot;,&quot;alt2_link&quot;:&quot;&quot;,&quot;alt2_link_options&quot;:&quot;&quot;}</options2>
+		<minlength>0</minlength>
+		<maxlength>255</maxlength>
+		<size>32</size>
+		<cols>0</cols>
+		<rows>0</rows>
+		<ordering>0</ordering>
+		<sorting>0</sorting>
+		<divider />
+		<bool>1</bool>
+		<location />
+		<extended />
+		<style />
+		<script />
+		<bool2>0</bool2>
+		<bool3>1</bool3>
+		<bool4>0</bool4>
+		<bool5>1</bool5>
+		<bool6>0</bool6>
+		<bool7>0</bool7>
+		<bool8>1</bool8>
+		<css />
+		<attributes />
+		<storage>none</storage>
+		<storage_cck>%prefix%_%form%_manager</storage_cck>
+		<storage_location />
+		<storage_table />
+		<storage_field>%prefix%_%form%_button_add</storage_field>
+		<storage_field2 />
+		<storage_filter />
+		<storage_key />
+		<storage_mode>0</storage_mode>
+		<storages />
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+	</field>
+</cck>

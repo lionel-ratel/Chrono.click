@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="joomla_menuitem" version="3.0" folder="content">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<joomla_menuitem>
+		<typeAlias />
+		<parent_id>1</parent_id>
+		<level>1</level>
+		<lft />
+		<rgt />
+		<alias>admin</alias>
+		<id />
+		<menutype>adminmenu</menutype>
+		<title>Admin</title>
+		<note />
+		<path>admin</path>
+		<link>index.php?option=com_cck&amp;view=form&amp;layout=edit&amp;type=o_user_login_form</link>
+		<type>component</type>
+		<published>1</published>
+		<component_id>com_cck</component_id>
+		<checked_out />
+		<checked_out_time />
+		<browserNav>0</browserNav>
+		<access>1</access>
+		<img> </img>
+		<template_style_id>321</template_style_id>
+		<params>{&quot;show_form_title&quot;:&quot;0&quot;,&quot;tag_form_title&quot;:&quot;h1&quot;,&quot;class_form_title&quot;:&quot;&quot;,&quot;display_form_title&quot;:&quot;&quot;,&quot;title_form_title&quot;:&quot;&quot;,&quot;show_form_desc&quot;:&quot;&quot;,&quot;form_desc&quot;:&quot;&quot;,&quot;live&quot;:&quot;&quot;,&quot;variation&quot;:&quot;&quot;,&quot;raw_rendering&quot;:&quot;0&quot;,&quot;urlvars&quot;:&quot;&quot;,&quot;menu-anchor_title&quot;:&quot;&quot;,&quot;menu-anchor_css&quot;:&quot;&quot;,&quot;menu_icon_css&quot;:&quot;&quot;,&quot;menu_image&quot;:&quot;&quot;,&quot;menu_image_css&quot;:&quot;&quot;,&quot;menu_text&quot;:1,&quot;menu_show&quot;:0,&quot;page_title&quot;:&quot;&quot;,&quot;show_page_heading&quot;:&quot;&quot;,&quot;page_heading&quot;:&quot;&quot;,&quot;pageclass_sfx&quot;:&quot;&quot;,&quot;menu-meta_description&quot;:&quot;&quot;,&quot;robots&quot;:&quot;noindex, nofollow&quot;}</params>
+		<home>0</home>
+		<language>*</language>
+		<client_id>0</client_id>
+		<publish_up />
+		<publish_down />
+	</joomla_menuitem>
+</cck>

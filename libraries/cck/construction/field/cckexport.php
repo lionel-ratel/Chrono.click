@@ -1,0 +1,69 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: cckexport.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
+
+// JFormField
+class JFormFieldCCKexport extends FormField
+{
+	protected $type	=	'CCKexport';
+
+	// getInput
+	protected function getInput()
+	{
+		$app		=	Factory::getApplication();
+		$type		=	(string)$this->element['extension_type'];
+		$type		=	( $type ) ? $type : 'plugin';
+		
+		$extension	=	'&extension='.$type;
+		$token		=	'&'.Session::getFormToken().'=1';
+		
+		if ( $type == 'languages' ) {
+			$lang	=	Factory::getLanguage()->getTag();			
+			$url	=	'index.php?option=com_cck&task=export'.$extension.'&lang_tag=en-GB'.$token;
+			$text	=	self::_getHtml( 'en-GB', $url, ' btn-small' );
+			
+			if ( $lang != 'en-GB' ) {
+				$text	.=	'&nbsp;&nbsp;<span style="font-weight: normal;">or</span>&nbsp;&nbsp;';
+				$tag	=	'&lang_tag='.$lang;
+				$url	=	'index.php?option=com_cck&task=export'.$extension.$tag.$token;
+				$text	.=	self::_getHtml( $lang, $url, ' btn-small' );
+			}
+		} else {
+			$lang			=	Factory::getLanguage();
+			$lang_default	=	$lang->setDefault( 'en-GB' );
+			$lang->load( 'com_cck_default', JPATH_SITE );
+			$lang->setDefault( $lang_default );
+			$id		=	$app->input->getInt( 'extension_id', 0 );
+			$id		=	'&extension_id='.$id;
+			$url	=	'index.php?option=com_cck&task=export'.$extension.$id.$token;
+			$text	=	self::_getHtml( Text::_( 'COM_CCK_DOWNLOAD' ), $url, ' btn-success' );
+		}
+		
+		return $text;
+	}
+	
+	// _getHtml
+	protected function _getHtml( $text, $url, $class = '' )
+	{
+		$html	=	'<a href="'.$url.'" class="btn'.$class.'">'
+				.	'<span class="icon-download"></span>'
+				.	"\n".$text
+				.	'</a>';
+
+		return $html;
+	}
+}
+?>

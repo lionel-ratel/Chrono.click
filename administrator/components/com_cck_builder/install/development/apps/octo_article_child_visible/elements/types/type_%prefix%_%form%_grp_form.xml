@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="types">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<type>
+		<id />
+		<asset_id />
+		<title>%Form% Grp (Form)</title>
+		<name>%prefix%_%form%_grp_form</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<template_admin>seb_minima</template_admin>
+		<template_site>seb_minima</template_site>
+		<template_content>seb_minima</template_content>
+		<template_intro>seb_minima</template_intro>
+		<description />
+		<indexed>none</indexed>
+		<published>1</published>
+		<options_admin />
+		<options_site />
+		<options_content />
+		<options_intro />
+		<admin_form>0</admin_form>
+		<location>collection</location>
+		<locked>1</locked>
+		<parent>%prefix%_%form%</parent>
+		<parent_inherit>0</parent_inherit>
+		<permissions />
+		<storage_location>joomla_article</storage_location>
+		<stylesheets />
+		<version>10</version>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>3</access>
+		<created_date>0000-00-00 00:00:00</created_date>
+		<created_user_id>0</created_user_id>
+		<modified_date>0000-00-00 00:00:00</modified_date>
+		<modified_user_id>0</modified_user_id>
+	</type>
+	<acl />
+	<fields>
+		<field1 client="admin" ordering="1" label="" variation="hidden" variation_override="" required="required" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="%more_category:%prefix%_%name%%" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%child%_category</field1>
+	</fields>
+	<positions />
+</cck>

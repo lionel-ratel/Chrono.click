@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_cck_field_restriction_joomla_acl</name>
+	<packagename>cck_field_restriction_joomla_acl</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>February 2014</creationDate>
+	<description>Joomla! ACL Restriction Pack for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>1.6.0</version>
+	
+	<scriptfile>pkg_script.php</scriptfile>
+	
+	<files folder="extensions">
+		<file type="plugin" id="joomla_access" group="cck_field_restriction">plg_cck_field_restriction_joomla_access.zip</file>
+		<file type="plugin" id="joomla_permissions" group="cck_field_restriction">plg_cck_field_restriction_joomla_permissions.zip</file>
+		<file type="plugin" id="joomla_user_group" group="cck_field_restriction">plg_cck_field_restriction_joomla_user_group.zip</file>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.pkg_cck_field_restriction_joomla_acl.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_cck_field_restriction_joomla_acl.sys.ini</language>
+	</languages>
+	
+	<updateservers>
+		<server type="extension" priority="1" name="Joomla! ACL Restriction Pack Updates">http://update.seblod.com/pkg_cck_field_restriction_joomla_acl.xml</server>
+	</updateservers>
+</extension>

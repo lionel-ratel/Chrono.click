@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Joomla local symlinks and runtime dirs (OVH keeps real dirs)
+configuration.php
+cache
+/tmp
+tmp
+images
+files
+media/cache
+administrator/cache
+administrator/logs
+
+# Logs / temporary artifacts
+*.log
+*.tmp
+
+# Deployment sync state
+.ftp-deploy-sync-state.json

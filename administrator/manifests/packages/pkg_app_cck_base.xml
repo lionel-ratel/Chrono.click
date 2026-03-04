@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_base</name>
+	<packagename>app_cck_base</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>May 2019</creationDate>
+	<description>SEBLOD 3.x Base App - www.seblod.com</description>
+	<version>4.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+			<file type="plugin" id="cck_break" group="cck_field">plg_cck_field_cck_break.zip</file>
+			<file type="plugin" id="cck_list" group="cck_field">plg_cck_field_cck_list.zip</file>
+			<file type="plugin" id="form_action" group="cck_field">plg_cck_field_form_action.zip</file>
+			<file type="plugin" id="item_x" group="cck_field">plg_cck_field_item_x.zip</file>
+			<file type="plugin" id="message_redirection" group="cck_field">plg_cck_field_message_redirection.zip</file>
+			<file type="plugin" id="search_breadcrumbs" group="cck_field">plg_cck_field_search_breadcrumbs.zip</file>
+			<file type="plugin" id="search_operator" group="cck_field">plg_cck_field_search_operator.zip</file>
+			<file type="plugin" id="search_query" group="cck_field">plg_cck_field_search_query.zip</file>
+			<file type="plugin" id="search_total" group="cck_field">plg_cck_field_search_total.zip</file>
+		<file type="plugin" id="plg_cck_field_cck_processing" group="cck_field">plg_cck_field_cck_processing.zip</file>
+			<file type="plugin" id="item_x" group="cck_field_link">plg_cck_field_link_item_x.zip</file>
+			<file type="plugin" id="x" group="cck_field_live">plg_cck_field_live_x.zip</file>
+			<file type="plugin" id="cck_fields" group="cck_field_restriction">plg_cck_field_restriction_cck_fields.zip</file>
+			<file type="plugin" id="item_x" group="cck_field_restriction">plg_cck_field_restriction_item_x.zip</file>
+			<file type="plugin" id="search_total" group="cck_field_restriction">plg_cck_field_restriction_search_total.zip</file>
+			<file type="plugin" id="x" group="cck_field_restriction">plg_cck_field_restriction_x.zip</file>
+			<file type="plugin" id="item_x" group="cck_field_typo">plg_cck_field_typo_item_x.zip</file>
+			<file type="plugin" id="date" group="cck_field_validation">plg_cck_field_validation_date.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

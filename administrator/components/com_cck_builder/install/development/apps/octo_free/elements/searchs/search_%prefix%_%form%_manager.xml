@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="searchs">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<search>
+		<id />
+		<title>%Form% Manager</title>
+		<name>%prefix%_%form%_manager</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<content>1</content>
+		<template_search>seb_uikit_search - %prefix%_%form%_manager (search)</template_search>
+		<template_filter>seb_minima</template_filter>
+		<template_list>seb_uikit_table - %prefix%_%form%_manager (list)</template_list>
+		<template_item>seb_minima</template_item>
+		<description />
+		<access>1</access>
+		<published>1</published>
+		<options>{&quot;limit&quot;:&quot;0&quot;,&quot;count&quot;:&quot;0&quot;,&quot;cache&quot;:&quot;0&quot;,&quot;cache_per_user&quot;:&quot;0&quot;,&quot;stages_optional&quot;:&quot;&quot;,&quot;cache2&quot;:&quot;0&quot;,&quot;pagination&quot;:&quot;&quot;,&quot;debug&quot;:&quot;&quot;,&quot;persistent_query&quot;:&quot;0&quot;,&quot;prepare_content&quot;:&quot;&quot;,&quot;sef&quot;:&quot;&quot;,&quot;sef_canonical&quot;:&quot;&quot;,&quot;auto_redirect&quot;:&quot;0&quot;,&quot;ordering&quot;:&quot;&quot;,&quot;show_list_title&quot;:&quot;1&quot;,&quot;tag_list_title&quot;:&quot;h1&quot;,&quot;class_list_title&quot;:&quot;&quot;,&quot;show_list_desc&quot;:&quot;1&quot;,&quot;show_list&quot;:&quot;1&quot;,&quot;show_form&quot;:&quot;1&quot;,&quot;show_items_number&quot;:&quot;0&quot;,&quot;label_items_number&quot;:&quot;Results&quot;,&quot;class_items_number&quot;:&quot;total&quot;,&quot;show_pages_number&quot;:&quot;&quot;,&quot;show_pagination&quot;:&quot;0&quot;,&quot;class_pagination&quot;:&quot;pagination&quot;,&quot;label_pagination&quot;:&quot;&quot;,&quot;callback_pagination&quot;:&quot;&quot;,&quot;message_style_no_access&quot;:&quot;error&quot;,&quot;action_no_access&quot;:&quot;redirection&quot;,&quot;message_no_access&quot;:&quot;&quot;,&quot;redirection_url_no_access&quot;:&quot;index.php?option=com_users&amp;view=login&quot;,&quot;message_style&quot;:&quot;0&quot;,&quot;action&quot;:&quot;file&quot;,&quot;message&quot;:&quot;&quot;,&quot;show_list_desc_no_result&quot;:&quot;1&quot;,&quot;mode_no_result&quot;:&quot;0&quot;,&quot;message_style_no_search&quot;:&quot;0&quot;,&quot;action_no_search&quot;:&quot;0&quot;,&quot;message_no_search&quot;:&quot;&quot;,&quot;load_resource&quot;:&quot;0&quot;,&quot;tmpl_resource&quot;:&quot;&quot;,&quot;json_resource&quot;:&quot;&quot;,&quot;autoid_resource&quot;:&quot;&quot;,&quot;validation_position&quot;:&quot;&quot;,&quot;validation_scroll&quot;:&quot;&quot;,&quot;validation_color&quot;:&quot;&quot;,&quot;validation_background_color&quot;:&quot;&quot;}</options>
+		<location />
+		<sef_route>%prefix%_%form%</sef_route>
+		<sef_route_aliases>-1</sef_route_aliases>
+		<storage_location>free</storage_location>
+		<stylesheets />
+		<version>21</version>
+		<checked_out />
+		<checked_out_time />
+	</search>
+	<fields>
+		<field1 client="list" ordering="1" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="clear" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_pre_">%prefix%_%form%_id</field1>
+		<field2 client="list" ordering="2" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="column-c">%prefix%_%form%_title</field2>
+		<field3 client="list" ordering="3" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="column-p">o_icon_edit</field3>
+		<field4 client="list" ordering="4" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="column-q">o_icon_delete</field4>
+		<field5 client="search" ordering="1" label="" variation="hidden" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="%prefix%_%form%" markup="" markup_class="" match_collection="" match_mode="exact" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_pre_">cck</field5>
+		<field6 client="search" ordering="2" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="0" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_pre_">%prefix%_%form%_join</field6>
+		<field7 client="search" ordering="3" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_pre_">%prefix%_%form%_query</field7>
+		<field8 client="search" ordering="4" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="uikit-html.div" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="toolbar1">%prefix%_%form%_button_add</field8>
+		<field9 client="search" ordering="5" label="" variation="form_filter" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="uikit-html.div" markup_class=" uk-width-2-5@m" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="filter1">%prefix%_%form%_keywords</field9>
+		<field10 client="search" ordering="6" label="" variation="form_filter" variation_override="{&quot;selectlabel&quot;:&quot;Any Status&quot;}" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="uikit-html.div" markup_class="" match_collection="" match_mode="exact" match_options="{&quot;var_type&quot;:&quot;0&quot;}" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="filter1_2">%prefix%_%form%_state</field10>
+		<field11 client="search" ordering="7" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="uikit.uikit_div" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="search_total" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="info1">%prefix%_%form%_search_total</field11>
+		<field12 client="search" ordering="8" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="uikit-html.div" markup_class="" match_collection="" match_mode="" match_options="" match_value="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="search_total" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="info1_2">%prefix%_%form%_order_by</field12>
+	</fields>
+	<positions>
+		<position1 client="list" legend="" variation="" variation_options="" width="" height="" css="">_post_</position1>
+		<position2 client="list" legend="" variation="" variation_options="" width="" height="" css="">_pre_</position2>
+		<position3 client="list" legend="" variation="" variation_options="" width="" height="" css="">column-c</position3>
+		<position4 client="list" legend="&lt;span uk-icon=&quot;pencil&quot;&gt;&lt;/span&gt;" variation="" variation_options="" width="5%" height="" css="uk-text-center uk-vertical-align-middle">column-p</position4>
+		<position5 client="list" legend="&lt;span uk-icon=&quot;close&quot;&gt;&lt;/span&gt;" variation="" variation_options="" width="5%" height="" css="uk-text-center uk-vertical-align-middle">column-q</position5>
+		<position6 client="search" legend="" variation="" variation_options="" width="" height="" css="">_post_</position6>
+		<position7 client="search" legend="" variation="" variation_options="" width="" height="" css="">_pre_</position7>
+		<position8 client="search" legend="" variation="uikit_form" variation_options="{&quot;position_class&quot;:&quot;&quot;,&quot;position_attributes&quot;:&quot;&quot;,&quot;field_label&quot;:&quot;1&quot;,&quot;field_description&quot;:&quot;5&quot;,&quot;field_markup&quot;:&quot;uikit.form&quot;}" width="" height="" css="">filter1</position8>
+		<position9 client="search" legend="" variation="" variation_options="" width="" height="" css="">filter1_2</position9>
+		<position10 client="search" legend="" variation="" variation_options="" width="" height="" css="">info1</position10>
+		<position11 client="search" legend="" variation="" variation_options="" width="" height="" css="">info1_2</position11>
+		<position12 client="search" legend="" variation="none" variation_options="" width="" height="" css="">toolbar1</position12>
+	</positions>
+</cck>

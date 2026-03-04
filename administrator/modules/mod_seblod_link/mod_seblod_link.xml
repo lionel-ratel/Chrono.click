@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="module" version="3.1" method="upgrade" client="administrator">
+    <name>MOD_SEBLOD_LINK</name>
+    <version>1.0.0</version>
+    <description>MOD_SEBLOD_LINK_XML_DESCRIPTION</description>
+    <creationDate>August 2023</creationDate>
+    <copyright>Copyright (C) SEBLOD GmbH</copyright>
+    <license>GNU General Public License</license>
+    <author>SEBLOD</author>
+    <authorEmail>info@seblod.com</authorEmail>
+    <authorUrl>https://seblod.com</authorUrl>
+    <files>
+        <filename module="mod_seblod_link">mod_seblod_link.php</filename>
+        <filename>script.php</filename>
+        <folder>assets</folder>
+        <folder>tmpl</folder>
+        <folder>presets</folder>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_seblod_link.ini</language>
+        <language tag="en-GB">en-GB/en-GB.mod_seblod_link.sys.ini</language>
+    </languages>
+    <scriptfile>script.php</scriptfile>
+    <config>
+        <fields name="params">
+            <fieldset name="advanced">
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+                    class="form-select"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

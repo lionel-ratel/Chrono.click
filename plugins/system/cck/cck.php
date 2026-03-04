@@ -1,0 +1,1373 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: cck.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Router\Router;
+use Joomla\CMS\Uri\Uri;
+
+// Plugin
+class plgSystemCCK extends CMSPlugin
+{
+	protected $content_objects		=	array();
+	protected $current_lang			=	null;
+	protected $default_lang			=	null;
+	protected $default_lang_mode	=	null;
+	protected $filter_lang			=	false;
+	protected $multisite			=	null;
+	protected $rest_api				=	null;
+	protected $site					=	null;
+	protected $site_context			=	null;
+	protected $site_exclusion		=	false;
+
+	// __construct
+	public function __construct( &$subject, $config )
+	{
+		parent::__construct( $subject, $config );
+
+		$app	=	Factory::getApplication();
+
+		if ( $app->isClient( 'administrator' ) ) {
+			Factory::getLanguage()->load( 'lib_cck', JPATH_SITE );
+
+			if ( file_exists( JPATH_SITE.'/plugins/cck_storage_location/joomla_user_note/joomla_user_note.php' ) ) {
+				$this->content_objects['joomla_user_note']	=	1;
+			}
+		}
+		$this->_setLegacyMode();
+
+		$this->default_lang_mode	=	(int)JCck::getConfig_Param( 'language_default', 1 );
+		$this->multisite			=	$this->_isMultiSite();
+		$this->rest_api				=	$this->_isRestApi();
+
+		PluginHelper::importPlugin( 'cck_storage_location' );
+	}
+
+	// buildRule
+	public function buildRule( &$router, &$uri )
+	{
+		if ( $this->site ) {
+			if ( $this->site_context ) {
+				if ( $this->site->context != '' ) {
+					if ( !$this->filter_lang || ( $this->filter_lang && $this->current_lang == $this->default_lang ) ) {
+					$uri->setPath( $uri->getPath() . '/' . $this->site->context . '/' );
+					}
+				}
+			}
+		}
+
+		if ( Factory::getApplication()->isClient( 'site' ) ) {
+			$Itemid	=	$uri->getVar( 'Itemid' );
+
+			if ( $uri->getVar( 'option' ) == 'com_cck' && !$uri->getVar( 'task' ) && !$uri->getVar( 'view' ) ) {
+				$item	=	Factory::getApplication()->getMenu()->getItem( $Itemid );
+				
+				if ( isset( $item->query['view'] ) && ( $item->query['view'] == 'list' || $item->query['view'] == 'form' ) ) {
+					$urlvars	=	$item->getParams()->get( 'urlvars' );
+					
+					if ( $urlvars ) {
+						$vars		=	explode( '&', JCckDevHelper::replaceLive( $urlvars ) );
+						
+						if ( count( $vars ) ) {
+							foreach ( $vars as $var ) {
+								$v	=	explode( '=', $var );
+								
+								if ( $v[0] && $v[1] != '' ) {
+									$uri->setVar( $v[0], $v[1] );
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// parseRule
+	public function parseRule( &$router, &$uri )
+	{
+		$this->_setMultisite();
+
+		if ( $this->site ) {
+			if ( $this->site_context || ( !$this->site_context && $this->site_exclusion ) ) {
+				if ( $this->site->context != '' ) {
+					if ( !$this->filter_lang || ( $this->filter_lang && $this->current_lang == $this->default_lang ) ) {
+						$path	=	$uri->getPath();
+						$pos	=	strpos( $path, $this->site->context );
+
+						if ( $pos !== false && $pos == 0 ) {
+							$path	=	substr( $path, strlen( $this->site->context ) + 1 );
+						
+							$uri->setPath( $path );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// onAfterLoad
+	public function onAfterLoad()
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onAfterLoad' );
+		}
+	}
+
+	// onAfterInitialise
+	public function onAfterInitialise()
+	{
+		$app	=	Factory::getApplication();
+
+		// Leave the J! API alone
+		if ( $app->getName() == 'api' ) {
+			return;
+		}
+
+		define( 'JPATH_RESOURCES', JCck::getConfig_Param( 'media_root_resources', JPATH_SITE ) );
+
+		$view	=	$app->input->get( 'view' );
+		$task	=	$app->input->get( 'task' );
+
+		if ( $view || ( $task && $task != 'download' ) ) {
+			Factory::getApplication()->getSession()->set( 'cck_task', '' );
+		}
+
+		if ( $this->rest_api ) {
+			$this->_setRestApi();
+		}
+
+		$router	=	$app::getRouter();
+
+		$router->attachBuildRule( array( $this, 'buildRule' ), Router::PROCESS_DURING );
+		$router->attachParseRule( array( $this, 'parseRule' ), Router::PROCESS_DURING );
+
+		if ( $app->isClient( 'administrator' ) ) {
+			JCckDevIntegration::addMenuPresets();
+			
+			if ( $app->input->get( 'option' ) == 'com_config' && strpos( $app->input->get( 'component', '' ), 'com_cck' ) !== false ) {
+				$lang			=	Factory::getLanguage();
+				$lang_default	=	$lang->setDefault( 'en-GB' );
+				$lang->load( 'com_cck' );
+				$lang->load( 'com_cck_core' );
+				$lang->setDefault( $lang_default );
+			}
+			$group	=	(int)JCck::getConfig_Param( 'development_group' );
+
+			if ( $group && $app->input->get( 'option' ) == 'com_cck'
+			  && $app->input->get( 'view' ) != 'form' && $app->input->get( 'view' ) != 'list' ) {
+				if ( ( $user_id = (int)Factory::getUser()->id ) > 0 ) {
+					jimport( 'cck.joomla.user.user' );
+					$userShadow		=	new CCKUser( $user_id );
+
+					$auth_groups	=	$userShadow->getAuthorisedGroups();
+					$auth_groups[]	=	$group;
+
+					$userShadow->setAuthorisedGroups( $auth_groups );
+					$userShadow->makeHimLive();
+				}
+			}
+		}
+
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onAfterInitialise' );
+		}
+	}
+
+	// onAfterRoute
+	public function onAfterRoute()
+	{
+		$app	=	Factory::getApplication();
+		$id		=	$app->input->getInt( 'id', 0 );
+		$itemId	=	$app->input->getInt( 'Itemid', 0 );
+		$option	=	$app->input->get( 'option', '' );
+		$view	=	$app->input->get( 'view', '' );
+
+		if ( $app->isClient( 'site' ) ) {
+			if ( $option == 'com_content' && $view == 'category' ) {
+				if ( JCck::is( '7' ) ) {
+					/* TODO#SEBLOD4: We may need another condition but it can't be with $app->getMenu()->getActive()->query['option'] */
+					$app->setUserState( 'com_content.category.list.'.(int)$id.':'.(int)$itemId.'.limit', -1 );
+				}
+			}
+		}
+
+		// Multi-sites
+		if ( $this->multisite ) {
+			$this->_runMultisite();
+		}
+
+		if ( $this->default_lang_mode === 2 ) {
+			$this->_setDefaultLanguage();
+		} elseif ( $this->default_lang_mode === 1 && $app->isClient( 'site' ) ) {
+			$this->_setDefaultLanguage();
+		}
+
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onAfterRoute' );
+		}
+	}
+
+	// onAfterDispatch
+	public function onAfterDispatch()
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onAfterDispatch' );
+		}
+		$app		=	Factory::getApplication();
+		$doc		=	Factory::getDocument();
+		$id			=	$app->input->getInt( 'id', 0 );
+		$layout		=	$app->input->get( 'layout', '' );
+		$option		=	$app->input->get( 'option', '' );
+		$view		=	$app->input->get( 'view', '' );
+
+		if ( $app->isClient( 'administrator' ) ) {
+			switch ( $option ) {
+				case 'com_config':
+					$com	=	$app->input->get( 'component', '' );
+					if ( $com == 'com_cck' || $com == 'com_cck_builder'
+										   || $com == 'com_cck_developer'
+										   || $com == 'com_cck_ecommerce'
+										   || $com == 'com_cck_exporter'
+										   || $com == 'com_cck_importer'
+										   || $com == 'com_cck_manager'
+										   || $com == 'com_cck_multilingual'
+										   || $com == 'com_cck_packager'
+										   || $com == 'com_cck_toolbox'
+										   || $com == 'com_cck_updater'
+										   || $com == 'com_cck_webservices' ) {
+						\Joomla\CMS\HTML\HTMLHelper::_( 'stylesheet', 'administrator/components/com_cck/assets/css/ui-big.css' );
+						JCck::loadjQuery( true, true, true );
+					}
+					break;
+				case 'com_installer':
+					if ( $view == 'update' ) {
+						if ( JCckDatabase::loadResult( 'SELECT extension_id FROM #__extensions WHERE type = "component" AND element = "com_cck_updater" AND enabled = 1' ) > 0 ) {
+							$class	=	'btn btn-primary btn-small';
+							$link	=	Route::_( 'index.php?option=com_cck_updater' );
+							$target	=	'_self';
+							$style	=	'top: -2px; position: relative;';
+						} else {
+							$class	=	'';
+							$link	=	'https://www.seblod.com/store/extensions/634';
+							$target	=	'_blank';
+							$style	=	'text-decoration:underline;';
+						}
+						Factory::getApplication()->enqueueMessage( \Joomla\CMS\Language\Text::_( 'LIB_CCK_INSTALLER_UPDATE_WARNING_CORE' ), 'notice' );
+						Factory::getApplication()->enqueueMessage( \Joomla\CMS\Language\Text::sprintf( 'LIB_CCK_INSTALLER_UPDATE_WARNING_MORE', $link, $target, $class, $style ), 'notice' );
+					} elseif ( $view == 'manage' ) {
+						$doc->addStyleDeclaration( 'span[data-original-title="SEBLOD (App Builder & CCK)"]{font-weight:bold;}');
+					}
+					break;
+				case 'com_joomlaupdate':
+					if ( $app->input->get( 'layout', '' ) !== 'complete' ) {
+						Factory::getApplication()->enqueueMessage( \Joomla\CMS\Language\Text::_( 'LIB_CCK_INSTALLER_UPDATE_WARNING_JOOMLA' ), 'notice' );
+					}
+					break;
+				case 'com_menus':
+					if ( $layout || $view == 'item' ) {
+						\Joomla\CMS\HTML\HTMLHelper::_( 'stylesheet', 'administrator/components/com_cck/assets/css/ui-big.css' );
+					}
+					break;
+				case 'com_modules':
+					if ( $layout ) {
+						\Joomla\CMS\HTML\HTMLHelper::_( 'stylesheet', 'administrator/components/com_cck/assets/css/ui-big.css' );
+					}
+					break;
+				case 'com_postinstall':
+					$doc->addStyleDeclaration( 'fieldset{padding-bottom:18px;} fieldset > legend{margin-bottom:0;}' );
+					break;
+				case 'com_plugins':
+					if ( $layout ) {
+						\Joomla\CMS\HTML\HTMLHelper::_( 'stylesheet', 'administrator/components/com_cck/assets/css/ui-big.css' );
+					}
+					break;
+				default:
+					$locations	=	JCckDatabase::loadObjectList( 'SELECT a.name, a.options FROM #__cck_core_objects AS a WHERE a.component = "'.JCckDatabase::escape( $option ).'"' );
+					$uri		=	array( 'option'=>$option, 'view'=>$view, 'layout'=>$layout, 'id'=>$id );
+					if ( count( $locations ) ) {
+						foreach ( $locations as $location ) {
+							$path	=	JPATH_SITE.'/plugins/cck_storage_location/'.$location->name.'/classes/integration.php';
+							if ( is_file( $path ) ) {
+								$data	=	array(
+												'options'=>new Registry( $location->options )
+											);
+								require_once $path;
+								JCck::callFunc_Array( 'plgCCK_Storage_Location'.$location->name.'_Integration', 'onCCK_Storage_LocationAfterDispatch', array( &$data, $uri ) );
+							}
+						}
+					}
+					break;
+			}
+			/*
+			if ( $option == 'com_cck' || $option == 'com_cck_toolbox' || $option == 'com_cck_webservices' ) {
+				if ( $app->input->cookie->get( 'atumSidebarState', '' ) !== 'closed' ) {
+					$app->input->cookie->set( 'atumSidebarState', 'closed' );
+					Factory::getApplication()->getSession()->set( 'cck_backend.atum', 1 );
+				}
+			} else {
+				$session	=	Factory::getApplication()->getSession();
+				if ( (int)$session->get( 'cck_backend.atum' ) == 1 ) {
+					$app->input->cookie->set( 'atumSidebarState', '' );
+					$session->set( 'cck_backend.atum', 0 );
+				}
+			}
+			*/
+		} elseif ( $app->isClient( 'site' ) ) {
+			if ( !JCck::getConfig_Param( 'sef_canonical', 0 ) && !isset( $app->cck_canonical ) && isset( $doc->_links ) && count( $doc->_links ) ) {
+				foreach ( $doc->_links as $k=>$link ) {
+					if ( $link['relation'] == 'canonical' ) {
+						unset( $doc->_links[$k] );
+						break;
+					}
+				}
+			}
+
+			$itemId	=	$app->input->getInt( 'Itemid', 0 );
+			$user	=	Factory::getUser();
+
+			// Redirect from tmpl=raw to #!
+			if ( $app->input->get( 'tmpl' ) == 'raw' ) {
+				$item	=	$app->getMenu()->getItem( $app->input->getInt( 'Itemid' ) );
+
+				if ( isset( $item->query['option'], $item->query['view'], $item->query['search'] )
+				  && $item->query['option'] == 'com_cck' && $item->query['view'] == 'list' ) {
+					$ref	=	$app->input->server->getString( 'HTTP_REFERER', '' );
+					$uri	=	\Joomla\CMS\Uri\Uri::getInstance();
+
+					if ( $ref == '' || strpos( $ref, '://'.$uri->getHost() ) === false ) {
+						if ( $item->query['search'] ) {
+							$search	=	JCckDatabase::loadResult( 'SELECT options FROM #__cck_core_searchs WHERE name = "'.$item->query['search'].'"' );
+							$search	=	new Registry( $search );
+
+							if ( (int)$search->get( 'load_resource', 0 ) ) {
+								$base		=	$uri->toString( array( 'scheme', 'host', 'port' ) );
+								$url		=	$uri->getPath();
+								$path		=	Route::_( 'index.php?Itemid='.$itemId );
+
+								if ( $path == '/' ) {
+									$path	=	'';
+								}
+
+								$base		.=	$path.'/';
+								$url		=	str_replace( $path.'/', '', $url );
+								$url		=	$base.'#'.$url;
+								
+								$app->redirect( $url );
+							}
+						}
+					}
+				}
+			}
+
+			if ( $this->multisite === true ) {
+				if ( $this->site ) {
+					$config		=	Factory::getConfig();
+					$site_desc	=	$this->site->configuration->get( 'metadesc', '' );
+					$site_keys	=	$this->site->configuration->get( 'metakeys', '' );
+
+					$meta_desc	=	$doc->getMetaData( 'description' );
+					$meta_keys	=	$doc->getMetaData( 'keywords' );
+
+					$page_title	=	$this->site->configuration->get( 'pagetitle', '' );
+
+					if ( $page_title != '' ) {
+						$menu	=	$app->getMenu();
+
+						if ( is_object( $menu ) ) {
+							$active	=	$menu->getActive();
+
+							if ( is_object( $active ) && (int)$active->home ) {
+								if ( !$active->getParams()->get( 'page_title', '' ) ) {
+									$doc->setTitle( $page_title );
+								}
+							}
+						}
+					}
+
+					$this->_updateTitle();
+
+					if ( $site_desc && ( !$meta_desc || $meta_desc == $config->get( 'MetaDesc' ) ) ) {
+						$doc->setMetaData( 'description', $site_desc );
+					}
+					if ( $site_keys && ( !$meta_keys || $meta_keys == $config->get( 'MetaKeys' ) ) ) {
+						$doc->setMetaData( 'keywords', $site_keys );
+					}
+					if ( $this->site->configuration->get( 'offline' ) && !$user->authorise( 'core.login.offline' ) ) {
+						$template	=	JCckDatabase::loadObject( 'SELECT template, params FROM #__template_styles WHERE template = "'.$app->getTemplate().'"' );
+						$params		=	array( 'directory'=>JPATH_THEMES,
+											   'file'=>'offline.php',
+											   'params'=>$template->params,
+											   'template'=>$template->template
+										);
+						$params['params']	=	new Registry( $params['params'] );
+						
+						$doc->parse( $params );
+						$this->offline_buffer	=	$doc->render( false, $params );
+					} elseif ( $this->site->configuration->get( 'set_template_style', false ) ) {
+						$menu	=	$app->getMenu();
+
+						if ( is_object( $menu ) ) {
+							$active	=	$menu->getActive();
+
+							if ( is_object( $active ) ) {
+								$style	=	$active->template_style_id;
+
+								if ( $style ) {
+									$this->_setTemplateStyle( $style );
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if ( $option == 'com_users' ) {
+				$options	=	JCckDatabase::loadResult( 'SELECT a.options FROM #__cck_core_objects AS a WHERE a.name = "joomla_user"' );
+				$options	=	new Registry( $options );
+				$itemId		=	$app->input->getInt( 'Itemid', 0 );
+
+				if ( $options->get( 'registration', 1 ) ) {
+					if ( $view == 'profile' ) {
+						$user	=	Factory::getUser();
+
+						if ( !$user->id ) {
+							return;
+						}
+						if ( $layout == 'edit' ) {
+							$type	=	JCckDatabase::loadResult( 'SELECT cck FROM #__cck_core WHERE storage_location="joomla_user" AND pk='.(int)$user->id );
+							if ( !$type ) {
+								return;
+							}
+							$itemId2	=	$options->get( 'profile_itemid', 0 );
+							$return		=	$app->input->getBase64( 'return', '' );
+
+							if ( $return == '' ) {
+								$return	=	base64_encode( $app->input->server->getString( 'HTTP_REFERER', '' ) );
+							}
+							$return		=	$return ? '&return='.$return : '';
+
+							if ( $itemId2 ) {
+								$item		=	$app->getMenu()->getItem( $itemId2 );
+								$urlvars	=	'';
+								if ( is_object( $item ) ) {
+									$urlvars	=	$item->getParams()->get( 'urlvars' );
+
+									if ( $urlvars != '' ) {
+										$urlvars	=	'&'.$urlvars;
+									}
+								}
+								$url		=	Route::_( 'index.php?option=com_cck&view=form&layout=edit&type='.$type.'&id='.$user->id.'&Itemid='.$itemId2.$urlvars.$return );
+							} else {
+								$url		=	'index.php?option=com_cck&view=form&layout=edit&type='.$type.'&id='.$user->id.'&Itemid='.$itemId.$return;
+							}
+						} else {
+							require_once JPATH_SITE.'/plugins/cck_storage_location/joomla_user/joomla_user.php';
+							$sef		=	0;
+							$itemId2	=	$options->get( 'profile_itemid', 0 );
+							if ( $itemId2 ) {
+								$link	=	JCckDatabase::loadResult( 'SELECT link FROM #__menu WHERE id = '.(int)$itemId2 );
+								if ( strpos( $link, 'index.php?option=com_cck&view=list' ) !== false ) {
+									$search	=	str_replace( 'index.php?option=com_cck&view=list&search=', '', $link );
+									$search	=	substr( $search, 0, strpos( $search, '&' ) );
+									$search	=	JCckDatabase::loadResult( 'SELECT options FROM #__cck_core_searchs WHERE name = "'.$search.'"' );
+									if ( $search != '' ) {
+										$search = '{}';
+									}
+									$search	=	new Registry( $search );
+									$sef	=	$search->get( 'sef', JCck::getConfig_Param( 'sef', '2' ) );
+									if ( $sef ) {
+										$itemId	=	$itemId2;
+									}
+								}
+							}
+							$url	=	plgCCK_Storage_LocationJoomla_User::getRoute( $user->id, $sef, $itemId );
+						}
+						if ( $url != '' ) {
+							$app->redirect( $url );
+						}
+					} elseif ( $view == 'registration' ) {
+						$itemId2	=	(int)$options->get( 'registration_itemid', 0 );
+
+						if ( $itemId2 ) {
+							$url	=	Route::_( 'index.php?Itemid='.$itemId2 );
+						} else {
+							$type	=	$options->get( 'default_type', 'user' );
+
+							if ( !$type ) {
+								return;
+							}
+							$url	=	'index.php?option=com_cck&view=form&layout=edit&type='.$type.'&Itemid='.$itemId;
+						}
+						$app->redirect( $url );
+					}
+				}
+			}
+
+			if ( $option == 'com_content' && $view == 'form' && $layout == 'edit' ) {
+				$aid	=	$app->input->getInt( 'a_id', 0 );
+				$return	=	$app->input->getBase64( 'return' );
+				if ( !$aid ) {
+					return;
+				}
+				$bridgeType	=	JCckDatabase::loadObject( 'SELECT cck, pk FROM #__cck_core WHERE storage_location IN ("joomla_user","joomla_user_group") AND pkb='.(int)$aid );
+
+				if ( is_object( $bridgeType ) && $bridgeType->cck ) {
+					$type	=	$bridgeType->cck;
+					$aid	=	(int)$bridgeType->pk;
+				} else {
+					$type	=	JCckDatabase::loadResult( 'SELECT cck FROM #__cck_core WHERE storage_location="joomla_article" AND pk='.(int)$aid );
+					if ( !$type ) {
+						return;
+					}
+				}
+				$url	=	'index.php?option=com_cck&view=form&layout=edit&type='.$type.'&id='.$aid.'&Itemid='.$itemId.'&return='.$return;
+				$app->redirect( $url );
+			}
+
+			$css_def	=	JCck::getConfig_Param( 'site_css_def', '' );
+			$css		=	JCck::getConfig_Param( 'site_css', '' );
+			$js			=	JCck::getConfig_Param( 'site_js', '' );
+			if ( $css_def == 'custom' ) {
+				$custom	=	JCck::getConfig_Param( 'site_css_def_custom', '' );
+				if ( is_array( $custom ) && count( $custom ) ) {
+					$css_def	=	implode( '-', $custom );
+					$css_def	=	( $css_def == 'base-spacing-writing' ) ? 'all' : $css_def;
+					$doc->addStyleSheet( \Joomla\CMS\Uri\Uri::root( true ).'/media/cck/css/definitions/'.$css_def.'.css' );
+				}
+			} elseif ( $css_def ) {
+				$doc->addStyleSheet( Uri::root( true ).'/media/cck/css/definitions/'.$css_def.'.css' );
+			}
+			if ( $css != '' ) {
+				$doc->addStyleDeclaration( $css );
+			}
+			if ( $js != '' ) {
+				JCck::loadjQuery( true, false, false );
+				$doc->addScriptDeclaration( 'jQuery(document).ready(function($){'.$js.'});' );
+			}
+		}
+	}
+
+	// onBeforeRender
+	public function onBeforeRender()
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onBeforeRender' );
+		}
+		$app	=	Factory::getApplication();
+		$doc	=	Factory::getDocument();
+
+		if ( ( $app->isClient( 'administrator' ) || ( $app->isClient( 'site' ) && JCckToolbox::getConfig()->def( 'KO' ) ) ) && $doc->getType() == 'html' ) {
+			$head	=	$doc->getHeadData();
+
+			JCckToolbox::setHead( $head );
+		}
+		if ( $app->isClient( 'site' ) && $doc->getType() == 'html' ) {
+			if ( isset( $app->cck_page_title ) ) {
+				$config		=	Factory::getConfig();
+
+				if ( $config->get( 'sitename_pagetitles', 0 ) == 1 ) {
+					$title	=	\Joomla\CMS\Language\Text::sprintf( 'JPAGETITLE', $config->get( 'sitename' ), $app->cck_page_title );
+				} elseif ( $config->get( 'sitename_pagetitles', 0 ) == 2 ) {
+					$title	=	\Joomla\CMS\Language\Text::sprintf( 'JPAGETITLE', $app->cck_page_title, $config->get( 'sitename' ) );
+				} else {
+					$title	=	$app->cck_page_title;
+				}
+
+				$doc->setTitle( $title );
+
+				if ( $this->multisite === true ) {
+					if ( $this->site ) {
+						$this->_updateTitle();
+					}
+				}
+			}
+
+			// Data Layer
+			$session	=	Factory::getApplication()->getSession();
+			$page_data	=	$session->get( 'cck.data_layer', null );
+
+			if ( $page_data ) {
+				$doc->addScriptDeclaration( 'document.addEventListener("DOMContentLoaded", (event) => { window.dataLayer = window.dataLayer || []; window.dataLayer.push('.json_encode( $page_data ).'); });' );
+				$doc->addScriptDeclaration( 'document.addEventListener("DOMContentLoaded", (event) => { window._mtm = window._mtm || []; window._mtm.push('.json_encode( $page_data ).'); });' );
+				$session->clear( 'cck.data_layer' );
+			}
+		}
+		if ( $app->isClient( 'site' ) && isset( $app->cck_app ) && isset( $app->cck_app['Header'] ) ) {
+			if ( count( $app->cck_app['Header'] ) ) {
+				foreach ( $app->cck_app['Header'] as $k=>$v ) {
+					$app->setHeader( $k, $v, true );
+				}
+			}
+		}
+	}
+
+	// onAfterRender
+	public function onAfterRender()
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			JCckToolbox::process( 'onAfterRender' );
+		}
+		$app		=	Factory::getApplication();
+		$doc		=	Factory::getDocument();
+		$option		=	$app->input->get( 'option', '' );
+		$view		=	$app->input->get( 'view', '' );
+		$layout		=	$app->input->get( 'layout', '' );
+
+		if ( ( $app->isClient( 'administrator' ) || ( $app->isClient( 'site' ) && JCckToolbox::getConfig()->def( 'KO' ) ) ) && $doc->getType() == 'html' ) {
+			JCckToolbox::setHeadAfterRender();
+		}
+
+		// site
+		if ( $app->isClient( 'site' ) ) {
+			if ( $this->multisite === true ) {
+				if ( $this->site ) {
+					if ( !$this->site_context ) {
+						if ( $this->site->context != '' ) {
+							$buffer		=	$app->getBody();
+
+							foreach ( $this->site->exclusions as $excl ) {
+								$buffer	=	str_replace( 'href="'.$excl.'/', 'href="'.'/'.$this->site->context.$excl.'/', $buffer );
+								$buffer	=	str_replace( 'href="'.$excl.'"', 'href="'.'/'.$this->site->context.$excl.'"', $buffer );
+								$buffer	=	str_replace( 'document.location.href=\''.$excl.'/', 'document.location.href=\'/'.$this->site->context.$excl.'/', $buffer );
+								$buffer	=	str_replace( 'document.location.href=\''.$excl.'\'', 'document.location.href=\'/'.$this->site->context.$excl.'\'', $buffer );
+								$buffer	=	str_replace( 'action="'.$excl.'/', 'action="'.'/'.$this->site->context.$excl.'/', $buffer );
+								$buffer	=	str_replace( 'action="'.$excl.'"', 'action="'.'/'.$this->site->context.$excl.'"', $buffer );
+							}
+
+							$app->setBody( $buffer );
+						}
+					}
+					if ( $this->site->configuration->get( 'offline' ) && isset( $this->offline_buffer ) ) {
+						$uri		=	Uri::getInstance();
+						$app->setUserState( 'users.login.form.data', array( 'return'=>(string)$uri ) );
+
+						if ( !isset( $app->cck_app['Header']['Status'] ) ) {
+							$app->setHeader( 'Status', '503 Service Temporarily Unavailable', true );
+						}
+						$app->setBody( $this->offline_buffer );
+					}
+				}
+			}
+
+			return;
+		}
+
+		// admin
+		if ( $app->isClient( 'administrator' ) ) {
+			$buffer		=	'';
+			$type		=	Factory::getDocument()->getType();
+
+			if ( $type == 'html' ) {
+				$buffer	=	$app->getBody();
+				$buffer	=	str_replace( 'icon-cck-', 'myicon-cck-', $buffer );
+
+				switch ( $option ) {
+					case 'com_cck':
+					case 'com_cck_builder':
+					case 'com_cck_developer':
+					case 'com_cck_ecommerce':
+					case 'com_cck_exporter':
+					case 'com_cck_importer':
+					case 'com_cck_manager':
+					case 'com_cck_multilingual':
+					case 'com_cck_packager':
+					case 'com_cck_toolbox':
+					case 'com_cck_updater':
+					case 'com_cck_webservices':
+						$buffer	=	$this->_setBasics( $buffer, $option, $view );
+						break;
+					case 'com_postinstall':
+						$eid	=	$app->input->get( 'eid', 0 );
+						$eid2	=	JCckDatabase::loadResult( 'SELECT extension_id FROM #__extensions WHERE type = "component" AND element = "com_cck"' );
+						if ( $eid && $eid == $eid2 ) {
+							$buffer	=	str_replace( 'com_cck', 'SEBLOD', $buffer );
+							$buffer	=	str_replace( 'option=SEBLOD', 'option=com_cck', $buffer );
+						}
+						break;
+					case 'com_templates':
+						if ( $view == 'templates' || $layout == 'edit' ) {
+							break;
+						}
+						$search		=	'#administrator/index.php\?option=com_templates&amp;task=style.edit&amp;id=(.*)">(.*)</a>#sU';
+						$list		=	JCckDatabase::loadObjectList( 'SELECT a.id, b.name FROM #__template_styles AS a LEFT JOIN #__cck_core_templates AS b ON b.name = a.template WHERE b.name != ""', 'id' );
+						preg_match_all( $search, $buffer, $matches );
+						if ( count( $matches[1] ) ) {
+							$i		=	0;
+							foreach ( $matches[1] as $match ) {
+								if ( isset( $list[$match] ) ) {
+									$replace	=	$matches[0][$i] . ' <span class="label label-info hasTooltip" title="'.\Joomla\CMS\Language\Text::_( 'COM_CCK_DO_NOT_SET_AS_DEFAULT_TEMPLATE' ).'"><span class="icon-info"></span>'.\Joomla\CMS\Language\Text::_( 'COM_CCK' ).'</span>';
+									$buffer		=	str_replace( $matches[0][$i], $replace, $buffer );
+								}
+								$i++;
+							}
+						}
+						break;
+					default:
+						$and		=	( $view ) ? ' AND ( a.view = "'.$view.'" OR a.view = "" )' : '';
+						$locations	=	JCckDatabase::loadObjectList( 'SELECT a.name, a.options FROM #__cck_core_objects AS a WHERE a.component = "'.$option.'"'.$and );
+						$uri		=	array( 'option'=>$option, 'view'=>$view, 'layout'=>$layout );
+						if ( count( $locations ) ) {
+							foreach ( $locations as $location ) {
+								$path	=	JPATH_SITE.'/plugins/cck_storage_location/'.$location->name.'/classes/integration.php';
+								if ( is_file( $path ) ) {
+									$data	=	array( 'doIntegration'=>false,
+													   'multilanguage'=>0,
+													   'options'=>new Registry( $location->options ),
+													   'replace_end'=>'"',
+													   'return_option'=>substr( $option, 4 ),
+													   'return_view'=>$view,
+													   'return'=>'',
+													   'search'=>'',
+													   'search_alt'=>''
+												);
+									require_once $path;
+									JCck::callFunc_Array( 'plgCCK_Storage_Location'.$location->name.'_Integration', 'onCCK_Storage_LocationAfterRender', array( &$buffer, &$data, $uri ) );
+									if ( $data['doIntegration'] ) {
+										$list	=	JCckDatabase::loadObjectList( 'SELECT pk, cck FROM #__cck_core WHERE storage_location="'.$location->name.'"', 'pk' );
+										$buffer	=	JCckDevIntegration::rewriteBuffer( $buffer, $data, $list );
+									}
+								}
+							}
+						}
+						break;
+				}
+				if ( $option == 'com_cck' ) {
+					$body_class	=	'';
+
+					if ( JCck::on( '5' ) ) {
+						$body_class	.=	'is-dark';
+					}
+					$buffer		=	str_replace( '<body class="', '<body class="widescreen '.$body_class, $buffer );
+				} elseif ( isset( $app->cck_integration_modal ) && $app->cck_integration_modal != '' ) {
+					$buffer	=	self::_updateBuffer( $buffer, $app->cck_integration_modal['path'], $app->cck_integration_modal['options'], $app->cck_integration_modal['params'], $app->cck_integration_modal['variables'] );
+				}
+				$app->setBody( $buffer );
+			} elseif ( $option == 'com_cck' && $type == 'raw' ) {
+				if ( $layout == 'edit3' || $layout == 'edit4' ) {
+					$buffer	=	$app->getBody();
+					$buffer	=	str_replace( array( "\r\n", "\r", "\n", "\t", '  ', '    ', '    ' ), '', $buffer );
+
+					if ( $buffer != '' ) {
+						$app->setBody( $buffer );
+					}
+				}
+			}
+
+			return;
+		}
+	}
+
+	// onContentPrepareForm
+	public function onContentPrepareForm( $form, $data )
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			$event		=	'onContentPrepareForm';
+			$processing	=	JCckDatabaseCache::loadObjectListArray( 'SELECT type, scriptfile, options FROM #__cck_more_processings WHERE published = 1 ORDER BY ordering', 'type' );
+
+			if ( isset( $processing[$event] ) ) {
+				foreach ( $processing[$event] as $p ) {
+					if ( is_file( JPATH_SITE.$p->scriptfile ) ) {
+						$options	=	new Registry( $p->options );
+
+						include_once JPATH_SITE.$p->scriptfile;
+					}
+				}
+			}
+		}
+	}
+
+	// onExtensionAfterSave
+	public function onExtensionAfterSave( $context, $table, $isNew )
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			$event		=	'onExtensionAfterSave';
+			$processing	=	JCckDatabaseCache::loadObjectListArray( 'SELECT type, scriptfile, options FROM #__cck_more_processings WHERE published = 1 ORDER BY ordering', 'type' );
+
+			if ( isset( $processing[$event] ) ) {
+				foreach ( $processing[$event] as $p ) {
+					if ( is_file( JPATH_SITE.$p->scriptfile ) ) {
+						$options	=	new Registry( $p->options );
+
+						include_once JPATH_SITE.$p->scriptfile;
+					}
+				}
+			}
+		}
+
+		if ( $context != 'com_config.component' ) {
+			return;
+		}
+
+		if ( !( is_object( $table ) && $table->type == 'component' && $table->element == 'com_cck_updater' ) ) {
+			return;
+		}
+
+		$params	=	new Registry;
+		$params->loadString( $table->params );
+
+		if ( $proxy = (int)$params->get( 'proxy', '0' ) ) {
+			require_once JPATH_ADMINISTRATOR.'/components/com_cck_updater/helpers/helper_admin.php';
+
+			$proxy	=	Helper_Admin::getProxy( $params, 'proxy_segment' );
+
+			JCckDatabase::execute( 'UPDATE #__update_sites SET location = REPLACE(location, "update.seblod.com", "'.$proxy.'") WHERE location LIKE "%update.seblod.com%" AND location != "http://update.seblod.com/pkg_cck.xml"' );
+		} elseif ( !$proxy && $params->get( 'proxy_domain' ) ) {
+			require_once JPATH_ADMINISTRATOR.'/components/com_cck_updater/helpers/helper_admin.php';
+
+			$proxy	=	Helper_Admin::getProxy( $params, 'proxy_segment' );
+
+			JCckDatabase::execute( 'UPDATE #__update_sites SET location = REPLACE(location, "'.$proxy.'", "update.seblod.com") WHERE location LIKE "%'.$proxy.'%"' );
+		}
+	}
+
+	// onInstallerAfterInstaller
+	public function onInstallerAfterInstaller( $package, $installer, $result, &$msg )
+	{
+		if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+			$event		=	'onInstallerAfterInstaller';
+			$processing	=	JCckDatabaseCache::loadObjectListArray( 'SELECT type, scriptfile, options FROM #__cck_more_processings WHERE published = 1 ORDER BY ordering', 'type' );
+
+			if ( isset( $processing[$event] ) ) {
+				foreach ( $processing[$event] as $p ) {
+					if ( is_file( JPATH_SITE.$p->scriptfile ) ) {
+						$options	=	new Registry( $p->options );
+
+						include_once JPATH_SITE.$p->scriptfile;
+					}
+				}
+			}
+		}
+	}
+
+	// _isMultiSite
+	protected function _isMultiSite()
+	{
+		return (bool)JCck::getConfig_Param( 'multisite', 0 );
+	}
+
+	// _isRestApi
+	protected function _isRestApi()
+	{
+		if ( JCckWebservice::getConfig()->params->def( 'KO' ) ) {
+		 	return false;
+		} else {
+			$api_paths	=	JCckDatabase::loadObjectList( 'SELECT path'
+														. ' FROM #__menu WHERE'
+														. ' link = "index.php?option=com_cck_webservices&view=api" AND published = 1', 'path' );
+			
+			if ( !count( $api_paths ) ) {
+				return false;
+			}
+
+			$base_path		=	\Joomla\CMS\Uri\Uri::getInstance()->getPath().'/';
+			$language_codes	=	array();
+			$prefix			=	( !Factory::getConfig()->get( 'sef_rewrite' ) ) ? '/index.php' : '';
+
+			if ( JCckDevHelper::isMultilingual( true ) ) {
+				$language_codes	=	JCckDevHelper::getLanguageCodes();
+
+				foreach ( $language_codes as $k=>$sef ) {
+					$language_codes[$k]	=	$prefix.'/'.$sef;
+				}
+			}
+
+			if ( count( $language_codes ) && JCckDevHelper::getLanguageCode( true ) !== '' ) {
+				foreach ( $api_paths as $api_path ) {
+					foreach ( $language_codes as $sef ) {
+						$path	=	$sef.'/'.$api_path->path.'/';
+						$pos	=	strpos( $base_path, $path );
+
+						if ( $pos !== false && $pos == 0 ) {
+							return true;
+						}
+					}
+				}	
+			}
+			foreach ( $api_paths as $api_path ) {
+				$path	=	$prefix.'/'.$api_path->path.'/';
+				$pos	=	strpos( $base_path, $path );
+
+				if ( $pos !== false && $pos == 0 ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	// _reSubmenu
+	protected function _reSubmenu( $buffer, $search, $replace )
+	{
+		preg_match( $search, $buffer, $match );
+		if ( is_array( $match ) && count( $match ) ) {
+			$search		=	$match[1];
+			$search		=	str_replace( '</ul>', '', $match[1] );
+
+			$replace	=	$match[1].'<li style="float: right;">'.$replace.'</li>';
+			$buffer		=	str_replace( $search, $replace.'</ul>', $buffer );
+		}
+
+		return $buffer;
+	}
+
+	// _runMultisite
+	protected function _runMultisite()
+	{
+		$app	=	Factory::getApplication();
+		$user	=	Factory::getUser();
+
+		if ( JCck::getMultisiteInfo( 'hasContext' ) ) {
+			$guests	=	JCck::getMultisiteInfo( 'guests' );
+			$isUser	=	!isset( $guests[(string)$user->id] );
+		} else {
+			if ( !is_object( $this->site ) ) {
+				$isUser	=	false;
+			} else {
+				$isUser	=	$user->id != $this->site->guest;
+			}
+		}
+		if ( $user->id > 0 && is_object( $this->site ) && $isUser ) {
+			if ( $app->isClient( 'site' ) ) {
+				$this->_setHomepage( $this->site->configuration->get( 'homepage', 0 ) );
+
+				$style	=	$this->site->configuration->get( 'template_style', '' );
+
+				if ( $style != '' ) {
+					$this->site->configuration->set( 'set_template_style', true );
+					$this->_setTemplateStyle( $style );
+				}
+			}
+
+			if ( ! $this->site ) {
+				Factory::getApplication()->getSession()->set( 'user', Factory::getUser( $user->id ) );
+
+				return;
+			}
+
+			if ( !(int)JCck::getConfig_Param( 'multisite_login', '1' ) ) {
+				if ( !$user->authorise( 'core.admin' ) ) {
+					$groups		=	explode( ',', $this->site->usergroups );
+					$hasGroups	=	0;
+
+					if ( count( $groups ) ) {
+						foreach ( $groups as $group_id ) {
+							if ( isset( $user->groups[$group_id] ) ) {
+								$hasGroups++;
+							}
+						}
+
+						if ( !$hasGroups ) {
+							$options	=	array( 'clientid'=>0 );
+							$result		=	$app->logout( $user->id, $options );
+
+							if ( !( $result instanceof Exception ) ) {
+								$app->redirect( \Joomla\CMS\Uri\Uri::getInstance()->getPath() );
+							}
+						}
+					}
+				}
+			}
+
+			// Groups
+			$authgroups	=	$user->getAuthorisedGroups();
+			$nogroups	=	JCckDatabase::loadColumn( 'SELECT usergroups FROM #__cck_core_sites WHERE id != '.$this->site->id );
+			$nogroups	=	( is_null( $nogroups ) ) ? '' : ','.implode( ',', $nogroups ).',';
+			$multisite	=	false;
+
+			if ( count( $user->groups ) ) {
+				foreach ( $user->groups as $g ) {
+					if ( strpos( $nogroups, ','.$g.',' ) !== false ) {
+						$multisite	=	true;
+						break;
+					}
+				}
+			}
+			$nogroups	=	str_replace( ',,',',', $nogroups );
+
+			// Viewlevels
+			$authlevels		=	$user->getAuthorisedViewLevels();
+			
+			if ( $multisite ) {
+				$nolevels	=	JCckDatabase::loadColumn( 'SELECT viewlevels FROM #__cck_core_sites WHERE id != '.$this->site->id );
+				$nolevels	=	( is_null( $nolevels ) ) ? array() : explode( ',', implode( ',', $nolevels ) );
+
+				if ( count( $nolevels) ) {
+					foreach ( $nolevels as $k=>$v ) {
+						$nolevels[$k]	=	(int)$v;
+					}
+				}
+				$viewlevels		=	array_diff( $authlevels, $nolevels );
+				$otherlevels	=	array_diff( explode( ',', $this->site->viewlevels ), $viewlevels );
+				$otherlevels	=	array_intersect( $otherlevels, $authlevels );
+
+				if ( is_array( $this->site->public_viewlevel ) ) {
+					$otherlevels	=	array_merge( $otherlevels, $this->site->public_viewlevel );
+				} else {
+					$otherlevels[]	=	(int)$this->site->public_viewlevel;
+				}
+				$otherlevels	=	ArrayHelper::toInteger( $otherlevels );
+
+				if ( count( $otherlevels ) ) {
+					$viewlevels	=	array_merge( $viewlevels, $otherlevels );
+				}
+			} else {
+				$viewlevels		=	$authlevels;
+
+				if ( is_array( $this->site->public_viewlevel ) ) {
+					$viewlevels		=	array_merge( $viewlevels, $this->site->public_viewlevel );
+				} else {
+					$viewlevels[]	=	(int)$this->site->public_viewlevel;
+				}
+			}
+
+			if ( $app->isClient( 'administrator' ) && (int)$this->site->guest_only_viewlevel > 0 ) {
+				$viewlevels[]	=	(int)$this->site->guest_only_viewlevel;
+			}
+
+			if( ( count( array_diff( $authlevels, $viewlevels ) ) ) || ( count( array_diff( $viewlevels, $authlevels ) ) ) ) {
+				jimport( 'cck.joomla.user.user' );
+				$userShadow		=	new CCKUser( $user->id );
+				$userShadow->setAuthorisedViewLevels( $viewlevels );
+				$userShadow->makeHimLive();
+			}
+
+			if ( JCck::on( '3.5' ) ) {
+				jimport( 'cck.joomla.menu.menu' );
+				$menuShadow		=	new CCKMenu( array( 'user_id'=>$user->id ) );
+				$menuShadow->makeHimLive();
+			}
+		} else {
+			if ( $app->isClient( 'administrator' ) ) {
+				return;
+			}
+
+			if ( ! $this->site ) {
+				if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+					JCckToolbox::process( 'onAfterInitialise' );
+				}
+				return;
+			}
+
+			$session	=	Factory::getApplication()->getSession();
+			$session->set( 'user', Factory::getUser( 0 ) );
+
+			if ( strpos( \Joomla\CMS\Uri\Uri::getInstance()->toString(), 'task=registration.activate' ) !== false ) {
+				if ( JCckToolbox::getConfig()->get( 'processing', 0 ) ) {
+					JCckToolbox::process( 'onAfterInitialise' );
+				}
+				return;
+			}
+
+			$user			=	Factory::getUser( $this->site->guest );
+			$user->guest	=	1;
+
+			$session->set( 'user', $user );
+
+			if ( JCck::on( 4.2 ) ) {
+				$app->loadIdentity( $session->get('user') );
+			}
+
+			if ( JCck::on( '3.5' ) ) {
+				jimport( 'cck.joomla.menu.menu' );
+				$menuShadow		=	new CCKMenu( array( 'user_id'=>$this->site->guest ) );
+				$menuShadow->makeHimLive();
+			}
+			$this->_setHomepage( $this->site->configuration->get( 'homepage', 0 ) );
+
+			$style	=	$this->site->configuration->get( 'template_style', '' );
+
+			if ( $style != '' ) {
+				$this->site->configuration->set( 'set_template_style', true );
+				$this->_setTemplateStyle( $style );
+			}
+		}
+	}
+
+	// _setBasics
+	protected function _setBasics( $buffer, $option, $view )
+	{
+		if ( ! $view ) {
+			if ( $option == 'com_cck_ecommerce' ) {
+				$buffer	=	str_replace( 'icon-48-seblod', 'icon-48-seblod-ecommerce', $buffer );
+			}
+		}
+
+		return $buffer;
+	}
+
+	// _setDefaultLanguage
+	protected function _setDefaultLanguage()
+	{
+		$lang	=	Factory::getLanguage();
+		$params	=	JCckDatabase::loadResult( 'SELECT params FROM #__extensions WHERE type = "component" AND element = "com_languages"' );
+		$params	=	new Registry( $params );
+
+		if ( ( $default = $params->get( 'site' ) ) != $lang->getDefault() ) {
+			$lang->setDefault( $default );
+		}
+	}
+
+	// _setHomepage
+	protected function _setHomepage( $id )
+	{
+		if ( !$id ) {
+			return;
+		}
+		$app	=	Factory::getApplication();
+		$menu	=	$app->getMenu();
+		$home	=	$menu->getDefault();
+		$my		=	$menu->getItem( $id );
+		$path	=	substr( \Joomla\CMS\Uri\Uri::getInstance()->getPath(), 1 );
+
+		if ( !is_object( $my ) ) {
+			return;
+		}
+
+		/* TODO#SEBLOD: need to be improved! */
+		if ( !( !$path || $path == 'index.php/'.$my->alias || $path == $my->alias.'.html' ) ) {
+			$home->title		=	$my->title;
+		} else {
+			$home->id			=	$my->id;
+			$home->title		=	$my->title;
+			$home->type			=	$my->type;
+			$home->access		=	$my->access;
+			$home->component	=	$my->component;
+			$home->component_id	=	$my->component_id;
+			$home->link			=	$my->link;
+			$home->query  		=	$my->query;
+
+			$home->setParams( $my->getParams() );
+		}
+	}
+
+	// _setLegacyMode
+	protected function _setLegacyMode()
+	{
+		// Joomla!
+		if ( !class_exists( 'JCck' ) ) {
+			require_once JPATH_LIBRARIES.'/cck/_/cck.php';
+			\JLoader::registerPrefix( 'JCck', JPATH_LIBRARIES.'/cck/_' );
+
+			if ( JCck::on( '4.0' ) ) {
+				// 
+			}
+		}
+
+		// Joomla! 4
+		if ( (int)JCck::getConfig_Param( 'sql_legacy', '0' ) ) {
+			$modes	=	JCckDatabase::loadResult( 'SELECT @@SESSION.sql_mode;' );
+
+			if ( $modes ) {
+				$modes	=	explode( ',', $modes );
+				$modes	=	array_flip( $modes );
+
+				unset( $modes['STRICT_TRANS_TABLES'] );
+
+				JCckDatabase::execute( 'SET SESSION sql_mode = "'.implode( ',', array_keys( $modes ) ).'";' );	
+			}	
+		}
+
+		// SEBLOD
+		$legacy	=	(int)JCck::getConfig_Param( 'core_legacy', '' );
+
+		if ( !$legacy ) {
+			return;
+		}
+
+		if ( $legacy == 2012 ) {
+			JLoader::registerAlias( 'plgCCK_FieldGeneric', 'JCckPluginField' );
+			JLoader::registerAlias( 'plgCCK_Field_LinkGeneric', 'JCckPluginLink' );
+			JLoader::registerAlias( 'plgCCK_Field_LiveGeneric', 'JCckPluginLive' );
+			JLoader::registerAlias( 'plgCCK_Field_TypoGeneric', 'JCckPluginTypo' );
+			JLoader::registerAlias( 'plgCCK_Field_ValidationGeneric', 'JCckPluginValidation' );
+			JLoader::registerAlias( 'plgCCK_StorageGeneric', 'JCckPluginStorage' );
+			JLoader::registerAlias( 'plgCCK_Storage_LocationGeneric', 'JCckPluginLocation' );
+			JLoader::registerAlias( 'CCK_TableGeneric', 'JCckTable' );
+		}
+
+		if ( $legacy <= 2017 ) {
+			if ( ! defined( 'JROOT_CCK' ) ) {
+				define( 'JROOT_CCK', \Joomla\CMS\Uri\Uri::root( true ) );
+			}
+			if ( ! defined( 'JROOT_MEDIA_CCK' ) ) {
+				define( 'JROOT_MEDIA_CCK', \Joomla\CMS\Uri\Uri::root( true ).'/media/cck' );
+			}
+			if ( ! defined( 'JPATH_LIBRARIES_CCK' ) ) {
+				define( 'JPATH_LIBRARIES_CCK', JPATH_SITE.'/libraries/cck' );
+			}
+
+			jimport( 'cck.content.article' );
+			jimport( 'cck.content.category' );
+			jimport( 'cck.content.content' );
+			jimport( 'cck.content.user' );
+		}
+	}
+
+	// _setMultisite
+	protected function _setMultisite()
+	{
+		$app	=	Factory::getApplication();
+
+		JCck::_setMultisite();
+		
+		$this->site		=	null;
+		
+		if ( JCck::isSite() ) {
+			$this->default_lang =	ComponentHelper::getParams( 'com_languages' )->get( 'site', 'en-GB' );
+			$this->filter_lang	=	PluginHelper::isEnabled( 'system', 'languagefilter' );
+			$this->site			=	JCck::getSite();
+			$this->site_context	=	(int)JCck::getConfig_Param( 'multisite_context', '1' );
+
+			$auto_context		=	$this->site->configuration->get( 'context', '' );
+
+			if ( $auto_context != '' && $auto_context == 0 ) {
+				$this->site_context	=	0;
+			}
+
+			if ( $app->isClient( 'site' ) && $this->site ) {
+				// --- Redirect to Homepage
+				$homepage	=	$this->site->configuration->get( 'homepage', 0 );
+
+				if ( $homepage > 0 ) {
+					$current	=	\Joomla\CMS\Uri\Uri::current( true );
+					$len		=	strlen( $current );
+
+					if ( $current[$len - 1] == '/' ) {
+						$current	=	substr( $current, 0, -1 );
+					}
+					$current	=	str_replace( array( 'http://', 'https://' ), '', $current );
+
+					if ( $current == $this->site->host ) {
+						$redirect_url	=	\Joomla\CMS\Router\Route::_( 'index.php?Itemid='.$homepage );
+
+						if ( $redirect_url != \Joomla\CMS\Uri\Uri::root(true).'/' ) {
+							Factory::getApplication()->redirect( $redirect_url );
+						}
+					}
+				}
+				// ---
+				$forced	=	false;
+				$path	=	\Joomla\CMS\Uri\Uri::getInstance()->getPath();
+				$length	=	strlen( $path );
+
+				if ( $path[$length - 1 ] != '/' ) {
+					$path	.=	'/';
+				}
+				if ( $path[0] != '/' ) {
+					$path	=	'/'.$path;
+				}
+				if ( isset( $this->site->exclusions ) && count( $this->site->exclusions ) ) {
+					foreach ( $this->site->exclusions as $excl ) {
+						$length	=	strlen( $excl );
+
+						if ( $excl[$length - 1 ] != '/' ) {
+							$excl	.=	'/';
+						}
+						if ( $excl[0] != '/' ) {
+							$excl	=	'/'.$excl;
+						}
+						if ( $this->site->context != '' ) {
+							$excl	=	'/' . $this->site->context . $excl;
+						}
+						$pos	=	strpos( $path, $excl );
+
+						if ( $pos !== false && $pos == 0 ) {
+							$forced					=	true;
+							$this->site_exclusion	=	true;
+							break;
+						}
+					}
+				}
+				if ( $forced == true ) {
+					$tag	=	Factory::getLanguage()->getDefault();
+				} else {
+					$tag	=	$this->site->configuration->get( 'language' );
+				}
+
+				if ( $tag ) {
+					JCckDevHelper::setLanguage( $tag );
+				}
+
+				$this->current_lang	=	Factory::getLanguage()->getTag();
+			}
+		}
+	}
+
+	// _setRestApi
+	protected function _setRestApi()
+	{
+		$format		=	JCckWebservice::getConfig_Param( 'resources_format', 'json' );
+		$request	=	(int)JCckWebservice::getConfig_Param( 'resources_format_request', 0 );
+
+		/* TODO: We may redirect or return bad request if not allowed ONLY when last segment has no ":" (unique/identifier) */
+		if ( $request == 1 ) {
+			$path		=	\Joomla\CMS\Uri\Uri::getInstance()->getPath();
+			$segment	=	substr( $path, strrpos( $path, '/' ) + 1 );
+
+			if ( $segment != '' ) {
+				if ( ( $pos = strpos( $segment, '.' ) ) !== false ) {
+					$format	=	substr( $segment, $pos + 1 );
+
+					if ( $format[0] == 'w' ) {
+						$format	=	substr( $format, 1 );
+					}
+				}
+			}
+		} elseif ( $request == 2 ) {
+			$format	=	Factory::getApplication()->input->get( 'format', $format );
+		}
+
+		Factory::getApplication()->input->set( 'format', $format );
+	}
+
+	// _setTemplateStyle
+	protected function _setTemplateStyle( $style )
+	{
+		$style	=	JCckDatabase::loadObject( 'SELECT template, params FROM #__template_styles WHERE id = '.(int)$style );
+		
+		if ( is_object( $style ) ) {
+			Factory::getApplication()->setTemplate( $style->template, $style->params );
+		}
+	}
+
+	// _updateBuffer
+	protected function _updateBuffer( $buffer, $path, $options, $params, $variables )
+	{
+		ob_start();
+		include $path;
+		$html	=	ob_get_clean();
+
+		return str_replace( '</body>', $html.'</body>', $buffer );
+	}
+
+	// _updateTitle
+	protected function _updateTitle()
+	{
+		$doc		=	Factory::getDocument();
+		$site_title	=	$this->site->configuration->get( 'sitename', '' );
+		$site_pages	=	$this->site->configuration->get( 'sitename_pagetitles', 0 );
+
+		if ( $site_pages ) {
+			$title	=	( $site_pages ) == 2 ? $doc->getTitle().' - '.$site_title : $site_title .' - '.$doc->getTitle();
+
+			$doc->setTitle( $title );
+		}
+	}
+}
+?>

@@ -1,0 +1,19 @@
+[class*='cck-quicklink-'] {
+    -webkit-mask: url(icon.svg) 50% 50% / 100% no-repeat;
+    mask: url(icon.svg) 50% 50% / 100% no-repeat;
+    background-color: currentColor;
+}
+/*
+ * Joomla 4
+ */
+
+.cck-quicklink-menu { aspect-ratio: 1 / 1; }
+
+.cck-quicklink-cpanel {
+    width: 46px;
+    height: 32px;
+}
+
+.no-dropdown:has(.cck-quicklink-menu-j3) { margin-left: -10px; }
+
+.cck-quicklink-cpanel-j3 { vertical-align: text-bottom; }

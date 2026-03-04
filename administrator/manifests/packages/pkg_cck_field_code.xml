@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_cck_field_code</name>
+	<packagename>cck_field_code</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>May 2013</creationDate>
+	<description>Code Field Pack for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>1.8.0</version>
+	
+	<scriptfile>pkg_script.php</scriptfile>
+	
+	<files folder="extensions">
+		<file type="plugin" id="code_afterstore" group="cck_field">plg_cck_field_code_afterstore.zip</file>
+		<file type="plugin" id="code_beforerender" group="cck_field">plg_cck_field_code_beforerender.zip</file>
+		<file type="plugin" id="code_beforesearch" group="cck_field">plg_cck_field_code_beforesearch.zip</file>
+		<file type="plugin" id="code_beforestore" group="cck_field">plg_cck_field_code_beforestore.zip</file>
+		<file type="plugin" id="code_css" group="cck_field">plg_cck_field_code_css.zip</file>
+		<file type="plugin" id="code_js" group="cck_field">plg_cck_field_code_js.zip</file>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.pkg_cck_field_code.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_cck_field_code.sys.ini</language>
+	</languages>
+	
+	<updateservers>
+		<server type="extension" priority="1" name="Code Field Pack Updates">http://update.seblod.com/pkg_cck_field_code.xml</server>
+	</updateservers>
+</extension>

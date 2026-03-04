@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CCK_TOOLBOX_PROCESSING_DEFAULT_TITLE" option="COM_CCK_TOOLBOX_PROCESSING_VIEW_DEFAULT_OPTION">
+		<help key = "..." />
+		<message><![CDATA[COM_CCK_TOOLBOX_PROCESSING_DEFAULT_DESC]]></message>
+	</layout>
+
+	<!-- Parameters object. -->
+	<fields name="params" addfieldpath="/libraries/cck/construction/field">
+		<fieldset name="basic" label="COM_CCK_TOOLBOX_CONFIG_FIELDSET_BASIC_OPTIONS">
+			<field name="processing" type="sql" default="" label="COM_CCK_TOOLBOX_PROCESSING" description="COM_CCK_TOOLBOX_PROCESSING_DESC" query="SELECT id, title FROM #__cck_more_processings WHERE published=1 AND type=0 ORDER BY title" key_field="id" value_field="title" class="inputbox" required="true">
+				<option value="">JGLOBAL_SELECT_AN_OPTION</option>
+			</field>
+			<field name="show_page_title" type="cck" construction="core_show_hide" default="" cck_selectlabel="Use Global"
+				   label="COM_CCK_CONFIG_SHOW_FORM_TITLE" description="COM_CCK_CONFIG_SHOW_FORM_TITLE_DESC" class="inputbox" />
+			<field name="tag_page_title" type="cck" construction="core_tag_title" default="" label="" description="" class="inputbox" />
+			<field name="class_page_title" type="cck" construction="core_class_title" default="" label="" description="" class="inputbox" cck_attributes="placeholder='J(Class)'" />
+			<field name="cckjs" type="cckjs" label="" description=""
+				   js_appendto="jform_params_show_page_title=J(as tag),#jform_params_tag_page_title,J(with class),#jform_params_class_page_title"
+				   js_isvisiblewhen="div#jform_params_cckjs-more='jform_params_show_page_title','1',false" js_format="html" hidden="true" />
+			<field name="display_page_title" type="cck" construction="core_dev_select" cck_options="Custom Text=1||Menu Item=0||Translated Text=3" cck_selectlabel="Inherited" default="" label="LIB_CCK_TITLE" description="" class="inputbox" />
+			<field name="title_page_title" type="cck" construction="core_dev_text" default="" label="" description="" class="inputbox" cck_attributes="placeholder='J(Title)'" js_appendto="jform_params_display_page_title=#jform_params_title_page_title" js_isvisiblewhen="div#jform_params_title_page_title-more='jform_params_display_page_title','1,3',false" js_format="html" hidden="true" />
+			<field name="show_page_desc" type="cck" construction="core_show_hide2" default="" cck_selectlabel="Use Global"
+				   label="COM_CCK_CONFIG_SHOW_FORM_DESCRIPTION" description="COM_CCK_CONFIG_SHOW_FORM_DESCRIPTION_DESC" class="inputbox" />
+			<field name="page_desc" type="cck" construction="core_description" default="" label="" description="..." class="inputbox" cck_selectlabel="Edit"
+				   js_appendto="jform_params_show_page_desc=a.wysiwyg_editor_box"
+				   js_isvisiblewhen="a.wysiwyg_editor_box='jform_params_show_page_desc','1,2',false" js_format="html" hidden="true" filter="raw" />
+			<field name="tag_page_desc" type="list" default="div" label="COM_CCK_CONFIG_DESCRIPTION_TAG" description="COM_CCK_CONFIG_DESCRIPTION_TAG_DESC" class="inputbox">
+				<option value="div">div</option>
+				<option value="div_div">div + div</option>
+				<option value="p">p</option>
+			</field>
+			<field name="class_page_desc" type="cck" construction="core_class_title" default="" label="" description="" class="inputbox" cck_attributes="placeholder='J(Class)'" />
+		</fieldset>
+		<fieldset name="advanced">
+			<field name="raw_rendering" type="list" label="LIB_CCK_RAW_RENDERING" default="" description="LIB_CCK_RAW_RENDERING_DESC" class="inputbox">
+				<option value="">COM_CCK_INHERITED_SL</option>
+				<option value="0">JNO</option>
+				<option	value="1">JYES</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>

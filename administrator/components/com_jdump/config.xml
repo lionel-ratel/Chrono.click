@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="component">
+		<field name="autopopup" type="radio" default="1" label="Auto Popup"
+			description="Automatically update the popup window when new items are dumped.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="maxdepth" type="text" default="5" maxlength="5" filter="uint"
+			label="Maximum recursion depth"
+			description="The number of levels that should be dumped for arrays and objects. Min=1, max=20" />
+		<field name="trimstrings" type="radio" default="1" label="Trim Strings"
+			description="Trim long strings.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="maxstrlength" type="text" default="5000" filter="uint"
+			label="Maximum String Length" description="Long strings will be trimmed to this number of characters." />
+		<field name="showOrigin" type="radio" default="1"
+			label="Show origin of call" description="Show the file, line and method from where dump was called.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="autoclose" type="number" min="0" max="10" filter="uint"  size="2" maxlength="2" default="0"
+			label="Auto close origin" description="Automatically close the info message after x seconds. 0 = no auto close.">
+		</field>
+		<field
+			name="openaccess"
+			type="usergrouplist"
+			multiple="true"
+			class="access-select"
+			label="Open for"
+			description="Open the popup only for the following groups"
+		/>
+	</fieldset>
+</config>

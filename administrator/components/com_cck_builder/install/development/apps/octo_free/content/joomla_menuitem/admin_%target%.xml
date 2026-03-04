@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="joomla_menuitem" version="3.0" folder="content">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<joomla_menuitem>
+		<typeAlias />
+		<parent_id>admin</parent_id>
+		<level>2</level>
+		<lft />
+		<rgt />
+		<alias>%target%</alias>
+		<id />
+		<menutype>adminmenu</menutype>
+		<title>%Target%</title>
+		<note />
+		<path>admin/%target%</path>
+		<link />
+		<type>heading</type>
+		<published>1</published>
+		<component_id>0</component_id>
+		<checked_out />
+		<checked_out_time />
+		<browserNav>0</browserNav>
+		<access>3</access>
+		<img> </img>
+		<template_style_id>321</template_style_id>
+		<params>{&quot;menu-anchor_title&quot;:&quot;&quot;,&quot;menu-anchor_css&quot;:&quot;&quot;,&quot;menu_icon_css&quot;:&quot;&quot;,&quot;menu_image&quot;:&quot;&quot;,&quot;menu_image_css&quot;:&quot;&quot;,&quot;menu_text&quot;:1,&quot;menu_show&quot;:1}</params>
+		<home>0</home>
+		<language>*</language>
+		<client_id>0</client_id>
+		<publish_up />
+		<publish_down />
+	</joomla_menuitem>
+</cck>

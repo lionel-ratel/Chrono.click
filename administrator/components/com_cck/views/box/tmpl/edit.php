@@ -1,0 +1,77 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: edit.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\Filesystem\File;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
+Helper_Include::addDependencies( $this->getName(), $this->getLayout() );
+
+$class		=	strpos( $this->file, '/selection.php' ) !== false ? 'modal-small' : 'modal-default';
+$config		=	JCckDev::init( array(), true );
+$isImage	=	( File::getExt( $this->file ) == 'png' || File::getExt( $this->file ) == 'jpg' ) ? 1 : 0;
+$doc		=	Factory::getDocument();
+?>
+
+<form action="<?php echo Route::_( 'index.php' ); ?>" method="post" id="adminForm" name="adminForm">
+
+<div id="titlebox" style="float:left; color:#eb8207; font-size:0.90em; font-weight:bold; text-transform:uppercase;"></div>
+<div id="toolbarBox" class="span12 subhead" style="float: left;">
+    <div style="float: left; padding-right: 8px;" id="messageBox"></div>
+	<?php if ( $isImage == 1 ) { ?>
+        <a href="javascript:void(0);" id="closeBox" class="btn btn-small" onclick="JCck.Dev.close();"><span class="icon-unpublish"></span>
+			<?php echo Text::_( 'COM_CCK_CLOSE' ); ?>
+		</a>
+    <?php } else { ?>
+        <a href="javascript:void(0);" id="closeBox" class="<?php echo $this->css['btn-no']; ?>" onclick="JCck.Dev.close();"><span class="icon-unpublish"></span>
+			<?php echo Text::_( 'COM_CCK_CANCEL' ); ?>
+		</a>
+        <a href="javascript:void(0);" id="resetBox" class="btn btn-small" onclick="JCck.Dev.reset();"><span class="icon-refresh"></span>
+			<?php echo Text::_( 'COM_CCK_RESET' ); ?>
+		</a>
+        <a href="javascript:void(0);" id="submitBox" class="<?php echo $this->css['btn-yes']; ?>" onclick="JCck.Dev.submit();"><span class="icon-save"></span>
+			<?php echo Text::_( 'COM_CCK_SAVE_AND_CLOSE' ); ?>
+		</a>
+    <?php } ?>
+</div>
+<div class="clearfix"></div>
+
+<div class="<?php echo $this->css['wrapper_tmpl']; ?>">
+    <div id="layout" class="<?php echo $class; ?>" style="text-align: center;">
+		<?php
+		if ( $this->function ) {
+			$this->onceFile( 'require', $config );
+			$this->function( $this->item->title, $this->item->name, $this->item->type, $this->item->params );
+		} else {
+			if ( $isImage == 1 ) {
+				echo '<img src="'.$this->file.'" />';
+			} else {
+				$this->onceFile( 'include', $config );
+			}
+		}
+        ?>
+    </div>
+</div>
+
+<div class="clr"></div>
+
+<?php
+if ( $this->doValidation == 1 ) {
+	JCckDev::validate( $config );
+}
+$js		=	'if("undefined"===typeof JCck.Dev){JCck.Dev={}};'
+		.	'JCck.Dev.close = function() { if (parent.jQuery.colorbox) {parent.jQuery.colorbox.close();}'
+		.	'else {if (window.parent.SqueezeBox) {window.parent.SqueezeBox.close();};} };';
+$doc->addScriptDeclaration( $js );
+?>
+</form>

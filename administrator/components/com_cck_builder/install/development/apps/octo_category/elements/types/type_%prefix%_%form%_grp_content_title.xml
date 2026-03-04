@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="types">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<type>
+		<id />
+		<asset_id />
+		<title>%Form% Grp (Content) Title</title>
+		<name>%prefix%_%form%_grp_content_title</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<template_admin />
+		<template_site />
+		<template_content />
+		<template_intro />
+		<description />
+		<indexed>intro</indexed>
+		<published>1</published>
+		<options_admin />
+		<options_site />
+		<options_content />
+		<options_intro />
+		<admin_form>0</admin_form>
+		<location>collection</location>
+		<locked>1</locked>
+		<parent>%prefix%_%form%</parent>
+		<parent_inherit>0</parent_inherit>
+		<permissions />
+		<storage_location>joomla_category</storage_location>
+		<stylesheets />
+		<version>6</version>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>3</access>
+		<created_date>0000-00-00 00:00:00</created_date>
+		<created_user_id>0</created_user_id>
+		<modified_date>0000-00-00 00:00:00</modified_date>
+		<modified_user_id>0</modified_user_id>
+	</type>
+	<acl />
+	<fields>
+		<field1 client="content" ordering="1" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;de-DE&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_de</field1>
+		<field2 client="content" ordering="2" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;en-GB&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_en</field2>
+		<field3 client="content" ordering="3" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;es-ES&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_es</field3>
+		<field4 client="content" ordering="4" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;fr-FR&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_fr</field4>
+		<field5 client="content" ordering="5" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;it-IT&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_it</field5>
+		<field6 client="intro" ordering="1" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="content" link_options="{&quot;sef&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;itemid_fieldname&quot;:&quot;&quot;,&quot;content&quot;:&quot;&quot;,&quot;content_fieldname&quot;:&quot;&quot;,&quot;content_location&quot;:&quot;joomla_article&quot;,&quot;language&quot;:&quot;&quot;,&quot;itemid_mapping&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;0&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;site&quot;:&quot;&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;de-DE&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_de</field6>
+		<field7 client="intro" ordering="2" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="content" link_options="{&quot;sef&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;itemid_fieldname&quot;:&quot;&quot;,&quot;content&quot;:&quot;&quot;,&quot;content_fieldname&quot;:&quot;&quot;,&quot;content_location&quot;:&quot;joomla_article&quot;,&quot;language&quot;:&quot;&quot;,&quot;itemid_mapping&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;0&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;site&quot;:&quot;&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;en-GB&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_en</field7>
+		<field8 client="intro" ordering="3" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="content" link_options="{&quot;sef&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;itemid_fieldname&quot;:&quot;&quot;,&quot;content&quot;:&quot;&quot;,&quot;content_fieldname&quot;:&quot;&quot;,&quot;content_location&quot;:&quot;joomla_article&quot;,&quot;language&quot;:&quot;&quot;,&quot;itemid_mapping&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;0&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;site&quot;:&quot;&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;es-ES&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_es</field8>
+		<field9 client="intro" ordering="4" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="content" link_options="{&quot;sef&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;itemid_fieldname&quot;:&quot;&quot;,&quot;content&quot;:&quot;&quot;,&quot;content_fieldname&quot;:&quot;&quot;,&quot;content_location&quot;:&quot;joomla_article&quot;,&quot;language&quot;:&quot;&quot;,&quot;itemid_mapping&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;0&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;site&quot;:&quot;&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;fr-FR&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_fr</field9>
+		<field10 client="intro" ordering="5" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="content" link_options="{&quot;sef&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;itemid_fieldname&quot;:&quot;&quot;,&quot;content&quot;:&quot;&quot;,&quot;content_fieldname&quot;:&quot;&quot;,&quot;content_location&quot;:&quot;joomla_article&quot;,&quot;language&quot;:&quot;&quot;,&quot;itemid_mapping&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;0&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;site&quot;:&quot;&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="joomla_language" restriction_options="{&quot;languages&quot;:&quot;it-IT&quot;,&quot;do&quot;:&quot;0&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_it</field10>
+	</fields>
+	<positions />
+</cck>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_cck_field_seblod</name>
+	<packagename>cck_field_seblod</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>December 2013</creationDate>
+	<description>SEBLOD Field Pack for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>6.0.0</version>
+	
+	<scriptfile>pkg_script.php</scriptfile>
+	
+	<files folder="extensions">
+		<file type="plugin" id="cck_form" group="cck_field">plg_cck_field_cck_form.zip</file>
+		<file type="plugin" id="cck_list" group="cck_field">plg_cck_field_cck_list.zip</file>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.pkg_cck_field_seblod.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_cck_field_seblod.sys.ini</language>
+	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="SEBLOD Field Pack Updates">http://update.seblod.com/pkg_cck_field_seblod.xml</server>
+	</updateservers>
+</extension>

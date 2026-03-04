@@ -1,0 +1,473 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: type.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
+require_once JPATH_COMPONENT.'/helpers/helper_version.php';
+require_once JPATH_COMPONENT.'/helpers/helper_workshop.php';
+
+// Model
+class CCKModelType extends JCckBaseLegacyModelAdmin
+{
+	protected $text_prefix	=	'COM_CCK';
+	protected $vName		=	'type';
+	
+	// canDelete
+	protected function canDelete( $record )
+	{
+		$user	=	Factory::getUser();
+		
+		if ( ! empty( $record->folder ) ) {
+			// Folder Permissions
+			return $user->authorise( 'core.delete', CCK_COM.'.folder.'.(int)$record->folder );
+		}
+
+		// Component Permissions
+		return parent::canDelete( $record );
+	}
+
+	// canEditState
+	protected function canEditState( $record )
+	{
+		$user	=	Factory::getUser();
+
+		if ( ! empty( $record->folder ) ) {
+			// Folder Permissions
+			return $user->authorise( 'core.edit.state', CCK_COM.'.folder.'.(int)$record->folder );
+		}
+
+		// Component Permissions
+		return parent::canEditState( $record );
+	}
+	
+	// populateState
+	protected function populateState()
+	{
+		$app	=	Factory::getApplication( 'administrator' );
+		
+		if ( ! ( $pk = $app->input->getInt( 'id', 0 ) ) ) {
+			if ( $tpl	=	(string)$app->getUserState( CCK_COM.'.add.type.skeleton_id' ) ) {
+				$this->setState( 'skeleton_id', $tpl );
+			}
+			if ( $tpl	=	(string)$app->getUserState( CCK_COM.'.add.type.tpl_admin' ) ) {
+				$this->setState( 'tpl.admin', $tpl );
+			}
+			if ( $tpl	=	(string)$app->getUserState( CCK_COM.'.add.type.tpl_site' ) ) {
+				$this->setState( 'tpl.site', $tpl );
+			}
+			if ( $tpl	=	(string)$app->getUserState( CCK_COM.'.add.type.tpl_content' ) ) {
+				$this->setState( 'tpl.content', $tpl );
+			}
+			if ( $tpl	=	(string)$app->getUserState( CCK_COM.'.add.type.tpl_intro' ) ) {
+				$this->setState( 'tpl.intro', $tpl );
+			}
+		} else {
+			if ( $client	=	(string)$app->getUserState( CCK_COM.'.edit.type.client' ) ) {
+				$this->setState( 'client', $client );
+			}
+		}
+		
+		$this->setState( 'type.id', $pk );
+	}
+	
+	// getForm
+	public function getForm( $data = array(), $loadData = true )
+	{
+		$form	=	$this->loadForm( CCK_COM.'.'.$this->vName, $this->vName, array( 'control' => 'jform', 'load_data' => $loadData ) );
+		if ( empty( $form ) ) {
+			return false;
+		}
+		
+		return $form;
+	}
+	
+	// getItem
+	public function getItem( $pk = null )
+	{
+		if ( $item = parent::getItem( $pk ) ) {
+			//
+		}
+		
+		return $item;
+	}
+	
+	// getTable
+	public function getTable( $type = 'Type', $prefix = CCK_TABLE, $config = array() )
+	{
+		return Table::getInstance( $type, $prefix, $config );
+	}
+	
+	// loadFormData
+	protected function loadFormData()
+	{
+		// Check the session for previously entered form data.
+		$data	=	Factory::getApplication()->getUserState( CCK_COM.'.edit.'.$this->vName.'.data', array() );
+
+		if ( empty( $data ) ) {
+			$data	=	$this->getItem();
+		}
+
+		return $data;
+	}
+	
+	// prepareTable2
+	protected function prepareTable2( &$table, &$data )
+	{
+		if ( $data['location'] != 'collection' ) {
+			if ( !$data['jform']['id'] && !$data['jform']['rules'] ) {
+				$data['jform']['rules']	=	array(
+												'core.create.max.parent'=>array( '8'=>'0' ),
+												'core.create.max.parent.author'=>array( '8'=>'0' ),
+												'core.create.max.author'=>array( '8'=>'0' )
+											);
+			}
+			if ( $data['jform']['rules'] ) {
+				if ( !is_array( $data['jform']['rules'] ) ) {
+					$data['jform']['rules']	=	json_decode( $data['jform']['rules'] );
+				}
+				jimport( 'cck.joomla.access.access' );
+				$rules	=	new CCKRules( JCckDevHelper::getRules( $data['jform']['rules'] ), 'com_cck', 'form' );
+				$table->setRules( $rules );
+			}
+		}
+	}
+	
+	// -------- -------- -------- -------- -------- -------- -------- -------- // Store
+	
+	// prepareData
+	protected function prepareData()
+	{
+		$app					=	Factory::getApplication();
+		$data					=	$app->input->post->getArray();
+		$data['description']	=	$app->input->post->get( 'description', '', 'raw' );
+		$client					=	$data['client'];
+		
+		if ( $data['location'] != 'collection' ) {
+			$P						=	'template_'.$client;
+			$data[$P]				=	Helper_Workshop::getTemplateStyleInstance( $data[$P], $data['template'], $data['template2'], $data['params'], $data['name'].' ('.$client.')' );
+		
+			$P						=	'options_'.$client;
+			
+			if ( !isset( $data['options'] ) ) {
+				$data['options']	=	array();
+			}
+			$data[$P]				=	JCckDev::toJSON( $data['options'] );
+		} else {
+			$P						=	'template_'.$client;
+			$data[$P]				=	0;
+		
+			$P						=	'options_'.$client;
+			$data[$P]				=	'';
+		}
+		
+		if ( ! $data['id'] ) {
+			if ( $data['location'] != 'collection' ) {
+				$clients			=	array( 'admin', 'site', 'content', 'intro' );
+				foreach ( $clients as $client ) {
+					$P	=	'template_'.$client;
+					if ( ! $data[$P] ) {
+						$default	=	Helper_Workshop::getDefaultStyle();
+						$data[$P]	=	$default->id;
+					}
+				}
+			}
+		} else {
+			$doVersion	=	JCck::getConfig_Param( 'version_auto', 1 );
+			if ( $doVersion == 1 || ( $doVersion == 2 && Helper_Version::checkLatest( 'type', $data['id'] ) === true ) ) {
+				Helper_Version::createVersion( 'type', $data['id'] );
+
+				if ( JCck::getConfig_Param( 'version_remove', 1 ) ) {
+					Helper_Version::removeVersion( 'type', $data['id'] );
+				}
+			}
+		}
+		
+		return $data;
+	}
+	
+	// postStore
+	public function postStore( $pk )
+	{
+		$app	=	Factory::getApplication();
+		$data	=	$app->input->post->getArray();
+		$client	=	$data['client'];
+		
+		if ( $data['fromclient'] ) {
+			if ( $client == 'site' ) {
+				$from 	=	'admin';
+			} elseif ( $client == 'admin' ) {
+				$from	=	'site';
+			} elseif ( $client == 'content' ) {
+				$from	=	'intro';
+			} elseif ( $client == 'intro' ) {
+				$from	=	'content';
+			}
+			$table	=	JCckTableBatch::getInstance( '#__cck_core_type_field' );
+			$table->load( 'typeid = '.$pk.' AND client = "'.$from.'"' );
+			$table->check( array( 'client'=>$client ) );
+			$table->store();
+			
+			$table	=	JCckTableBatch::getInstance( '#__cck_core_type_position' );
+			$table->load( 'typeid = '.$pk.' AND client = "'.$from.'"' );
+			$table->check( array( 'client'=>$client ) );
+			$table->store();
+		} else {
+			if ( isset( $data['li_end'] ) && $data['li_end'] == '1' ) {
+				$raw_data	=	$app->input->post->getArray( array( 'ffp'=>'raw' ) );
+
+				if ( isset( $raw_data['ffp'] ) ) {
+					$data['ffp']	=	$raw_data['ffp'];
+				}
+
+				$this->storeMore( $pk, $data['client'], $data['ff'], $data['ffp'], $data['location'] );
+			}
+		}
+		
+		if ( isset( $data['quick_menuitem'] ) && $data['quick_menuitem'] ) {
+			if ( is_file( JPATH_SITE.'/libraries/joomla/database/table/menu.php' ) ) {
+				require_once JPATH_SITE.'/libraries/joomla/database/table/menu.php';
+			}
+			$quick_item					=	explode( '.', $data['quick_menuitem'] );
+
+			if ( JCck::is( '7' ) ) {
+				$content_item	=	new JCckContentMenuItem;
+				$item_data		=	array(
+										'access'=>$data['access'],
+										'client_id'=>0,
+										'component_id'=>JCckDatabase::loadResult( 'SELECT extension_id FROM #__extensions WHERE type = "component" AND element = "com_cck"' ),
+										'home'=>0,
+										'language'=>'*',
+										'link'=>'index.php?option=com_cck&view=form&layout=edit&type='.$data['name'],
+										'menutype'=>$quick_item[0],
+										'params'=>'{"display_list_title":"1","title_list_title":"'.$data['title'].'","menu_show":1}',
+										'parent_id'=>$quick_item[1],
+										'published'=>1,
+										'template_style_id'=>0,
+										'title'=>$data['title'],
+										'type'=>'component'
+									);
+
+				$content_item->create( 'o_nav_item', $item_data );
+			} else {
+				$item						=	Table::getInstance( 'Menu' );
+				$item->id					=	0;
+				$item->title				=	$data['title'];
+				$item->menutype				=	$quick_item[0];
+				$item->parent_id			=	$quick_item[1];
+				$item->published			=	1;
+				
+				$item->component_id			=	JCckDatabase::loadResult( 'SELECT extension_id FROM #__extensions WHERE type = "component" AND element = "com_cck"' );
+				$item->link					=	'index.php?option=com_cck&view=form&layout=edit&type='.$data['name'];
+				$item->path					=	uniqid();
+				$item->params				=	'{}';
+				$item->type					=	'component';
+				
+				$item->client_id			=	0;
+				$item->home					=	0;
+				$item->language				=	'*';
+				$item->template_style_id	=	0;
+				
+				$item->setLocation( $quick_item[1], 'last-child' );
+				$item->check();
+				$item->store();				
+			}
+		}
+	}
+	
+	// storeMore
+	protected function storeMore( $typeId, $client, $fields, $params, $location = '' )
+	{
+		jimport( 'cck.construction.field.generic_more' );
+
+		$db		=	Factory::getDbo();
+		$table	=	'type_field';
+		$method	=	'gm_getConstruction_Values_Type';
+		
+		JCckDatabase::execute( 'DELETE FROM #__cck_core_'.$table.' WHERE typeid = '.(int)$typeId . ' AND client = "'.$client.'"' );
+
+		if ( count( $fields ) ) {
+			$assigned	=	'';
+			$ordering	=	1;
+			$position	=	'mainbody';
+			$positions	=	'';
+			
+			foreach ( $fields as $k => $v ) {
+				$next	=	next( $fields );
+				
+				if ( $v == 'position' ) {
+					if ( $location != 'collection' ) {
+						$legend				=	( @$params[$k]['legend'] != '' ) ? $db->escape( $params[$k]['legend'] ) : '';
+						$variation			=	( @$params[$k]['variation'] != '' ) ? $params[$k]['variation'] : '';
+						$variation_options	=	( @$params[$k]['variation_options'] != '' ) ? $db->escape( $params[$k]['variation_options'] ) : '';
+						$width				=	( @$params[$k]['width'] != '' ) ? $params[$k]['width'] : '';
+						$height				=	( @$params[$k]['height'] != '' ) ? $params[$k]['height'] : '';
+						$css				=	( @$params[$k]['css'] != '' ) ? $params[$k]['css'] : '';
+						$position			=	substr( $k, 4 );
+						
+						if ( $next != 'position' ) {
+							$positions	.=	', ( '.(int)$typeId.', "'.(string)$position.'", "'.$client.'", "'.$legend.'", "'.$variation.'", "'.$variation_options.'", "'.$width.'", "'.$height.'", "'.$css.'" )';
+						}
+					}
+				} else {
+					if ( $location == 'collection' ) {
+						$position	=	'_main_';
+					}
+					$assigned	.= ', ( '.(int)$typeId.', '.(int)$v.', "'.$client.'", '.$ordering.', '.plgCCK_FieldGeneric_More::$method( $k, $params, $position, $client ).' )';
+					$ordering++;
+				}
+			}
+			if ( $assigned ) {
+				JCckDatabase::execute( 'INSERT INTO #__cck_core_'.$table.' ( typeid, fieldid, client, ordering, '.plgCCK_FieldGeneric_More::gm_getConstruction_Columns( $table ).' ) VALUES ' . substr( $assigned, 1 ) );
+			}
+
+			JCckDatabase::execute( 'DELETE FROM #__cck_core_type_position WHERE typeid = '.(int)$typeId . ' AND client = "'.$client.'"' );
+
+			if ( $positions ) {				
+				JCckDatabase::execute( 'INSERT INTO #__cck_core_type_position ( typeid, position, client, legend, variation, variation_options, width, height, css ) VALUES ' . substr( $positions, 1 ) );
+			}
+		}
+	}
+	
+	// duplicate
+	public function duplicate( $pk )
+	{
+		$app	=	Factory::getApplication();
+		$db		=	$this->getDbo();
+		$title	=	$app->input->getString( 'duplicate_title', '' );
+		$user	=	Factory::getUser();
+
+		if ( ! $user->authorise( 'core.create', CCK_COM ) ) {
+			throw new Exception( Text::_( 'JERROR_CORE_CREATE_NOT_PERMITTED' ) );
+		}
+
+		$table	=	$this->getTable();
+		$table->load( $pk, true );
+		
+		if ( $table->id ) {
+			$table->id	=	0;
+
+			if ( $title ) {
+				$table->title	=	$title;
+			} else {
+				$table->title	.=	' (2)';
+			}
+			$table->name	=	'';
+			
+			if ( !$table->check() ) {
+				throw new Exception( $table->getError() );
+			}
+			
+			$prefix	=	JCck::getConfig_Param( 'development_prefix', '' );
+			if ( $prefix ) {
+				$table->name	=	$prefix.'_'.$table->name;
+			}
+			
+			// Template Styles
+			$clients		=	array( 'admin', 'site', 'content', 'intro' );
+			$styles			=	JCckDatabase::loadObjectList( 'SELECT * FROM #__template_styles WHERE id IN ('.(int)$table->template_admin.','
+																											  .(int)$table->template_site.','
+																											  .(int)$table->template_content.','
+																											  .(int)$table->template_intro.')', 'id' );
+			foreach ( $clients as $client ) {
+				$property	=	'template_'.$client;
+				$style		=	$styles[$table->$property];
+				if ( !( is_object( $style ) && $style->id ) ) {
+					$style	=	Helper_Workshop::getDefaultStyle();
+				}
+				$table->$property	=	Helper_Workshop::getTemplateStyleInstance( $style->id, $style->template, $style->template, $style->params, $table->name.' ('.$client.')', true );
+			}
+			
+			if ( !$table->store() ) {
+				throw new Exception( $table->getError() );
+			}
+			
+			if ( ! $table->id ) {
+				return 0;
+			}
+			
+			// Fields
+			$query	=	'SELECT a.*, b.storage_table FROM #__cck_core_type_field AS a LEFT JOIN #__cck_core_fields AS b ON b.id = a.fieldid WHERE a.typeid = '.(int)$pk;
+			
+			$this->_table_no_key_batch( 'query', $query, '#__cck_core_type_field', 'typeid', $table->id, array( 'storage_table' ), '_check_storage' );
+			
+			// Positions			
+			$this->_table_no_key_batch( 'where', 'typeid = '.(int)$pk, '#__cck_core_type_position', 'typeid', $table->id );		
+		}
+	}
+	
+	// version
+	public function version( $pks )
+	{
+		foreach ( $pks as $pk ) {
+			Helper_Version::createVersion( 'type', $pk, '', true );
+
+			if ( JCck::getConfig_Param( 'version_remove', 1 ) ) {
+				Helper_Version::removeVersion( 'type', $pk );
+			}
+		}
+		
+		return true;
+	}
+	
+	// _table_no_key_batch
+	protected function _table_no_key_batch( $sql_type, $sql, $table, $key, $val, $excluded = array(), $callback = '' )
+	{
+		$db	=	Factory::getDbo();
+		
+		if ( $sql_type == 'where' ) {
+			$elems	=	JCckDatabase::loadObjectList( 'SELECT * FROM '.$table.' WHERE '.$sql );
+		} else {
+			$elems	=	JCckDatabase::loadObjectList( $sql );
+		}
+		$str	=	'';
+		
+		foreach ( $elems as $elem ) {
+			$add	=	1;
+			if ( $callback != '' ) {
+				$add	=	$this->$callback( $elem );
+			}
+			if ( $add == 1 ) {
+				$str2	=	'';
+				foreach ( $elem as $k => $v ) {
+					if ( in_array( $k, $excluded ) !== true ) {
+						if ( $k == $key ) {
+							$v	=	$val;
+						}
+						$str2	.=	'"'.$db->escape( $v ).'", ';
+					}
+				}
+				if ( $str2 != '' ) {
+					$str2	=	substr( trim( $str2 ), 0, -1 );
+					$str	.=	'(' . $str2 . '), ';
+				}
+			}
+		}
+		if ( $str != '' ) {
+			$str	=	substr( trim( $str ), 0, -1 );
+			
+			JCckDatabase::execute( 'INSERT INTO '.$table.' VALUES '.$str );
+		}
+	}
+	
+	// _check_storage
+	protected function _check_storage( $elem )
+	{
+		if ( strpos( $elem->storage_table, '#__cck_store_form_' ) !== false ) {
+			return 0;
+		}
+		
+		return 1;
+	}
+}
+?>

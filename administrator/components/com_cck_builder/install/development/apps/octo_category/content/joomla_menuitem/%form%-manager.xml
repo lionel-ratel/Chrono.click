@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="joomla_menuitem" version="3.0" folder="content">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<joomla_menuitem type="o_nav_item">
+		<parent_id>%core_menu_item%</parent_id>
+		<level>1</level>
+		<lft />
+		<rgt />
+		<alias>%form%-manager</alias>
+		<id />
+		<menutype>adminmenu</menutype>
+		<title>%Title%</title>
+		<note />
+		<path>%form%-manager</path>
+		<link>index.php?option=com_cck&amp;view=list&amp;search=%prefix%_%form%_manager&amp;task=search</link>
+		<type>component</type>
+		<published>1</published>
+		<component_id>com_cck</component_id>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<browserNav>0</browserNav>
+		<access>%core_viewing_access_level%</access>
+		<img />
+		<template_style_id>0</template_style_id>
+		<params>{&quot;show_list_title&quot;:&quot;1&quot;,&quot;tag_list_title&quot;:&quot;h1&quot;,&quot;class_list_title&quot;:&quot;&quot;,&quot;display_list_title&quot;:&quot;3&quot;,&quot;title_list_title&quot;:&quot;%Form% Manager&quot;,&quot;display_form_title&quot;:&quot;3&quot;,&quot;title_form_title&quot;:&quot;%Form%&quot;,&quot;show_list_desc&quot;:&quot;&quot;,&quot;list_desc&quot;:&quot;&quot;,&quot;show_form&quot;:&quot;&quot;,&quot;auto_redirect&quot;:&quot;&quot;,&quot;ordering&quot;:&quot;&quot;,&quot;order_by&quot;:&quot;&quot;,&quot;show_items_number&quot;:&quot;&quot;,&quot;show_items_number_label&quot;:&quot;Results&quot;,&quot;class_items_number&quot;:&quot;total&quot;,&quot;show_pages_number&quot;:&quot;&quot;,&quot;show_pagination&quot;:&quot;&quot;,&quot;class_pagination&quot;:&quot;pagination&quot;,&quot;urlvars&quot;:&quot;&quot;,&quot;live&quot;:&quot;&quot;,&quot;variation&quot;:&quot;&quot;,&quot;raw_rendering&quot;:&quot;0&quot;,&quot;menu-anchor_title&quot;:&quot;&quot;,&quot;menu-anchor_css&quot;:&quot;&quot;,&quot;menu_image&quot;:&quot;&quot;,&quot;menu_text&quot;:1,&quot;page_title&quot;:&quot;&quot;,&quot;menu_show&quot;:1,&quot;show_page_heading&quot;:0,&quot;page_heading&quot;:&quot;&quot;,&quot;pageclass_sfx&quot;:&quot;&quot;,&quot;menu-meta_description&quot;:&quot;&quot;,&quot;menu-meta_keywords&quot;:&quot;&quot;,&quot;robots&quot;:&quot;&quot;,&quot;secure&quot;:0}</params>
+		<home>0</home>
+		<language>*</language>
+		<client_id>0</client_id>
+		<item_request>{"search":"%prefix%_%form%_manager","task":"search"}</item_request>
+		<item_type>com_cck.list</item_type>
+	</joomla_menuitem>
+</cck>

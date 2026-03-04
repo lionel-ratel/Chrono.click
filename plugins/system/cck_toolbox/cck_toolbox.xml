@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" version="2.5" method="upgrade">
+	<name>plg_system_cck_toolbox</name>
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>October 2014</creationDate>
+	<description>SEBLOD Toolbox Add-on for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>6.0.3</version>
+	
+	<files>
+		<filename plugin="cck_toolbox">cck_toolbox.php</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<config>
+		<fields />
+	</config>
+</extension>

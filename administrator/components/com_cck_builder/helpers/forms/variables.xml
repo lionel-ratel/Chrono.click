@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field
+			name="note"
+			type="text"
+			label="COM_CCK_CONFIG_VAR_NOTE"
+			description="COM_CCK_CONFIG_VAR_NOTE_DESC"
+			class="input-xlarge"
+		/>
+		<field
+			name="value"
+			type="text"
+			label="COM_CCK_CONFIG_VAR_VALUE"
+			description="COM_CCK_CONFIG_VAR_VALUE_DESC"
+			class="input-small"
+		/>
+	</fieldset>
+</form>

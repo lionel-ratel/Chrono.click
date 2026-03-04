@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="template_styles">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<template_style>
+		<id />
+		<template>seb_list</template>
+		<client_id>0</client_id>
+		<home>0</home>
+		<title>seb_list - %prefix%_%ref%_%form%_item_x_checkbox_list (list)</title>
+		<params>{&quot;rendering_item_attributes&quot;:&quot;class=\&quot;o-grid o-col-auto-2 o-align-ic o-align-jic o-align-jss o-cgap-8\&quot;&quot;,&quot;rendering_css_class&quot;:&quot;&quot;,&quot;rendering_custom_attributes&quot;:&quot;&quot;,&quot;cck_client_item&quot;:&quot;0&quot;,&quot;list_display&quot;:&quot;0&quot;,&quot;tag&quot;:&quot;ul_li&quot;,&quot;class&quot;:&quot;o-grid o-col-5 o-rgap-8&quot;,&quot;auto_clean&quot;:&quot;0&quot;,&quot;attributes&quot;:&quot;&quot;}</params>
+	</template_style>
+</cck>

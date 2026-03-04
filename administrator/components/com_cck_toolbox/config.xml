@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config addfieldpath="/libraries/cck/construction/field">
+	<fieldset name="fs_load" label="COM_CCK_TOOLBOX_FIELDSET_LOAD" description="COM_CCK_TOOLBOX_FIELDSET_LOAD_DESC">
+		<field name="bootstrap_css" type="radio" default="0" label="COM_CCK_TOOLBOX_BOOTSTRAP_CSS" class="btn-group"
+			description="COM_CCK_TOOLBOX_BOOTSTRAP_CSS_DESC">
+			<option value="1">JYES</option>
+			<option value="2">Yes (Light)</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="bootstrap_tooltip" type="radio" default="0" label="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP" class="btn-group"
+			description="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="bootstrap_tooltip_selector" type="text" size="16" default=".hasTooltip" label="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP_SELECTOR" description="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP_SELECTOR_DESC" class="inputbox" />
+		<field name="bootstrap_tooltip_params" type="text" size="16" default="" label="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP_PARAMS" description="COM_CCK_TOOLBOX_BOOTSTRAP_TOOLTIP_PARAMS_DESC" class="inputbox" />
+		<field name="bootstrap_filestyle" type="radio" default="0" label="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE" class="btn-group"
+			description="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="bootstrap_filestyle_selector" type="text" size="16" default=":file" label="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_SELECTOR" description="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_SELECTOR_DESC" class="inputbox" />
+		<field name="bootstrap_filestyle_icon" type="text" size="16" default="" label="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_ICON" description="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_ICON_DESC" class="inputbox" />
+		<field name="bootstrap_filestyle_text" type="text" size="16" default="" label="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_TEXT" description="COM_CCK_TOOLBOX_BOOTSTRAP_FILESTYLE_TEXT_DESC" class="inputbox" />
+		<field name="boostrap_select" type="radio" default="0" label="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT" class="btn-group"
+			description="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT_DESC">
+			<option value="2">COM_CCK_YES_REGISTERED</option>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="boostrap_select_version" type="list" default="0" label="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT" class="btn-group"
+			description="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT_DESC">
+			<option value="1.14.0-beta3">1.14.0-beta3</option>
+			<option value="1">1.13.x</option>
+			<option value="0">1.12.x</option>
+		</field>
+		<field name="bootstrap_select_selector" type="text" size="16" default="select" label="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT_SELECTOR" description="COM_CCK_TOOLBOX_BOOTSTRAP_SELECT_SELECTOR_DESC" class="inputbox" />
+		<field name="chosen" type="radio" default="0" label="COM_CCK_TOOLBOX_CHOSEN" class="btn-group"
+			description="COM_CCK_TOOLBOX_CHOSEN_DESC">
+			<option value="3">COM_CCK_YES_SPECIAL</option>
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="chosen_selector" type="text" size="16" default="select" label="COM_CCK_TOOLBOX_CHOSEN_SELECTOR" description="COM_CCK_TOOLBOX_CHOSEN_SELECTOR_DESC" class="inputbox" />
+		<field name="select2" type="radio" default="0" label="COM_CCK_TOOLBOX_SELECT2" class="btn-group"
+			description="COM_CCK_TOOLBOX_SELECT2_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="select2_selector" type="text" size="16" default="select" label="COM_CCK_TOOLBOX_SELECT2_SELECTOR" description="COM_CCK_TOOLBOX_SELECT2_SELECTOR_DESC" class="inputbox" />
+		<field name="icomoon" type="list" default="0" label="COM_CCK_TOOLBOX_FONT_ICOMOON" class="chzn-color"
+			description="COM_CCK_TOOLBOX_FONT_ICOMOON_DESC">
+			<option value="1">JYES</option>
+			<option value="2">Yes Light</option>
+			<option value="-1">Yes Custom</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="icomoon_custom" type="text" size="16" default="" label="COM_CCK_TOOLBOX_FONT_ICOMOON" description="COM_CCK_TOOLBOX_FONT_ICOMOON_DESC" class="inputbox input-xlarge" />
+		<field name="lazy_sizes" type="radio" default="0" label="COM_CCK_TOOLBOX_LAZY_SIZES" class="btn-group"
+			description="COM_CCK_TOOLBOX_LAZY_SIZES_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+	</fieldset>
+	<fieldset name="fs_modernize" label="COM_CCK_TOOLBOX_FIELDSET_MODERNIZE" description="COM_CCK_TOOLBOX_FIELDSET_MODERNIZE_DESC">
+		<field name="css3_mediaqueries" type="radio" default="0" label="COM_CCK_TOOLBOX_CSS3_MEDIAQUERIES" class="btn-group"
+			description="COM_CCK_TOOLBOX_CSS3_MEDIAQUERIES_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="excanvas" type="radio" default="0" label="COM_CCK_TOOLBOX_EXCANVAS" class="btn-group"
+			description="COM_CCK_TOOLBOX_EXCANVAS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="html5_shiv" type="radio" default="0" label="COM_CCK_TOOLBOX_HTML5_SHIV" class="btn-group"
+			description="COM_CCK_TOOLBOX_HTML5_SHIV_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="html5_placeholder" type="radio" default="0" label="COM_CCK_TOOLBOX_HTML5_PLACEHOLDER" class="btn-group"
+			description="COM_CCK_TOOLBOX_HTML5_PLACEHOLDER_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="html5_placeholder_selector" type="text" size="16" default="input" label="COM_CCK_TOOLBOX_HTML5_PLACEHOLDER_SELECTOR" description="COM_CCK_TOOLBOX_HTML5_PLACEHOLDER_SELECTOR_DESC" class="inputbox" />
+		<field name="svgeezy" type="radio" default="0" label="COM_CCK_TOOLBOX_SVGEEZY" class="btn-group"
+			description="COM_CCK_TOOLBOX_SVGEEZY_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="cck_core_css" type="radio" default="0" label="COM_CCK_TOOLBOX_CCK_CORE_CSS" class="btn-group"
+			description="COM_CCK_TOOLBOX_CCK_CORE_CSS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+	</fieldset>
+	<fieldset name="fs_optimize" label="COM_CCK_TOOLBOX_FIELDSET_OPTIMIZE" description="COM_CCK_TOOLBOX_FIELDSET_OPTIMIZE_DESC">
+		<field name="optimize" type="list" default="onBeforeRender" label="COM_CCK_TOOLBOX_OPTIMIZE" class="inputbox"
+			description="COM_CCK_TOOLBOX_OPTIMIZE_DESC">
+			<option value="0">JNO</option>
+			<option value="onAfterDispatch">onAfterDispatch</option>
+			<option value="onBeforeRender">onBeforeRender (Default)</option>
+			<option value="onAfterRender">onAfterRender</option>
+		</field>
+		<field name="optimize_groups" type="usergrouplist" label="COM_CCK_TOOLBOX_OPTIMIZE_GROUPS" description="COM_CCK_TOOLBOX_OPTIMIZE_GROUPS_DESC" multiple="true" filter="int_array" size="10" />
+		<field name="optimize_bypass" type="text" label="COM_CCK_TOOLBOX_OPTIMIZE_BYPASS_IDS" description="COM_CCK_TOOLBOX_OPTIMIZE_BYPASS_IDS_DESC" class="input-xlarge" />
+		<field name="css_combine" type="radio" default="0" label="COM_CCK_TOOLBOX_CSS_COMBINE" class="btn-group"
+			description="COM_CCK_TOOLBOX_CSS_COMBINE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="css_minify" type="radio" default="0" label="COM_CCK_TOOLBOX_CSS_MINIFY" class="btn-group"
+			description="COM_CCK_TOOLBOX_CSS_MINIFY_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="css_minify_raw" type="radio" default="0" label="COM_CCK_TOOLBOX_CSS_MINIFY_RAW" class="btn-group"
+			description="COM_CCK_TOOLBOX_CSS_MINIFY_RAW_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="js_combine" type="radio" default="0" label="COM_CCK_TOOLBOX_JS_COMBINE" class="btn-group"
+			description="COM_CCK_TOOLBOX_JS_COMBINE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="js_exclusions" type="textarea" default="" cols="80" rows="3" label="COM_CCK_TOOLBOX_JS_EXCLUSIONS" description="COM_CCK_TOOLBOX_JS_EXCLUSIONS_DESC" class="inputbox input-xlarge" />
+		<field name="js_execution" type="list" default="" label="COM_CCK_TOOLBOX_JS_EXECUTION" class="btn-group"
+			description="COM_CCK_TOOLBOX_JS_EXECUTION_DESC">
+			<option value="async">COM_CCK_ASYNC</option>
+			<option value="defer">COM_CCK_DEFER</option>
+			<option value="">COM_CCK_STANDARD</option>
+		</field>
+		<field name="js_minify_raw" type="radio" default="0" label="COM_CCK_TOOLBOX_JS_MINIFY_RAW" class="btn-group"
+			description="COM_CCK_TOOLBOX_JS_MINIFY_RAW_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="html_minify" type="list" default="0" label="COM_CCK_TOOLBOX_HTML_MINIFY" class="inputbox chzn-color"
+			description="COM_CCK_TOOLBOX_HTML_MINIFY_DESC">
+			<option value="0">JNO</option>
+			<option value="1">COM_CCK_BASIC</option>
+			<option value="2">COM_CCK_INTERMEDIATE</option>
+		</field>
+		<field name="html_return_tags" type="textarea" default="" cols="80" rows="3" label="COM_CCK_TOOLBOX_HTML_RETURN_TAGS" description="COM_CCK_TOOLBOX_HTML_RETURN_TAGS_DESC" class="inputbox input-xlarge" />
+		<field name="optimize_query_version" type="text" label="COM_CCK_TOOLBOX_OPTIMIZE_QUERY_VERSION" description="COM_CCK_TOOLBOX_OPTIMIZE_QUERY_VERSION_DESC" />
+		<!--<field name="css_preload" type="radio" default="0" label="COM_CCK_TOOLBOX_CSS_PRELOAD" class="btn-group"
+			description="COM_CCK_TOOLBOX_CSS_PRELOAD_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>-->
+	</fieldset>
+	<fieldset name="fs_process" label="COM_CCK_TOOLBOX_FIELDSET_PROCESS" description="COM_CCK_TOOLBOX_FIELDSET_PROCESS_DESC">
+		<field name="processing" type="radio" default="1" label="COM_CCK_TOOLBOX_PROCESSING" class="btn-group"
+			description="COM_CCK_TOOLBOX_PROCESSING_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="mode_ajax_count" type="text" size="8" default="25" label="COM_CCK_CONFIG_MODE_AJAX_COUNT" description="COM_CCK_CONFIG_MODE_AJAX_COUNT_DESC" class="inputbox" />
+	</fieldset>
+	<fieldset name="fs_secure" label="COM_CCK_TOOLBOX_FIELDSET_SECURE" description="COM_CCK_TOOLBOX_FIELDSET_SECURE_DESC">
+		<field name="admin_url" type="radio" default="0" label="COM_CCK_TOOLBOX_ADMIN_URL" class="btn-group"
+			description="COM_CCK_TOOLBOX_ADMIN_URL_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="admin_url_var" type="text" size="16" default="protected" label="COM_CCK_TOOLBOX_ADMIN_URL_VARIABLE" description="COM_CCK_TOOLBOX_ADMIN_URL_VARIABLE_DESC" class="inputbox" />
+		<field name="admin_url_var_match" type="text" size="16" default="" label="COM_CCK_TOOLBOX_ADMIN_URL_VARIABLE_MATCH" description="COM_CCK_TOOLBOX_ADMIN_URL_VARIABLE_MATCH_DESC" class="inputbox" />
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_cck_toolbox" section="component" />
+	</fieldset>
+</config>

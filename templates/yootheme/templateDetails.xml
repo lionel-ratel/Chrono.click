@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="template" client="site" method="upgrade">
+    <name>YOOtheme</name>
+    <element>yootheme</element>
+    <version>5.0.19</version>
+    <creationDate>March 2026</creationDate>
+    <copyright>Copyright (C) YOOtheme GmbH</copyright>
+    <license>GNU General Public License</license>
+    <author>YOOtheme</author>
+    <authorEmail>info@yootheme.com</authorEmail>
+    <authorUrl>https://yootheme.com</authorUrl>
+    <description>
+        <![CDATA[
+            <div id="tmpl-description">A powerful, flexible and elegant website builder that allows you to create complex pages within minutes and customize every aspect of the theme.</div>
+            <script src="../templates/yootheme/templateDetails.js" type="module"></script>
+        ]]>
+    </description>
+    <files>
+        <folder>assets</folder>
+        <folder>css</folder>
+        <folder>fonts</folder>
+        <folder>html</folder>
+        <folder>language</folder>
+        <folder>less</folder>
+        <folder>packages</folder>
+        <folder>templates</folder>
+        <folder>vendor</folder>
+        <filename>bootstrap.php</filename>
+        <filename>CHANGELOG.md</filename>
+        <filename>config.php</filename>
+        <filename>error.php</filename>
+        <filename>index.php</filename>
+        <filename>NEWS.md</filename>
+        <filename>offline.php</filename>
+        <filename>template_bootstrap.php</filename>
+        <filename>template_preview.png</filename>
+        <filename>template_thumbnail.png</filename>
+        <filename>templateDetails.js</filename>
+        <filename>templateDetails.xml</filename>
+    </files>
+    <positions>
+        <position>toolbar-left</position>
+        <position>toolbar-right</position>
+        <position>logo</position>
+        <position>navbar</position>
+        <position>header</position>
+        <position>dialog</position>
+        <position>logo-mobile</position>
+        <position>navbar-mobile</position>
+        <position>header-mobile</position>
+        <position>dialog-mobile</position>
+        <position>top</position>
+        <position>sidebar</position>
+        <position>bottom</position>
+        <position>builder-1</position>
+        <position>builder-2</position>
+        <position>builder-3</position>
+        <position>builder-4</position>
+        <position>builder-5</position>
+        <position>builder-6</position>
+    </positions>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="config" type="hidden" filter="RAW" />
+                <field name="yootheme" type="hidden" default="true" />
+                <field name="uikit3" type="hidden" default="true" />
+                <field name="widgetkit" type="hidden" default="noconflict" />
+            </fieldset>
+        </fields>
+    </config>
+    <scriptfile>script.php</scriptfile>
+</extension>

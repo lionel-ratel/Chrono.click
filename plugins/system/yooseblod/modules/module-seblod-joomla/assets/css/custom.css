@@ -1,0 +1,125 @@
+ul.uk-tab-top + ul.uk-switcher{padding-top:30px !important;}
+
+/* -- Custom -- */
+.uk-padding-top-38{padding-top: 38px;}
+.uk-tooltip-inner{padding: 10px;}
+.uk-tooltip{z-index: 4000;}
+.uk-form-icon + .uk-card + select,.uk-form-icon + .uk-card + textarea{padding-left: 45px !important;}
+.uk-form-icon.uk-icon.textarea > svg{position: absolute; top: 10px;}
+.field-calendar input:disabled + button{display: none;height: 0;}
+.uk-form-icon.search-input{left: 10px;}
+
+/* -- Frontend Builder -- */
+.builder-layout {margin: 0 auto;}
+.yo-builder-grid{width: 430px; background-color: #FFFFFF;padding: 2px;}
+.yo-builder-grid > * > .uk-grid {margin-top: -2px;margin-left: -2px;min-height: 82px;}
+.yo-builder-grid > * > .uk-grid > * {padding-top: 2px;padding-left: 2px;}
+.yo-builder-element {position: relative;box-sizing: border-box;padding: 15px 10px;background: #f5f5f5;color: #777;}
+.yo-builder-section + .yo-builder-section{margin-top: 6px;}
+*+.yo-builder-element {margin-top: 2px;}
+
+/* -- Fields -- */
+ul.sortable li.t-uikit_tabs {background-color: #dedede;}
+.uk-button + .uk-button {margin-left:  5px;}
+
+.upload_file2 > input.inputbox,.upload_image2 > input.inputbox {width: 0;height: 0;float: left !important;padding: 0 !important;margin: 0 !important;border: none;}
+.upload_file2 .dropzone{display:-ms-grid;display:grid;list-style:none;position:relative;grid-auto-flow:dense;-ms-grid-rows:auto;grid-template-rows:auto;-ms-grid-columns:(1fr)[1];grid-template-columns:repeat(1,1fr);-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;overflow-y:auto;grid-row-gap:8px;padding:8px;border-radius:16px;}
+.upload_file2 .dropzone .dz-message{margin: 0.5em 0;}
+.upload_file2 .dropzone.dz-started{-webkit-box-align:start;-ms-flex-align:start;align-items:flex-start;-ms-flex-line-pack:start;align-content:flex-start;}
+.upload_file2 .dropzone .dz-preview{position:relative;display:-ms-grid;display:grid;vertical-align:top;margin:0;min-height:auto;-ms-grid-columns:(1fr)[3];grid-template-columns:repeat(3,1fr);grid-gap:var(--form-dropzone-gap);background:#FFD7A33B;border-radius:12px;border-color:var(--form-dropzone-border-color);border-style:var(--form-dropzone-border-style);border-width:var(--form-dropzone-border-width);-webkit-box-align:center;-ms-flex-align:center;align-items:center;padding: 4px;}
+.upload_file2 .dropzone .dz-preview .dz-image{display:none !important;}
+.upload_file2 .dropzone .dz-preview .dz-remove{z-index:2;}
+.upload_file2 .dropzone .dz-preview .dz-details{z-index:20;position:relative;top:auto;left:auto;opacity:1;font-size:13px;min-width:100%;max-width:100%;padding:0;text-align:center;color:rgba(0,0,0,0.9);line-height:20px;-ms-grid-column-span:2;grid-column:span 2;}
+.upload_file2 .dropzone .dz-preview .dz-details .dz-size{margin-bottom:0;font-size:16px;}
+.upload_file2 .dropzone .dz-preview .dz-details .dz-filename{margin-bottom:0;font-size:16px;}
+.upload_file2 .dropzone.dz-clickable{height: initial;min-height: 64px;}
+.upload_file2.multiple .dropzone.dz-started .dz-message{display: block !important;}
+
+.upload_image2 .dropzone{height: 150px;padding: 10px 10px 10px 40px;}
+.upload_image2 .dropzone .dz-preview{margin: 0;height: 100%;background: none;width: 100%;}
+.upload_image2 .dropzone .dz-message{margin: 2.5em 0;}
+.upload_image2 .dropzone .dz-preview .dz-details{padding-bottom: 0;}
+.upload_image2 .dropzone .dz-preview .dz-image{width:100%; height: 110px;}
+
+.dropzone .dz-preview .dz-remove {font-size: 14px;text-align: center;display: block;cursor: pointer;border: none;position: absolute;bottom: 0;width: 100%;}
+
+.is-ordering > select{
+	background-color: transparent !important;
+	border:  none !important;
+}
+
+/* 1. On cible la rangée que nous avons nommée nav-edit-sidebar */
+.nav-edit-sidebar {
+    position: relative;
+    height: 0 !important; /* Pour ne pas décaler le titre vers le bas */
+    min-height: 0 !important;
+    margin: 0 !important;
+    z-index: 100;
+}
+
+/* 2. On positionne le bloc de boutons à gauche du conteneur */
+.nav-edit-sidebar .uk-position-absolute {
+    left: -60px !important; /* Ajuste cette valeur pour décaler plus ou moins à gauche */
+    top: 0 !important;
+    width: auto !important;
+}
+
+/* 3. On force l'alignement vertical (au lieu de horizontal par défaut) */
+.nav-edit-sidebar .uk-grid {
+    display: flex !important;
+    flex-direction: column !important; /* Empile les boutons */
+    margin-left: 0 !important;
+}
+
+/* 4. On gère l'espacement entre les boutons */
+.nav-edit-sidebar .el-item {
+    padding-left: 0 !important;
+    /*margin-bottom: 10px !important; /* Espace vertical entre icônes */*/
+}
+
+/* 5. Style des icônes pour qu'elles ressortent bien */
+.nav-edit-sidebar .uk-icon-button {
+    background: #fff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    border: 1px solid #e5e5e5 !important;
+    transition: transform 0.2s ease-in-out;
+}
+
+.nav-edit-sidebar .uk-icon-button:hover {
+    transform: scale(1.1);
+}
+
+/* 6. Adaptation pour mobile (on les remet au dessus du titre s'il n'y a plus de place à gauche) */
+@media (max-width: 1200px) {
+    .nav-edit-sidebar .uk-position-absolute {
+        left: 0 !important;
+        top: -50px !important;
+        flex-direction: row !important;
+    }
+    .nav-edit-sidebar .uk-grid {
+        flex-direction: row !important;
+    }
+    .nav-edit-sidebar .el-item {
+        margin-right: 10px;
+    }
+}
+
+/* -- Modal Full viewport -- */
+/*@media (min-width: 640px)*/
+/*
+.uk-modal-full .uk-modal-body {
+  padding: 0;
+}
+
+.uk-modal-full .uk-modal-dialog {
+    height: 100vh;
+}
+
+.uk-modal-full .uk-modal-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 0;
+}
+.uk-modal-full .uk-modal-footer > div{padding: 10px;}
+*/

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="system" method="upgrade">
+    <name>YOO SEBLOD Customizer</name>
+    <version>0.0.1</version>
+    <description>SEBLOD Customizer for Yootheme Pro</description>
+    <creationDate>2025-05-06</creationDate>
+    <copyright>Copyright (C)</copyright>
+    <license>GNU General Public License</license>
+    <author>Lionel RATEL</author>
+    <authorEmail>lionel@ratel.ovh</authorEmail>
+    <authorUrl></authorUrl>
+    <files>
+        <filename plugin="yooseblod">yooseblod.php</filename>
+        <folder>modules</folder>
+    </files>
+    <updateservers>
+        <server type="extension" priority="1" name="yooseblod">
+            /update.xml
+        </server>
+    </updateservers>
+</extension>

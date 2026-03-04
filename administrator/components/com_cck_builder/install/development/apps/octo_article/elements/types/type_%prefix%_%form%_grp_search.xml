@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="types">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<type>
+		<id />
+		<asset_id />
+		<title>%Form% Grp (Search)</title>
+		<name>%prefix%_%form%_grp_search</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<template_admin>seb_minima</template_admin>
+		<template_site>seb_minima</template_site>
+		<template_content>seb_minima</template_content>
+		<template_intro>seb_minima</template_intro>
+		<description />
+		<indexed>intro</indexed>
+		<published>1</published>
+		<options_admin />
+		<options_site />
+		<options_content />
+		<options_intro />
+		<admin_form>0</admin_form>
+		<location>collection</location>
+		<locked>1</locked>
+		<parent>%prefix%_%form%</parent>
+		<parent_inherit>0</parent_inherit>
+		<permissions />
+		<storage_location>joomla_article</storage_location>
+		<stylesheets />
+		<version>11</version>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>3</access>
+		<created_date>0000-00-00 00:00:00</created_date>
+		<created_user_id>0</created_user_id>
+		<modified_date>0000-00-00 00:00:00</modified_date>
+		<modified_user_id>0</modified_user_id>
+	</type>
+	<acl />
+	<fields>
+		<field1 client="intro" ordering="1" label="clear" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="cck_form" link_options="{&quot;form&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;%form%-manager&quot;,&quot;form_edition&quot;:&quot;1&quot;,&quot;form_edition_stage&quot;:&quot;&quot;,&quot;form_fieldname&quot;:&quot;&quot;,&quot;redirection&quot;:&quot;&quot;,&quot;redirection_custom&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;o-edit&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;1&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;no_access&quot;:&quot;0&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="3" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_icon_edit</field1>
+		<field2 client="intro" ordering="2" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_grp_content_title</field2>
+		<field3 client="intro" ordering="3" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="cck_route" link_options="{&quot;mode&quot;:&quot;1&quot;,&quot;routes_fieldname&quot;:&quot;%prefix%_%form%_grp_content_title&quot;,&quot;routes&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;&quot;,&quot;target&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;path_type&quot;:&quot;0&quot;,&quot;state&quot;:&quot;1&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="html" typo_label="0" typo_options="{&quot;html&quot;:&quot;&lt;a href=\&quot;$cck-&gt;getLink('o_freetext_read_more')\&quot; class=\&quot;*link_class*\&quot;&gt;*value*&lt;/a&gt;&quot;,&quot;priority&quot;:&quot;5&quot;}" stage="0" access="1" restriction="cck_fields" restriction_options="{&quot;property&quot;:&quot;-1&quot;,&quot;property_custom&quot;:&quot;link&quot;,&quot;do&quot;:&quot;0&quot;,&quot;trigger&quot;:&quot;o_freetext_read_more&quot;,&quot;match&quot;:&quot;isFilled&quot;,&quot;values&quot;:&quot;&quot;,&quot;priority&quot;:&quot;6&quot;,&quot;live&quot;:&quot;&quot;}" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_freetext_read_more</field3>
+	</fields>
+	<positions />
+</cck>

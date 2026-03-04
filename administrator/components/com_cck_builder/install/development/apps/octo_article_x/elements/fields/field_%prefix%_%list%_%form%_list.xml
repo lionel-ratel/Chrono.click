@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="fields">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<field>
+		<id />
+		<title>%Title% (%Form% List)</title>
+		<name>%prefix%_%name%_%form%_list</name>
+		<folder>more/%target%/%folder%/%prefix%_%name%</folder>
+		<type>cck_list</type>
+		<description />
+		<published>1</published>
+		<label>clear</label>
+		<selectlabel />
+		<display>3</display>
+		<required />
+		<validation />
+		<defaultvalue />
+		<options>%prefix%_%name%_pk_%ref%=o_%ref_object_alias%_id</options>
+		<options2>{&quot;pagination&quot;:&quot;&quot;,&quot;class_pagination&quot;:&quot;pagination&quot;,&quot;callback_pagination&quot;:&quot;&quot;,&quot;show_more&quot;:&quot;0&quot;,&quot;show_link_more&quot;:&quot;&quot;,&quot;link_more_class&quot;:&quot;&quot;,&quot;link_more_text&quot;:&quot;&quot;,&quot;link_more_variables&quot;:&quot;&quot;,&quot;link_resource&quot;:&quot;&quot;,&quot;json_resource&quot;:&quot;&quot;}</options2>
+		<minlength>0</minlength>
+		<maxlength>255</maxlength>
+		<size>32</size>
+		<cols>0</cols>
+		<rows>0</rows>
+		<ordering>0</ordering>
+		<sorting>-1</sorting>
+		<divider />
+		<bool>-1</bool>
+		<location />
+		<extended>%prefix%_%name%_%form%_list</extended>
+		<style />
+		<script />
+		<bool2>0</bool2>
+		<bool3>-2</bool3>
+		<bool4>0</bool4>
+		<bool5>0</bool5>
+		<bool6>0</bool6>
+		<bool7>0</bool7>
+		<bool8>1</bool8>
+		<css />
+		<attributes />
+		<storage>none</storage>
+		<storage_cck />
+		<storage_location />
+		<storage_table />
+		<storage_field>%name%_%form%_list</storage_field>
+		<storage_field2 />
+		<storage_filter />
+		<storage_mode>0</storage_mode>
+		<storages />
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+	</field>
+</cck>

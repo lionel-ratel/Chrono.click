@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_o_events</name>
+	<packagename>app_cck_o_events</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>February 2020</creationDate>
+	<description>SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="plugin" id="plg_cck_field_cck_processing" group="cck_field">plg_cck_field_cck_processing.zip</file>
+		<file type="plugin" id="plg_cck_field_code_js" group="cck_field">plg_cck_field_code_js.zip</file>
+		<file type="plugin" id="plg_cck_field_link_custom" group="cck_field_link">plg_cck_field_link_custom.zip</file>
+		<file type="template" id="tpl_seb_manager_search" client="site">tpl_seb_manager_search.zip</file>
+		<file type="file" id="pro_cck_project_apps_o_events_process_field_seo_seo" src="project/apps/o_events/process/field/">pro_cck_project_apps_o_events_process_field_seo_seo.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

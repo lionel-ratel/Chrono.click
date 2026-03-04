@@ -1,0 +1,47 @@
+<?php
+/**
+* @version 			SEBLOD 3.x More
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\Registry\Registry;
+use Joomla\CMS\Plugin\PluginHelper;
+
+$loaded		=	0;
+$location	=	$config['location'];
+$params		=	new Registry;
+
+if ( count( $items ) && $location ) {
+	$pks		=	'';
+	$pkbs		=	'';
+	$plg		=	PluginHelper::getPlugin( 'cck_storage_location', $location );
+	$plg_params	=	new Registry( $plg->params );
+	for ( $i = 0; $i < $total; $i++ ) {
+		if ( isset( $items[$i]->pk ) ) {
+			$pks	.=	(int)$items[$i]->pk.',';
+			$pkbs	.=	(int)$items[$i]->pkb.',';
+		}
+	}
+	if ( $pks ) {
+		$pks	=	substr( $pks, 0, -1 );
+	}
+	if ( $pkbs ) {
+		$pkbs	=	substr( $pkbs, 0, -1 );
+	}
+	
+	JCck::callFunc_Array( 'plgCCK_Storage_Location'.$location, 'onCCK_Storage_LocationPrepareList', array( &$params ) );
+	$path	=	JPATH_PLUGINS.'/cck_storage_location/'.$location.'/tmpl/item.php';
+	
+	foreach ( $items as $item ) {
+		include $path;	
+	}
+} else {
+	echo $data;
+}
+?>

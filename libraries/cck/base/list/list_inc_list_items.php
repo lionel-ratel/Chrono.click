@@ -1,0 +1,513 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: list_inc_list_items.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+
+// Prepare
+PluginHelper::importPlugin( 'cck_field_link' );
+PluginHelper::importPlugin( 'cck_field_typo' );
+PluginHelper::importPlugin( 'cck_storage' );
+PluginHelper::importPlugin( 'cck_storage_location' );
+
+require_once JPATH_SITE.'/libraries/cck/rendering/rendering_item.php';
+$count		=	count( $items );
+$count2		=	count( $fields );
+$count3		=	( $client == 'item' && $go_for_both ) ? count( $fields2 ) : 0;
+if ( !isset( $doc->list ) ) {
+	$doc->list			=	array();
+}
+$doc->list[$idx]		=	array();
+
+$debug			=	JCck::getConfig_Param( 'debug', 0 );
+$ids			=	'';
+$lang			=	Factory::getLanguage();
+$lang_default	=	$lang->getDefault();
+$lang_tag		=	$lang->getTag();
+$optimize		=	(int)JCck::getConfig_Param( 'optimize_memory', 0 );
+$properties		=	CCK_List::getPropertyColumns_asString( $optimize );
+$pks			=	'';
+
+if ( $list['isCore'] ) {
+	for ( $i = 0; $i < $count; $i++ ) {
+		$ids	.=	(int)$items[$i]->pid.',';
+		$pks	.=	(int)$items[$i]->pk.',';
+	}
+	$ids		=	substr( $ids, 0, -1 );
+	$pks		=	substr( $pks, 0, -1 );
+} else {
+	for ( $i = 0; $i < $count; $i++ ) {
+		if ( isset( $items[$i]->id ) && is_string( $items[$i]->id ) ) {			
+			if ( isset( $items[$i]->id2_key ) ) {
+				$ids	.=	$items[$i]->id.'_'.$items[$i]->id2_key.',';
+			} else {
+				$ids	.=	$items[$i]->id.',';	
+			}
+		}
+	}
+	if ( $ids != '' ) {
+		$ids	=	substr( $ids, 0, -1 );
+	}
+}
+$storages		=	array( '_'=>'' );
+$suffix			=	'';
+
+if ( $debug == -1 ) {
+	$suffix		=	'Debug';
+	foreach ( $fields as $field ) {
+		$field->storage	=	'lipsum';
+	}
+}
+if ( $count ) {
+	for ( $i = 0; $i < $count; $i++ ) {
+		if ( isset( $items[$i]->pk ) ) {
+			$PK							=	$items[$i]->pk;
+
+			if ( isset( $items[$i]->id2_key ) ) {
+				$PK	.=	'_'.$items[$i]->id2_key;
+			}
+
+			if ( !isset( $items[$i]->loc ) ) {
+				$items[$i]->loc			=	$list['location'];
+			}
+		} else {
+			$PK							=	isset( $config_list['identifier'] ) && $config_list['identifier'] ? $items[$i]->{$config_list['identifier']} : $i;
+
+			$items[$i]->author			=	0;
+			$items[$i]->author_session	=	'';
+			$items[$i]->cck				=	'';
+			$items[$i]->loc				=	$list['location'];
+			$items[$i]->parent			=	'';
+			$items[$i]->pid				=	0;
+			$items[$i]->pk				=	$PK;
+			$items[$i]->pkb				=	0;
+			$items[$i]->type_id			=	0;
+		}
+		$item	=	new CCK_Rendering_Item( $templateStyle->name, $search->name, $items[$i]->pk );
+		
+		// --
+		if ( $count2 ) {
+			$config		=	array(
+								'app'=>null,
+								'author'=>$items[$i]->author,
+								'author_session'=>$items[$i]->author_session,
+								'client'=>'item',
+								'doSEF'=>$list['doSEF'],
+								'doTranslation'=>JCck::getConfig_Param( 'language_jtext', 1 ),
+								'error'=>0,
+								'fields'=>array(),
+								'formId'=>$list['formId'],
+								'formWrapper'=>0,
+								'id'=>$items[$i]->pid,
+								'ids'=>$ids,
+								'Itemid'=>$list['itemId'],
+								'links'=>array(),
+								'location'=>$items[$i]->loc,
+								'parent_id'=>$items[$i]->parent,
+								'pk'=>$items[$i]->pk,
+								'pkb'=>$items[$i]->pkb,
+								'pks'=>$pks,
+								'sef_aliases'=>$list['sef_aliases'],
+								'storages'=>array(),
+								'type'=>$items[$i]->cck,
+								'type_id'=>(int)$items[$i]->type_id
+							);
+			$fieldsI	=	array();
+			$unset		=	array();
+			
+			$config['app']	=	new JCckApp;
+			$config['app']->loadDefault();
+
+			if ( $PK != $config['pk'] ) {
+				$config['pkey']	=	$PK;
+			}
+			foreach ( $fields as $field ) {
+				if ( $field->position == '_above_' || $field->position == '_below_' ) {
+					continue;
+				}
+				$field				=	clone $field;
+				$field->typo_target	=	'value';
+				$fieldName			=	$field->name;
+				$value				=	'';
+
+				if ( $field->variation_override ) {
+					$override	=	json_decode( $field->variation_override, true );
+
+					if ( count( $override ) ) {
+						foreach ( $override as $k=>$v ) {
+							$field->$k	=	$v;
+						}
+					}
+
+					$field->variation_override	=	null;
+				}
+				
+				if ( $fieldName ) {
+					$Pt				=	( $field->storage_table != '' ) ? $field->storage_table : '_';
+					if ( $Pt && ! isset( $config['storages'][$Pt] ) ) {
+						if ( ! isset( $storages[$Pt] ) ) {
+							$storages[$Pt]					=	'';
+							if ( !$list['isCore'] || $Pt == '_' ) {
+								$config['storages'][$Pt]	=	$items[$i];
+							} else {
+								$app->triggerEvent( 'onCCK_Storage_LocationPrepareItems', array( &$field, &$storages, $config['pks'], &$config, true ) );
+								$config['storages'][$Pt]				=	isset( $storages[$Pt][$config['pk']] ) ? $storages[$Pt][$config['pk']] : new stdClass;
+								if ( $storages['_'] && !isset( $config['storages'][$storages['_']] ) ) {
+									$config['storages'][$storages['_']]	=	$storages[$storages['_']][$config['pk']];
+								}
+							}
+						} else {
+							if ( !$list['isCore'] || $Pt == '_' ) {
+								$config['storages'][$Pt]	=	$items[$i];						
+							} else {
+								$app->triggerEvent( 'onCCK_Storage_LocationPrepareItems', array( &$field, &$storages, $config['pks'], &$config, false ) );
+								$config['storages'][$Pt]				=	isset( $storages[$Pt][$config['pk']] ) ? $storages[$Pt][$config['pk']] : new stdClass;
+								if ( $storages['_'] && !isset( $config['storages'][$storages['_']] ) ) {
+									$config['storages'][$storages['_']]	=	$storages[$storages['_']][$config['pk']];
+								}
+							}
+						}
+					}
+					
+					$app->triggerEvent( 'onCCK_StoragePrepareContent', array( &$field, &$value, &$config['storages'][$Pt], $config ) );
+					
+					if ( is_string( $value ) ) {
+						$storage_mode	=	(int)$field->storage_mode;
+						$value			=	trim( $value );
+
+						if ( $storage_mode && $value != '' ) {
+							if ( $storage_mode == -1 ) {
+								$json		=	json_decode( $value );
+								$value		=	isset( $json->$lang_default ) ? $json->$lang_default : '';
+							} else {
+								$json		=	json_decode( $value );
+								$value		=	isset( $json->$lang_tag ) ? $json->$lang_tag : '';
+							}
+						}
+					}
+					
+					$hasLink	=	( $field->link != '' ) ? 1 : 0;
+					$app->triggerEvent( 'onCCK_FieldPrepareContent'.$suffix, array( &$field, $value, &$config ) );
+					$target		=	$field->typo_target;
+					if ( $hasLink ) {
+						$app->triggerEvent( 'onCCK_Field_LinkPrepareContent', array( &$field, &$config ) );
+						if ( $field->link ) {
+							JCckPluginLink::g_setHtml( $field, $target );
+						}
+					}
+					if ( @$field->typo && ( $field->$target !== '' || $field->typo_label == -2 ) ) {
+						$app->triggerEvent( 'onCCK_Field_TypoPrepareContent', array( &$field, $field->typo_target, &$config ) );
+					} else {
+						$field->typo	=	'';
+					}
+					
+					$fieldsI[$fieldName]			=	$field;
+
+					if ( $i == 0 ) {
+						$pos						=	$field->position;
+						$positions[$pos][]			=	$field->name;
+					}
+
+					// Was it the last one?
+					if ( $config['error'] ) {
+						break;
+					}
+				}
+			}
+			
+			// Merge
+			if ( count( $config['fields'] ) ) {
+				foreach ( $config['fields'] as $k=>$v ) {
+					if ( $v->markup == 'unset' && isset( $fieldsI[$k] ) ) {
+						$unset[$k]		=	$fieldsI[$k];
+					}
+					if ( !( $v->restriction == 'unset' ) ) {
+						$fieldsI[$k]	=	$v;
+					}
+				}
+				$config['fields']	=	null;
+				unset( $config['fields'] );
+			}
+
+			// BeforeRender
+			if ( isset( $config['process']['beforeRenderContent'] ) && count( $config['process']['beforeRenderContent'] ) ) {
+				JCckDevHelper::sortObjectsByProperty( $config['process']['beforeRenderContent'], 'priority' );
+				
+				foreach ( $config['process']['beforeRenderContent'] as $process ) {
+					if ( $process->type ) {
+						JCck::callFunc_Array( 'plg'.$process->group.$process->type, 'on'.$process->group.'BeforeRenderContent', array( $process->params, &$fieldsI, &$config['storages'], &$config ) );
+					}
+				}
+			}
+			if ( count( $unset ) ) {
+				foreach ( $unset as $k=>$v ) {
+					$fieldsI[$k]	=	$v;
+				}
+				unset( $unset );
+			}
+
+			/* TODO#SEBLOD: ->legend2 may be deprecated (from here) in a near future... in order to move at template level. */
+			if ( $i == 0 ) {
+				foreach ( $positions as $p_key=>$p_fields ) {
+					$legend2	=	'';
+
+					foreach ( $p_fields as $p_field ) {
+						if ( $fieldsI[$p_field]->display ) {
+							$legend2	=	( $legend2 != '' && $fieldsI[$p_field]->label ) ? $legend2 .' / '. $fieldsI[$p_field]->label : $fieldsI[$p_field]->label;
+						}
+					}
+
+					if ( isset( $positions_p[$p_key] ) ) {
+						$positions_p[$p_key]->legend2	=	$legend2;
+					}
+				}
+			}
+
+			// Optimize
+			if ( $optimize == 11 ) {
+				foreach ( $fieldsI as $k=>$v ) {
+					if ( isset( $v->state ) && !$v->state ) {
+						unset( $fieldsI[$k] );
+					}
+				}
+			} elseif ( $optimize ) {
+				foreach ( $fieldsI as $k=>$v ) {
+					if ( $optimize ) {
+						foreach ( $properties as $property ) {
+							unset( $v->$property );
+						}
+					}
+				}	
+			}
+			
+			$item->$target_f	=	$fieldsI;
+
+			if ( isset( $config['validation'] ) ) {
+				$validation	=	$config['validation'];
+			}
+			if ( $config['formWrapper'] ) {
+				$form_wrapper	=	$config['formWrapper'];
+			}
+		}
+
+		if ( $count3 ) {
+			$config		=	array(
+								'app'=>null,
+								'author'=>$items[$i]->author,
+								'author_session'=>$items[$i]->author_session,
+								'client'=>'item',
+								'doSEF'=>$list['doSEF'],
+								'doTranslation'=>JCck::getConfig_Param( 'language_jtext', 1 ),
+								'error'=>0,
+								'fields'=>array(),
+								'formId'=>$list['formId'],
+								'formWrapper'=>0,
+								'id'=>$items[$i]->pid,
+								'ids'=>$ids,
+								'Itemid'=>$list['itemId'],
+								'links'=>array(),
+								'location'=>$items[$i]->loc,
+								'parent_id'=>$items[$i]->parent,
+								'pk'=>$items[$i]->pk,
+								'pkb'=>$items[$i]->pkb,
+								'pks'=>$pks,
+								'sef_aliases'=>$list['sef_aliases'],
+								'storages'=>array(),
+								'type'=>$items[$i]->cck,
+								'type_id'=>(int)$items[$i]->type_id
+							);
+			$fieldsI	=	array();
+			$unset		=	array();
+			
+			$config['app']	=	new JCckApp;
+			$config['app']->loadDefault();
+
+			if ( $PK != $config['pk'] ) {
+				$config['pkey']	=	$PK;
+			}
+			foreach ( $fields2 as $field ) {
+				if ( $field->position == '_above_' || $field->position == '_below_' ) {
+					continue;
+				}
+				$field				=	clone $field;
+				$field->typo_target	=	'value';
+				$fieldName			=	$field->name;
+				$value				=	'';
+
+				if ( $field->variation_override ) {
+					$override	=	json_decode( $field->variation_override, true );
+
+					if ( count( $override ) ) {
+						foreach ( $override as $k=>$v ) {
+							$field->$k	=	$v;
+						}
+					}
+
+					$field->variation_override	=	null;
+				}
+
+				if ( $fieldName ) {
+					$Pt				=	( $field->storage_table != '' ) ? $field->storage_table : '_';
+					if ( $Pt && ! isset( $config['storages'][$Pt] ) ) {
+						if ( ! isset( $storages[$Pt] ) ) {
+							$storages[$Pt]					=	'';
+							if ( !$list['isCore'] || $Pt == '_' ) {
+								$config['storages'][$Pt]	=	$items[$i];
+							} else {
+								$app->triggerEvent( 'onCCK_Storage_LocationPrepareItems', array( &$field, &$storages, $config['pks'], &$config, true ) );
+								$config['storages'][$Pt]				=	isset( $storages[$Pt][$config['pk']] ) ? $storages[$Pt][$config['pk']] : new stdClass;
+								if ( $storages['_'] && !isset( $config['storages'][$storages['_']] ) ) {
+									$config['storages'][$storages['_']]	=	$storages[$storages['_']][$config['pk']];
+								}
+							}
+						} else {
+							if ( !$list['isCore'] || $Pt == '_' ) {
+								$config['storages'][$Pt]	=	$items[$i];
+							} else {
+								$app->triggerEvent( 'onCCK_Storage_LocationPrepareItems', array( &$field, &$storages, $config['pks'], &$config, false ) );
+								$config['storages'][$Pt]				=	isset( $storages[$Pt][$config['pk']] ) ? $storages[$Pt][$config['pk']] : new stdClass;
+								if ( $storages['_'] && !isset( $config['storages'][$storages['_']] ) ) {
+									$config['storages'][$storages['_']]	=	$storages[$storages['_']][$config['pk']];
+								}
+							}
+						}
+					}
+					
+					$app->triggerEvent( 'onCCK_StoragePrepareContent', array( &$field, &$value, &$config['storages'][$Pt], $config ) );
+					
+					if ( is_string( $value ) ) {
+						$storage_mode	=	(int)$field->storage_mode;
+						$value			=	trim( $value );
+
+						if ( $storage_mode && $value != '' ) {
+							if ( $storage_mode == -1 ) {
+								$json		=	json_decode( $value );
+								$value		=	isset( $json->$lang_default ) ? $json->$lang_default : '';
+							} else {
+								$json		=	json_decode( $value );
+								$value		=	isset( $json->$lang_tag ) ? $json->$lang_tag : '';
+							}
+						}
+					}
+					
+					$hasLink	=	( $field->link != '' ) ? 1 : 0;
+					$app->triggerEvent( 'onCCK_FieldPrepareContent', array( &$field, $value, &$config ) );
+					$target		=	$field->typo_target;
+					if ( $hasLink ) {
+						$app->triggerEvent( 'onCCK_Field_LinkPrepareContent', array( &$field, &$config ) );
+						if ( $field->link ) {
+							JCckPluginLink::g_setHtml( $field, $target );
+						}
+					}
+					if ( @$field->typo && ( $field->$target !== '' || $field->typo_label == -2 ) ) {
+						$app->triggerEvent( 'onCCK_Field_TypoPrepareContent', array( &$field, $field->typo_target, &$config ) );
+					} else {
+						$field->typo	=	'';
+					}
+
+					// Optimize Memory
+					if ( $optimize ) {
+						foreach ( $properties as $property ) {
+							unset( $field->$property );
+						}
+					}
+					$fieldsI[$fieldName]			=	$field;
+
+					if ( $i == 0 ) {
+						$pos						=	$field->position;
+						$positions2[$pos][]			=	$field->name;
+					}
+
+					// Was it the last one?
+					if ( $config['error'] ) {
+						break;
+					}
+				}
+			}
+			
+			// Merge
+			if ( count( $config['fields'] ) ) {
+				foreach ( $config['fields'] as $k=>$v ) {
+					if ( $v->markup == 'unset' && isset( $fieldsI[$k] ) ) {
+						$unset[$k]		=	$fieldsI[$k];
+					}
+					if ( !( $v->restriction == 'unset' ) ) {
+						$fieldsI[$k]	=	$v;
+					}
+				}
+				$config['fields']	=	null;
+				unset( $config['fields'] );
+			}
+
+			// BeforeRender
+			if ( isset( $config['process']['beforeRenderContent'] ) && count( $config['process']['beforeRenderContent'] ) ) {
+				JCckDevHelper::sortObjectsByProperty( $config['process']['beforeRenderContent'], 'priority' );
+
+				foreach ( $config['process']['beforeRenderContent'] as $process ) {
+					if ( $process->type ) {
+						JCck::callFunc_Array( 'plg'.$process->group.$process->type, 'on'.$process->group.'BeforeRenderContent', array( $process->params, &$fieldsI, &$config['storages'], &$config ) );
+					}
+				}
+			}
+			if ( count( $unset ) ) {
+				foreach ( $unset as $k=>$v ) {
+					$fieldsI[$k]	=	$v;
+				}
+				unset( $unset );
+			}
+
+			/* TODO#SEBLOD: ->legend2 may be deprecated (from here) in a near future... in order to move at template level. */
+			if ( $i == 0 ) {
+				foreach ( $positions2 as $p_key=>$p_fields ) {
+					$legend2	=	'';
+
+					foreach ( $p_fields as $p_field ) {
+						if ( $fieldsI[$p_field]->display ) {
+							$legend2	=	( $legend2 != '' && $fieldsI[$p_field]->label ) ? $legend2 .' / '. $fieldsI[$p_field]->label : $fieldsI[$p_field]->label;
+						}
+					}
+
+					if ( isset( $positions_p[$p_key] ) ) {
+						$positions_p[$p_key]->legend2	=	$legend2;
+					}
+				}
+			}
+
+			$item->fields_list		=	$fieldsI;
+
+			if ( $config['formWrapper'] ) {
+				$form_wrapper		=	$config['formWrapper'];
+			}
+		}
+		
+		// --
+		$item->params				=	$templateStyle->params;
+		$item->positions			=	$positions;
+		$item->positions_m			=	$positions_p;
+		// --
+		
+		$item->initialize();
+		$doc->list[$idx][$PK]			=	$item;
+		$doc->list[$idx][$PK]->pid		=	$items[$i]->pid;
+		$doc->list[$idx][$PK]->pk		=	(string)$items[$i]->pk;
+		$doc->list[$idx][$PK]->pkb		=	$items[$i]->pkb;
+		$doc->list[$idx][$PK]->cck		=	$items[$i]->cck;
+		$doc->list[$idx][$PK]->location	=	$items[$i]->loc;
+		$doc->list[$idx][$PK]->author	=	$items[$i]->author;
+	}
+} else {
+	foreach ( $fields as $field ) {
+		$pos				=	$field->position;
+		$positions[$pos][]	=	$field->name;
+	}
+}
+?>

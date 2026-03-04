@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_cck_webservices</name>
+	<packagename>cck_webservices</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>January 2013</creationDate>
+	<description>SEBLOD WebServices Add-on for SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>6.0.4</version>
+	
+	<scriptfile>pkg_script.php</scriptfile>
+	
+	<!-- EXTENSIONS -->
+	<files folder="extensions">
+		<!-- START HERE -->
+			<!-- Component -->
+			<file type="component" id="com_cck_webservices">com_cck_webservices.zip</file>
+			<!-- Plugin // CCK Field -->
+			<file type="plugin" id="cck_webservice" group="cck_field">plg_cck_field_cck_webservice.zip</file>
+			<!-- Plugin // CCK Storage Location -->
+			<file type="plugin" id="cck_webservice" group="cck_storage_location">plg_cck_storage_location_cck_webservice.zip</file>
+			<!-- Plugin // CCK WebService -->
+			<file type="plugin" id="cck_webservice_http" group="cck_webservice">plg_cck_webservice_http.zip</file>
+			<file type="plugin" id="cck_webservice_http2" group="cck_webservice">plg_cck_webservice_http2.zip</file>
+		<!-- END HERE -->
+	</files>
+
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.pkg_cck_webservices.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.pkg_cck_webservices.sys.ini</language>
+	</languages>
+
+	<updateservers>
+		<server type="extension" priority="1" name="SEBLOD WebServices Add-on Updates">http://update.seblod.com/pkg_cck_webservices.xml</server>
+	</updateservers>
+</extension>

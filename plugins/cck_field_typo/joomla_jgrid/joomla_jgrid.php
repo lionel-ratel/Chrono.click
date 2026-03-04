@@ -1,0 +1,559 @@
+<?php
+/**
+* @version 			SEBLOD 3.x More
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
+
+use Joomla\Component\Users\Administrator\Service\HTML\Users;
+
+// Plugin
+class plgCCK_Field_TypoJoomla_Jgrid extends JCckPluginTypo
+{
+	protected static $type		=	'joomla_jgrid';
+	protected static $increment	=	array();
+	
+	// -------- -------- -------- -------- -------- -------- -------- -------- // Prepare
+	
+	// onCCK_Field_TypoPrepareContent
+	public function onCCK_Field_TypoPrepareContent( &$field, $target = 'value', &$config = array() )
+	{
+		if ( self::$type != $field->typo ) {
+			return;
+		}
+		
+		// Prepare
+		$typo	=	parent::g_getTypo( $field->typo_options );
+		$value	=	parent::g_hasLink( $field, $typo, $field->$target );
+
+		// Set
+		$field->typo	=	self::_typo( $typo, $field, $value, $config );
+	}
+	
+	// _typo
+	protected static function _typo( $typo, $field, $value, &$config = array() )
+	{
+		$class	=	$typo->get( 'class', '' );
+		$start	=	$typo->get( 'start', '1' );
+		$type	=	$typo->get( 'type', '' );
+		
+		if ( !$type ) {
+			return $value;
+		}
+
+		static $i		=	0;
+		static $formId	=	null;
+		static $pks		=	array();
+		$pk				=	$config['pk'];
+		if ( !isset( $pks[$pk] ) ) {
+			$pks[$pk]	=	$i;
+			$i++;
+		}
+
+		switch ( $type ) {
+			case 'activation':
+			case 'block':
+				parent::g_addProcess( 'beforeRenderContent', self::$type, $config, array( 'name'=>$field->name, 'type'=>$type, 'value'=>$value, 'class'=>$class, 'pk'=>$pk, 'pk_i'=>$pks[$pk] ) );
+
+				$config['formWrapper']	=	1;
+				break;
+			case 'dropdown':
+				static $dropdown		=	array();
+				static $dropdown_css	=	false;
+
+				$class	=	$typo->get( 'class1', '' );
+
+				if ( !isset( $dropdown[$pk] ) ) {
+					$class	=	$class ? ' '.$class : '';
+					$value	=	'<button type="button" data-toggle="dropdown" class="dropdown-toggle btn'.$class.'"><span class="caret"></span></button>'
+							.	'<ul class="dropdown-menu flex-column-reverse"></ul>';
+					
+					$dropdown[$pk]		=	array( 'parent'=>$field->name, 'html'=>'' );
+					
+					if ( !$dropdown_css ) {
+						$dropdown_css	=	true;
+
+						Factory::getDocument()->addStyleDeclaration( '.btn-group.open > .dropdown-menu{display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient:vertical; -webkit-box-direction:reverse; -ms-flex-direction:column-reverse; flex-direction:column-reverse;}' );
+					}
+					
+					$class	=	'';
+				} else {
+					$class	=	$class ? ' class="'.$class.'"' : '';
+				}
+				$dropdown[$pk]['html']	=	'<li'.$class.'>'.( ( isset( $field->html ) && $field->html ) ? $field->html : $value ).'</li>';
+
+				parent::g_addProcess( 'beforeRenderContent', self::$type, $config, array( 'name'=>$dropdown[$pk]['parent'], 'target'=>$field->name, 'type'=>$type, 'html'=>$dropdown[$pk]['html'] ) );
+				break;
+			case 'featured':
+				static $loaded_featured	=	0;
+				if ( !$loaded_featured ) {
+					HTMLHelper::addIncludePath( JPATH_ADMINISTRATOR.'/components/com_content/helpers/html' );
+					$loaded_featured	=	1;
+				}
+				$value		=	$field->value;
+
+				if ( is_numeric( $value ) ) {
+					$value	=	( (int)$value > 0 ) ? 1 : 0;
+				} elseif ( is_array( $value ) ) {
+					$value	=	( count( $value ) > 0 ) ? 1 : 0;
+				} else {
+					$value	=	( $value == '' ) ? 0 : 1;
+				}
+
+				parent::g_addProcess( 'beforeRenderContent', self::$type, $config, array( 'name'=>$field->name, 'type'=>$type, 'value'=>$value, 'class'=>$class, 'pk'=>$pks[$pk] ) );
+
+				$config['formWrapper']	=	1;
+				break;
+			case 'form':
+			case 'form_custom_number':
+			case 'form_disabled':
+			case 'form_hidden':
+				if ( $type == 'form_custom_number' ) {
+					$type	=	'form';
+					$type2	=	'custom_number';
+				} else {
+					$type2	=	'';
+				}
+
+				$class				=	$typo->get( 'class2', '' );
+				$unset_validation	=	false;
+
+				if ( !isset( $config['doValidation'] ) ) {
+					$config['doValidation']	=	0;
+					$unset_validation		=	true;
+				} else {
+					$doValidation	=	$config['doValidation'];
+				}
+				$hasIdentifier		=	(int)$typo->get( 'use_identifier', '1' );
+				$hasModifier		=	$typo->get( 'use_modifier', '' );
+				$hasModifier		=	$hasModifier ? '@'.$hasModifier : '';
+				$identifier			=	( $typo->get( 'identifier', 'id' ) == 'pk' ) ? $config['pk'] : $config['id'];
+				$identifier_name	=	$typo->get( 'identifier_name', '' );
+				$identifier_name	=	( $identifier_name != '' ) ? $identifier_name : $field->name;
+				$identifier_suffix	=	$typo->get( 'identifier_suffix', '' );
+				$inherit			=	array( 'id'=>$identifier.'_', 'name'=>'' );
+
+				if ( $identifier_suffix ) {
+					if ( $hasIdentifier == 2 ) {
+						$inherit['name']	=	$identifier_suffix.'['.$identifier.']'.'['.$identifier_name.']';
+					} else if ( $hasIdentifier ) {
+						$inherit['name']	=	$identifier.'['.$identifier_suffix.']'.'['.$identifier_name.']';
+					} else {
+						$inherit['name']	=	$identifier_suffix.'['.$identifier_name.'][]';
+					}
+					$inherit['id']			.=	$identifier_suffix.'_';
+				} else {
+					if ( $hasIdentifier ) {
+						$inherit['name']	=	$identifier.'['.$identifier_name.$hasModifier.']';
+					} else {
+						$inherit['name']	=	$identifier_name.'[]';
+					}
+				}
+
+				$inherit['id']		.=	$identifier_name;
+
+				if ( $typo->get( 'trigger' ) ) {
+					$field->attributes	.=	' onchange="if(!document.getElementById(\'cb'.($i - 1).'\').checked){document.getElementById(\'cb'.($i - 1).'\').checked=true; Joomla.isChecked(document.getElementById(\'cb'.($i - 1).'\').checked, document.getElementById(\''.( @$config['formId'] ? $config['formId'] : 'seblod_form' ).'\'));}"';
+				}
+				$field->attributes	.=	' data-cck-remove-before-search=""';
+				$field->css			=	trim( $field->css.' '.$class );
+				$field->label2		=	( $field->label != '' ) ? $field->label : 'clear';
+				
+				if ( $type == 'form_disabled' ) {
+					$field->variation	=	'disabled';
+				} elseif ( $type == 'form_hidden' ) {
+					$field->variation	=	'hidden';
+				} else {
+					if ( $typo->get( 'validation', '' ) != '' ) {
+						$field->validation			=	$typo->get( 'validation', '' );
+						$field->validation_options	=	'{}';
+
+						require_once JPATH_PLUGINS.'/cck_field_validation/'.$field->validation.'/'.$field->validation.'.php';
+						JCck::callFunc_Array( 'plgCCK_Field_Validation'.$field->validation, 'onCCK_Field_ValidationPrepareForm', array( &$field, $inherit['id'], &$config ) );
+					}
+					if ( $typo->get( 'required' ) == 'required' ) {
+						// Factory::getLanguage()->load( 'plg_cck_field_validation_required', JPATH_ADMINISTRATOR );
+
+						// require_once JPATH_PLUGINS.'/cck_field_validation/required/required.php';
+
+						$config['doValidation']	=	2;
+						$field->required		=	'required';
+						$field->required_alert	=	'';
+					} elseif ( $typo->get( 'required' ) == 'grouprequired' ) {
+						$config['doValidation']	=	2;
+						$field->required		=	'grouprequired['.$typo->get( 'required2' ).']';
+						$field->required_alert	=	'';
+
+						$config['validation']	=	array();
+					}
+				}
+				
+				if ( $type2 ) {
+					$field->variation	=	$type2;
+				}
+
+				/* TODO#SEBLOD4 temporary fix */
+				$field->options			=	JCckDatabase::loadResult( 'SELECT options FROM #__cck_core_fields WHERE name = "'.$field->name.'"' );
+				/* TODO#SEBLOD4 */
+
+				Factory::getApplication()->triggerEvent( 'onCCK_FieldPrepareForm', array( &$field, $field->value, &$config, $inherit ) );
+
+				$field->form			=	JCck::callFunc_Array( 'plgCCK_Field'.$field->type, 'onCCK_FieldRenderForm', array( $field, &$config ) );
+				$field->label			=	$field->label2 != 'clear' ? $field->label2 : '';
+				$value					=	$field->form;
+				$config['formWrapper']	=	1;
+
+				if ( $config['doValidation'] ) {
+					static $validation_loaded	=	0;
+					
+					if ( !$validation_loaded )	{
+						$validation_loaded		=	1;
+					} else {
+						if ( $i > 1 ) {
+							$config['validation']	=	null;
+						}
+					}
+				}
+
+				if ( $unset_validation ) {
+					unset( $config['doValidation'] );
+				} else {
+					$config['doValidation']	=	$doValidation;
+				}
+				
+				break;
+			case 'increment':
+				$identifier_name	=	$typo->get( 'identifier_name', '' );
+
+				if ( $identifier_name != '' ) {
+					if ( !isset( self::$increment[$identifier_name] ) ) {
+						self::$increment[$identifier_name]	=	array( 'i'=>0, 'pks'=>array() );
+
+						if ( $start ) {
+							self::$increment[$identifier_name]++;
+						}
+					}
+					if ( !isset( self::$increment[$identifier_name]['pks'][$config['pk']] ) ) {
+						self::$increment[$identifier_name]['pks'][$config['pk']]	=	self::$increment[$identifier_name]['i'];
+						self::$increment[$identifier_name]['i']++;
+					}
+
+					$value		=	self::$increment[$identifier_name]['i'];
+				} else {
+					$value		=	( !$start ) ? $i - 1 : $i;
+				}
+				break;
+			case 'selection':
+				if ( !$formId ) {
+					$formId	=	( @$config['formId'] != '' ) ? $config['formId'] : 'seblod_form';
+				}
+				$class		=	$typo->get( 'class1', '' );
+				$value		=	HTMLHelper::_( 'grid.id', $pks[$pk], $value );
+
+				if ( $class ) {
+					$value	=	str_replace( '<input class="', '<input class="'.$class.' ', $value );
+				}
+
+				$value		=	str_replace( '<input ', '<input data-cck-remove-before-search="" data-item-form-id="'.$formId.'" ', $value );
+
+				if ( $typo->get( 'trigger' ) ) {
+					// J!6 ?
+				}
+				if ( Factory::getApplication()->input->get( 'tmpl' ) != 'raw' ) {
+					Factory::getDocument()->getWebAssetManager()->useScript( 'list-view' );	
+				}
+				$config['formWrapper']	=	1;
+				break;
+			case 'selection_label':
+				$value		=	'<label for="cb'.$pks[$pk].'">'.$value.'</label>';
+				break;
+			case 'sort':
+			case 'sort_grip':
+				$canDo			=	false;
+				$parentId		=	$config['parent_id'];
+				static $orders	=	array();
+				static $user	=	null;
+
+				if ( !isset( $orders[$parentId] ) ) {
+					$orders[$parentId]	=	0;
+				}
+				$orders[$parentId]++;
+				$order			=	$orders[$parentId];
+
+				if ( $type == 'sort' ) {
+					static $loaded 	= 	false;
+					static $can		=	array();
+
+					if ( !isset( $can[$config['type_id']] ) ) {
+						$user				=	Factory::getUser();
+						$can				=	array( $config['type_id']=>array(
+													'edit'=>$user->authorise( 'core.edit', 'com_cck.form.'.$config['type_id'] ),
+													'edit.own'=>$user->authorise( 'core.edit.own', 'com_cck.form.'.$config['type_id'] )
+												) );
+					}
+					if ( $can[$config['type_id']]['edit'] && $can[$config['type_id']]['edit.own']
+						|| ( $can[$config['type_id']]['edit'] && !$can[$config['type_id']]['edit.own'] && ( $config['author'] != $user->id ) )
+						|| ( $can[$config['type_id']]['edit.own'] && ( $config['author'] == $user->id ) ) ) {
+						$canDo	=	true;
+					}
+
+					if ( !$loaded && $canDo ) {
+						if ( ( isset( $field->state ) && $field->state ) || !isset( $field->state ) ) {
+							$app			=	Factory::getApplication();
+							$formId			=	( @$config['formId'] != '' ) ? $config['formId'] : 'seblod_form';
+							$legacy			=	(int)JCck::getConfig_Param( 'core_legacy', '' );
+							$legacy			=	$legacy && $legacy <= 2024 ? true : false;
+
+							$listDir		=	'asc';
+							$loaded			= 	true;
+
+							if ( $legacy ) {
+								$tableWrapper	=	$formId . ' table.table';
+							} else {
+								$tableWrapper	=	$formId . ' table.o-table-manager';
+							}
+							
+							$task			=	$typo->get( 'task', '' );
+							$task_id		=	$typo->get( 'task_id_process', '' );
+
+							if ( $task == 'process_ajax' && $task_id ) {
+								$saveOrderUrl	=	JCckDevHelper::getAbsoluteUrl( 'auto', 'task=processAjax&format=raw&tid='.$task_id );
+							} elseif ( $task == 'none' ) {
+								$saveOrderUrl	=	Route::_( 'index.php?option=com_cck&task=ajax&format=raw', false );
+							} else {
+								$saveOrderUrl	=	Route::_( 'index.php?option=com_cck&task=saveOrderAjax&tmpl=component', false );
+							}
+							if ( JCck::on( '4.0' ) ) {
+								HTMLHelper::_( 'draggablelist.draggable', $tableWrapper, $formId, $listDir, $saveOrderUrl, false, true );
+							} else {
+								HTMLHelper::_( 'sortablelist.sortable', $tableWrapper, $formId, $listDir, $saveOrderUrl.'&'.Session::getFormToken().'=1', false, true );
+							}
+						}
+					}
+				} else {
+					$canDo	=	true;
+				}
+
+				if ( $canDo ) {
+					$value 	= 	'<span class="sortable-handler">'
+							.	'<span class="icon-menu"></span>'
+							.	'<input type="text" style="display:none" name="order[]" size="5" value="'.$order.'" data-cck-remove-before-search="" />'
+							.	'</span>';
+				} else {
+					$value	=	'<input type="text" style="display:none" name="order[]" size="5" value="'.$order.'" data-cck-remove-before-search="" />';
+				}
+				
+				$config['formWrapper']	=	1;
+				break;
+			case 'state':
+				parent::g_addProcess( 'beforeRenderContent', self::$type, $config, array( 'name'=>$field->name, 'type'=>$type, 'value'=>$field->value, 'class'=>$class, 'pk'=>$pks[$pk], 'title'=>$typo->get( 'state_title', '' ), 'fieldname_up'=>$typo->get( 'state_up', '' ), 'fieldname_down'=>$typo->get( 'state_down', '' ) ) );
+
+				$config['formWrapper']	=	1;
+				break;
+			default:
+				break;
+		}
+		
+		return $value;
+	}
+
+	// getStaticValue
+	public static function getStaticValue( $identifier, $pk = 0 )
+	{
+		if ( $pk ) {
+			return ( isset( self::$increment[$identifier] ) ) ? self::$increment[$identifier]['pks'][$pk] : 0;
+		} else {
+			return ( isset( self::$increment[$identifier] ) ) ? self::$increment[$identifier]['i'] : 0;
+		}
+	}
+
+	// onCCK_Field_TypoBeforeRenderContent
+	public static function onCCK_Field_TypoBeforeRenderContent( $process, &$fields, &$storages, &$config = array() )
+	{
+		$name	=	$process['name'];
+		$type	=	$process['type'];
+
+		if ( !$name ) {
+			return;
+		}
+
+		if ( $type == 'state' ) {
+			$class				=	$process['class'];
+			$field_name_up		=	$process['fieldname_up'];
+			$field_name_down	=	$process['fieldname_down'];
+
+			if ( $field_name_up || $field_name_down ) {
+				$state_up		=	( $field_name_up != '' && isset( $fields[$field_name_up] ) ) ? $fields[$field_name_up]->value : '';
+				$state_up		=	( $state_up == '' ) ? '0000-00-00 00:00:00' : $state_up;
+				$state_down		=	( $field_name_down != '' && isset( $fields[$field_name_down] ) ) ? $fields[$field_name_down]->value : '';
+				$state_down		=	( $state_down == '' ) ? '0000-00-00 00:00:00' : $state_down;
+
+				$value			=	HTMLHelper::_( 'jgrid.published', $process['value'], $process['pk'], '', false /*$canChange*/, 'cb', $state_up, $state_down );
+			} else {
+				$value			=	HTMLHelper::_( 'jgrid.published', $process['value'], $process['pk'], '', false /*$canChange*/, 'cb', '', '' );
+			}
+			if ( $fields[$name]->link ) {
+				$hasLink		=	true;
+				$value			=	str_replace( '<a ', '<a href="'.$fields[$name]->link.'"', $value );
+			} else {
+				$hasLink		=	false;
+			}
+			if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+				if ( !$hasLink ) {
+					$class	.=	' disabled';
+				}
+				if ( $hasLink && isset( $fields[$name]->link_title ) && $fields[$name]->link_title ) {
+					$value	=	preg_replace( '#title=".*"#U', 'title="'.$fields[$name]->link_title.'"', $value );
+				} elseif ( $process['title'] === '0' ) {
+					$output	=	JCckField::getInstance( $name );
+					$output->loadValue( $process['value'] );
+					$value	=	preg_replace( '#title=".*"#U', 'title="'.$output->getText().'"', $value );
+				}
+				if ( JCck::on( '4' ) ) {
+					// See later for the class
+				} else {
+					$value		=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" #U', 'class="'.$class.'"', $value );
+				}
+			}
+
+			$fields[$name]->typo	=	$value;
+		} elseif ( $type == 'featured' ) {
+			if ( !is_file( JPATH_ADMINISTRATOR.'/components/com_content/helpers/html/contentadministrator.php' ) ) {
+				$fields[$name]->typo	=	$fields[$name]->text ? $fields[$name]->text : $process['value'];
+			} else {
+				$class		=	$process['class'];
+				$value		=	HTMLHelper::_( 'contentadministrator.featured', $process['value'], $process['pk'], false /*$canChange*/ );
+
+				if ( $fields[$name]->link ) {
+					$hasLink		=	true;
+					$value			=	str_replace( '<a ', '<a href="'.$fields[$name]->link.'"', $value );
+				} else {
+					$hasLink		=	false;
+				}
+				if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+					if ( !$hasLink ) {
+						$class	.=	' disabled';
+					}
+					if ( $hasLink && isset( $fields[$name]->link_title ) && $fields[$name]->link_title ) {
+						$value	=	preg_replace( '#title=".*"#U', 'title="'.$fields[$name]->link_title.'"', $value );
+					}
+					if ( JCck::on( '4' ) ) {
+						// See later for the class
+					} else {
+						$value		=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" title#U', 'class="'.$class.'" title', $value );
+					}
+				}
+				$fields[$name]->typo	=	$value;
+			}
+		} elseif ( $type == 'block' || $type == 'activation' ) {
+			static $loaded_users	=	0;
+			static $user			=	null;
+			if ( !$loaded_users ) {
+				HTMLHelper::getServiceRegistry()->register( 'users', new Users() );
+
+				$loaded_users		=	1;
+				$user				=	Factory::getUser();
+			}
+			$class		=	$process['class'];
+
+			if ( $type == 'activation' ) {
+				$activated	=	empty( $fields[$name]->value ) ? 0 : 1;
+				$title		=	( $activated == 0 ) ? 'COM_CCK_ACTIVATED' : 'COM_CCK_UNACTIVATED';
+				$value		=	 HTMLHelper::_( 'jgrid.state', HTMLHelper::_( 'users.activateStates' ), $activated, $process['pk_i'], 'users.', false /*(bool)$activated*/ );
+
+				if ( $fields[$name]->link && $activated ) {
+					$hasLink		=	true;
+					$value			=	str_replace( '<a ', '<a href="'.$fields[$name]->link.'"', $value );
+				} else {
+					$hasLink		=	false;
+				}
+				
+				// if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+					// $class	.=	' disabled';
+					// $value	=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" #U', 'class="'.$class.'"', $value );
+				// }
+				if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+					if ( !$hasLink ) {
+						$class	.=	' disabled';
+					} else {
+						if ( $activated ) {
+							$class	=	str_replace( ' disabled', '', $class );
+						}
+					}
+					if ( $hasLink && isset( $fields[$name]->link_title ) && $fields[$name]->link_title ) {
+						$value	=	preg_replace( '#title=".*"#U', 'title="'.$fields[$name]->link_title.'"', $value );
+					} else {
+						$value	=	str_replace( array( 'title=""', 'title="COM_USERS_ACTIVATED"' ), 'title="'.Text::_( $title ).'"', $value );
+					}
+					if ( JCck::on( '4' ) ) {
+						// See later for the class
+					} else {
+						$value		=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" #U', 'class="'.$class.'"', $value );
+					}
+				}
+				/*
+				$value		=	str_replace( 'return listItemTask(', 'return JCck.Core.doTask(', $value );
+				$value		=	str_replace( '\'users.activate\'', '\'update.activate\', document.getElementById(\''.$formId.'\')', $value );
+				*/
+				$fields[$name]->typo	=	$value;
+			} else {
+				$value		=	$fields[$name]->value;
+				$self		=	$user->id == $process['pk'];
+				$title		=	( $value == 1 ) ? 'COM_CCK_BLOCKED' : 'COM_CCK_ENABLED';
+				$value		=	HTMLHelper::_( 'jgrid.state', HTMLHelper::_( 'users.blockStates', false /* self */ ), $value, $process['pk_i'], 'users.', false );
+
+				if ( $fields[$name]->link ) {
+					$hasLink		=	true;
+					$value			=	str_replace( '<a ', '<a href="'.$fields[$name]->link.'"', $value );
+				} else {
+					$hasLink		=	false;
+				}
+				// if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+					// $class	.=	' disabled';
+					// $value	=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" #U', 'class="'.$class.'"', $value );
+				// }
+				if ( !( $class == '' || $class == 'btn btn-micro hasTooltip' ) ) {
+					if ( !$hasLink ) {
+						$class	.=	' disabled';
+					} else {
+						$class	=	str_replace( ' disabled', '', $class );
+					}
+					if ( $hasLink && isset( $fields[$name]->link_title ) && $fields[$name]->link_title ) {
+						$value	=	preg_replace( '#title=".*"#U', 'title="'.$fields[$name]->link_title.'"', $value );
+					} else {
+						$value	=	str_replace( 'title=""', 'title="'.Text::_( $title ).'"', $value );
+					}
+					if ( JCck::on( '4' ) ) {
+						// See later for the class
+					} else {
+						$value		=	preg_replace( '#class="[a-zA-Z0-9\-\ ]*" #U', 'class="'.$class.'"', $value );
+					}
+				}
+				/*
+				$value		=	str_replace( 'return listItemTask(', 'return JCck.listItemTask(', $value );
+				$value	=	str_replace( '\'users.block\'', '\'update.block\', document.getElementById(\''.$formId.'\')', $value );
+				$value	=	str_replace( '\'users.unblock\'', '\'update.unblock\', document.getElementById(\''.$formId.'\')', $value );
+				*/
+				$fields[$name]->typo	=	$value;
+			}
+		} elseif ( $type == 'dropdown' ) {
+			$target	=	$process['target'];
+
+			if ( $fields[$target]->display ) {
+				$fields[$name]->typo	=	str_replace( '<ul class="dropdown-menu flex-column-reverse">', '<ul class="dropdown-menu flex-column-reverse">'.$process['html'], $fields[$name]->typo );
+			}
+		}
+	}
+}
+?>

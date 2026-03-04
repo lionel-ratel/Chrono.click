@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="folders">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<folder>
+		<id />
+		<parent_id>more/%target%</parent_id>
+		<path>more/%target%/%prefix%_%name%</path>
+		<title>%Title%</title>
+		<name>%prefix%_%name%</name>
+		<color>#613c97</color>
+		<introchar>%abbr%</introchar>
+		<colorchar>#ffffff</colorchar>
+		<elements>type,field,search,template</elements>
+		<icon_path />
+		<depth />
+		<lft />
+		<rgt />
+		<description />
+		<app>%prefix%_%name%</app>
+		<featured>1</featured>
+		<home>1</home>
+		<params />
+		<published>1</published>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+	</folder>
+</cck>

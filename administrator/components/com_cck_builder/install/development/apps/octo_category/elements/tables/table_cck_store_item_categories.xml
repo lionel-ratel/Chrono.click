@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="tables">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<table>
+		<name>#__cck_store_item_categories</name>
+	</table>
+	<indexes>
+		<index1 column_name="id" index_type="BTREE" seq_in_type="1">PRIMARY</index1>
+	</indexes>
+	<fields>
+		<field1 type="tinyint(3)" default="0">archived_mode</field1>
+		<field2 type="text" default="">aliases</field2>
+		<field3 type="text" default="">meta_desc</field3>
+		<field4 type="text" default="">page_title</field4>
+		<field5 type="text" default="">snippets</field5>
+		<field6 type="text" default="">texts</field6>
+		<field7 type="text" default="">titles</field7>
+	</fields>
+</cck>

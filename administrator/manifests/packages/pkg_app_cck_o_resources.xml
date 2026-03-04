@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="2.5" method="upgrade">
+	<name>pkg_app_cck_o_resources</name>
+	<packagename>app_cck_o_resources</packagename>
+	<packager>Octopoos</packager>
+	<packagerurl>https://www.seblod.com</packagerurl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>December 2022</creationDate>
+	<description>SEBLOD 3.x Resources App - www.seblod.com</description>
+	<version>1.0.0</version>
+	<scriptfile>pkg_script.php</scriptfile>
+	<files folder="extensions">
+		<file type="template" id="tpl_seb_manager_search" client="site">tpl_seb_manager_search.zip</file>
+		<file type="file" id="var_cck_octo_modal_body">var_cck_octo_modal_body.zip</file>
+		<file type="plugin" id="plg_cck_field_upload_image2" group="cck_field">plg_cck_field_upload_image2.zip</file>
+		<file type="plugin" id="plg_cck_field_upload_file2" group="cck_field">plg_cck_field_upload_file2.zip</file>
+		<file type="plugin" id="plg_cck_field_typo_file" group="cck_field_typo">plg_cck_field_typo_file.zip</file>
+	</files>
+	<languages folder="languages" />
+</extension>

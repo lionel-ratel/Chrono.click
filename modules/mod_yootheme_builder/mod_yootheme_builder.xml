@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_YOOTHEME_BUILDER</name>
+    <version>5.0.19</version>
+    <description>MOD_YOOTHEME_BUILDER_XML_DESCRIPTION</description>
+    <creationDate>March 2026</creationDate>
+    <copyright>Copyright (C) YOOtheme GmbH</copyright>
+    <license>GNU General Public License</license>
+    <author>YOOtheme</author>
+    <authorEmail>info@yootheme.com</authorEmail>
+    <authorUrl>https://yootheme.com</authorUrl>
+    <namespace path="src">Joomla\Module\YOOthemeBuilder</namespace>
+    <files>
+        <folder module="mod_yootheme_builder">services</folder>
+        <folder>language</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+    </files>
+    <config>
+        <fields name="params">
+            <fieldset name="basic" addfieldprefix="Joomla\Module\YOOthemeBuilder\Site\Fields">
+                <field name="button" type="button" hiddenLabel="true" />
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+                    class="form-select"
+                />
+            </fieldset>
+        </fields>
+        <fieldset name="basic">
+            <field name="content" type="hidden" filter="raw" />
+        </fieldset>
+    </config>
+</extension>

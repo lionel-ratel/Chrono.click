@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="types">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<type>
+		<id />
+		<asset_id />
+		<title>%Form% Grp (Form) EN</title>
+		<name>%prefix%_%form%_grp_form_en</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<template_admin>seb_minima</template_admin>
+		<template_site>seb_minima</template_site>
+		<template_content>seb_minima</template_content>
+		<template_intro>seb_minima</template_intro>
+		<description />
+		<indexed>intro</indexed>
+		<language>en-GB</language>
+		<published>1</published>
+		<options_admin />
+		<options_site />
+		<options_content />
+		<options_intro />
+		<admin_form>0</admin_form>
+		<location>collection</location>
+		<locked>1</locked>
+		<parent>%prefix%_%form%</parent>
+		<parent_inherit>0</parent_inherit>
+		<permissions />
+		<storage_location>joomla_article</storage_location>
+		<stylesheets />
+		<version>9</version>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>3</access>
+		<created_date>0000-00-00 00:00:00</created_date>
+		<created_user_id>0</created_user_id>
+		<modified_date>0000-00-00 00:00:00</modified_date>
+		<modified_user_id>0</modified_user_id>
+	</type>
+	<acl />
+	<fields>
+		<field1 client="admin" ordering="1" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_languages_en</field1>
+		<field2 client="admin" ordering="2" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_en_details</field2>
+		<field3 client="admin" ordering="3" label="" variation="" variation_override="" required="required[lang:default]" required_alert="" validation="" validation_options="{&quot;alert&quot;:&quot;&quot;}" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">%prefix%_%form%_title_en</field3>
+		<field4 client="admin" ordering="4" label="" variation="" variation_override="" required="required[lang:default]" required_alert="" validation="" validation_options="{&quot;alert&quot;:&quot;&quot;}" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="o_article_page_title_en,%prefix%_%form%_title_en" conditional_options="{&quot;states&quot;:[{&quot;type&quot;:&quot;isFilledBy&quot;,&quot;selector&quot;:&quot; #form#&quot;,&quot;revert&quot;:&quot;0&quot;,&quot;value&quot;:&quot;%prefix%_%form%_title_en&quot;}],&quot;conditions&quot;:[{&quot;type&quot;:&quot;isEmpty&quot;,&quot;trigger&quot;:&quot;o_article_page_title_en&quot;,&quot;value&quot;:&quot;&quot;},{&quot;type&quot;:&quot;isFilled&quot;,&quot;trigger&quot;:&quot;%prefix%_%form%_title_en&quot;,&quot;value&quot;:&quot;&quot;}],&quot;rule&quot;:&quot;and&quot;}" position="_main_">o_article_page_title_en</field4>
+		<field5 client="admin" ordering="5" label="" variation="" variation_override="" required="required[cond:%prefix%_%form%_title_en]" required_alert="" validation="" validation_options="{&quot;alert&quot;:&quot;&quot;}" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_article_snippet_en</field5>
+		<field6 client="admin" ordering="6" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_en_description</field6>
+		<field7 client="admin" ordering="7" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_article_text_en</field7>
+		<field8 client="admin" ordering="8" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="3" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_en_metadata</field8>
+		<field9 client="admin" ordering="9" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="3" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_article_meta_title_en</field9>
+		<field10 client="admin" ordering="10" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="3" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_article_meta_desc_en</field10>
+		<field11 client="admin" ordering="11" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="%core_viewing_access_level:Admin%" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_en_options</field11>
+		<field12 client="admin" ordering="12" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="%core_viewing_access_level:Admin%" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_article_alias_en</field12>
+		<field13 client="admin" ordering="13" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="" link_options="" live="" live_options="" live_value="" markup="" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="_main_">o_tab_en_end</field13>
+	</fields>
+	<positions />
+</cck>

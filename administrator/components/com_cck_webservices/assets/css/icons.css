@@ -1,0 +1,17 @@
+/**
+* @version 			SEBLOD WebServices 1.x
+* @package			SEBLOD WebServices Add-on for SEBLOD 3.x
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+**/
+
+.icon-48-seblod-webservices {background: url(../../../com_cck/assets/images/48/icon-48-seblod-banner.png), url(../../assets/images/48/icon-48-seblod-webservices.png) 266px 0;}
+
+.integration-apps {background: url(../../assets/images/32/icon-32-integration-apps.png) 7px 7px no-repeat; background-size: 32px;}
+.integration-auths {background: url(../../assets/images/32/icon-32-integration-auths.png) 7px 7px no-repeat; background-origin:border-box; background-size: 32px;}
+
+.icon-48-calls {background-image: url(../../assets/images/48/icon-48-calls.png);}
+.icon-48-integrations {background-image: url(../../assets/images/48/icon-48-integrations.png);}
+.icon-48-resources {background-image: url(../../assets/images/48/icon-48-resources.png);}
+.icon-48-webservices {background-image: url(../../assets/images/48/icon-48-webservices.png);}

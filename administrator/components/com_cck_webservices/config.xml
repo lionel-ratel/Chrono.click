@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config addfieldpath="/libraries/cck/construction/field">
+	<fieldset name="fs_main" label="COM_CCK_CONFIG_FIELDSET_LOCAL_RESOURCES" description="COM_CCK_CONFIG_FIELDSET_LOCAL_RESOURCES_DESC">
+		<field name="resources_format" type="cck" construction="more_webservices_resource_format" default="json" label="COM_CCK_CONFIG_RESOURCES_FORMAT" description="COM_CCK_CONFIG_RESOURCES_FORMAT_DESC" class="btn-group" cck_selectlabel="" cck_options="JSON=json||XML=xml" />
+		<field name="resources_format_request" type="list" default="0" label="COM_CCK_CONFIG_RESOURCES_FORMAT_REQUEST" description="COM_CCK_CONFIG_RESOURCES_FORMAT_REQUEST_DESC">
+			<option value="0">JNO</option>
+			<option value="1">COM_CCK_YES_EXTENSION</option>
+			<option value="2">COM_CCK_YES_QUERY</option>
+		</field>
+		<field name="resources_output" type="cck" construction="more_webservices_resource_output" default="wrapped" label="COM_CCK_CONFIG_RESOURCES_OUTPUT" description="COM_CCK_CONFIG_RESOURCES_OUTPUT_DESC" class="chzn-color" cck_selectlabel="" />
+		<field name="resources_cors" type="radio" default="0" label="COM_CCK_CONFIG_RESOURCES_CORS" description="COM_CCK_CONFIG_RESOURCES_CORS_DESC" class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="resources_cors_credentials" type="radio" default="0" label="COM_CCK_CONFIG_RESOURCES_CORS_CREDENTIALS" description="COM_CCK_CONFIG_RESOURCES_CORS_CREDENTIALS_DESC" class="btn-group btn-group-yesno" showon="resources_cors:1">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="resources_cors_origin" type="cck" construction="core_dev_text" default="*" label="COM_CCK_CONFIG_RESOURCES_CORS_ORIGIN" description="COM_CCK_CONFIG_RESOURCES_CORS_ORIGIN_DESC" class="inputbox" showon="resources_cors:1" />
+		<field name="resources_cors_headers" type="cck" construction="core_dev_text" default="" label="COM_CCK_CONFIG_RESOURCES_CORS_HEADERS" description="COM_CCK_CONFIG_RESOURCES_CORS_HEADERS_DESC" class="inputbox" />
+		<field name="resources_offline" type="radio" default="0" label="COM_CCK_CONFIG_RESOURCES_OFFLINE" description="COM_CCK_CONFIG_RESOURCES_OFFLINE_DESC" class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="resources_http" type="radio" default="1" label="COM_CCK_CONFIG_RESOURCES_HTTP" description="COM_CCK_CONFIG_RESOURCES_HTTP_DESC" class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="resources_filters" type="text" default="" label="COM_CCK_CONFIG_RESOURCES_FILTERS" description="COM_CCK_CONFIG_RESOURCES_FILTERS_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_limit" type="cck" construction="core_limit" default="10" label="COM_CCK_CONFIG_RESOURCES_LIMIT" description="COM_CCK_CONFIG_RESOURCES_LIMIT_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_limit_max" type="cck" construction="core_limit" default="10" label="COM_CCK_CONFIG_RESOURCES_LIMIT_MAX" description="COM_CCK_CONFIG_RESOURCES_LIMIT_MAX_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_ordering" type="cck" construction="more_webservices_resource_ordering" default="alpha" label="COM_CCK_CONFIG_RESOURCES_ORDERING" description="COM_CCK_CONFIG_RESOURCES_ORDERING_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_filtering" type="list" default="0" label="COM_CCK_CONFIG_RESOURCES_FILTERING" description="COM_CCK_CONFIG_RESOURCES_FILTERING_DESC" class="">
+			<option value="0">JNONE</option>
+			<option value="2">COM_CCK_MULTIPLE_PARAMETERS</option>			
+			<option value="1">COM_CCK_SINGLE_PARAMETER</option>
+		</field>
+		<field name="resources_links" type="cck" construction="more_webservices_resource_hateoas" default="0" label="COM_CCK_CONFIG_RESOURCES_HATOAS_LINKS" description="COM_CCK_CONFIG_RESOURCES_HATOAS_LINKS_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_pagination" type="cck" construction="more_webservices_resource_hateoas_pagination" default="0" label="COM_CCK_CONFIG_RESOURCES_HATOAS_PAGINATION" description="COM_CCK_CONFIG_RESOURCES_HATOAS_PAGINATION_DESC" class="inputbox" cck_selectlabel="" />
+		<field name="resources_prepare_data" type="radio" default="0" label="COM_CCK_CONFIG_RESOURCES_PREPARE_DATA" description="COM_CCK_CONFIG_RESOURCES_PREPARE_DATA_DESC" class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="fs_main2" label="COM_CCK_CONFIG_FIELDSET_REMOTE_SERVICES" description="COM_CCK_CONFIG_FIELDSET_REMOTE_SERVICES_DESC">
+		<field name="calls_http" type="radio" default="1" label="COM_CCK_CONFIG_CALLS_HTTP" description="COM_CCK_CONFIG_CALLS_HTTP_DESC" class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="debug" type="list" default="0" label="COM_CCK_CONFIG_MODE" description="COM_CCK_CONFIG_MODE_DESC" class="inputbox">
+			<option value="1">COM_CCK_DEVELOPMENT</option>
+			<option value="2">COM_CCK_DEVELOPMENT_FOR_SUPER_ADMIN</option>
+			<option value="0">COM_CCK_PRODUCTION</option>
+		</field>
+		<field name="debug_group" type="usergrouplist" default="" label="COM_CCK_CONFIG_DEV_GROUP" class="inputbox" maxlength="2" description="COM_CCK_CONFIG_DEV_GROUP_DESC">
+			<option value="">JNONE</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_cck_webservices" section="component" />
+		<field name="initial_version" type="hidden" default="" />
+		<field name="latest_update" type="hidden" default="" />
+	</fieldset>
+</config>

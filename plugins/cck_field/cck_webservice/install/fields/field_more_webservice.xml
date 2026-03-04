@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="fields">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<field>
+		<id>0</id>
+		<title>More WebService</title>
+		<name>more_webservice</name>
+		<folder>core</folder>
+		<type>select_dynamic</type>
+		<description />
+		<published>0</published>
+		<label>Webservice</label>
+		<selectlabel>Select</selectlabel>
+		<display>3</display>
+		<required>required</required>
+		<validation />
+		<defaultvalue />
+		<options />
+		<options2>{&quot;query&quot;:&quot;&quot;,&quot;table&quot;:&quot;#__cck_more_webservices&quot;,&quot;name&quot;:&quot;title&quot;,&quot;where&quot;:&quot;published = 1&quot;,&quot;value&quot;:&quot;name&quot;,&quot;orderby&quot;:&quot;title&quot;,&quot;orderby_direction&quot;:&quot;ASC&quot;,&quot;limit&quot;:&quot;&quot;,&quot;language_detection&quot;:&quot;joomla&quot;,&quot;language_codes&quot;:&quot;EN,GB,US,FR&quot;,&quot;language_default&quot;:&quot;EN&quot;,&quot;attr1&quot;:&quot;&quot;,&quot;attr2&quot;:&quot;&quot;,&quot;attr3&quot;:&quot;&quot;,&quot;attr4&quot;:&quot;&quot;,&quot;attr5&quot;:&quot;&quot;,&quot;attr6&quot;:&quot;&quot;}</options2>
+		<minlength>0</minlength>
+		<maxlength>255</maxlength>
+		<size>32</size>
+		<cols>0</cols>
+		<rows>0</rows>
+		<ordering>0</ordering>
+		<sorting>0</sorting>
+		<divider>,</divider>
+		<bool>0</bool>
+		<location />
+		<extended />
+		<style />
+		<script />
+		<bool2>0</bool2>
+		<bool3>0</bool3>
+		<bool4>0</bool4>
+		<bool5>0</bool5>
+		<bool6>0</bool6>
+		<bool7>0</bool7>
+		<bool8>1</bool8>
+		<css />
+		<attributes />
+		<storage>dev</storage>
+		<storage_cck />
+		<storage_location />
+		<storage_table />
+		<storage_field>extended</storage_field>
+		<storage_field2 />
+		<storage_params />
+		<storages />
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+	</field>
+</cck>

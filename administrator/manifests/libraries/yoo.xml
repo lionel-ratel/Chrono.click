@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="library" version="2.5" method="upgrade">
+    <name>SEBLOD</name>
+    <libraryname>yoo</libraryname>
+    <author>Lionel Ratel</author>
+    <authorEmail>lionel@ratel.ovh</authorEmail>
+    <authorUrl></authorUrl>
+    <copyright>Copyright (C) 2025 RATEL. All Rights Reserved.</copyright>
+    <license>GNU General Public License version 2 or later.</license>
+    <creationDate>April 2025</creationDate>
+    <description>Yoo 3.x Library</description>
+    <version>1.0.0</version>
+
+    <files>
+        <folder>src</folder>
+    </files>
+</extension>

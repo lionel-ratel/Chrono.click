@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<form>
+    <fields name="fieldparams">
+        <fieldset name="fieldparams">
+            <field
+                name="directory"
+                type="media"
+                label="PLG_FIELDS_MEDIAFILE_PARAMS_DIRECTORY_LABEL"
+                preview="false"
+                types="directories"
+            />
+        </fieldset>
+    </fields>
+</form>

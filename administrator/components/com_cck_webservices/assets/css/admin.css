@@ -1,0 +1,19 @@
+/**
+* @version 			SEBLOD WebServices 1.x
+* @package			SEBLOD WebServices Add-on for SEBLOD 3.x
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+**/
+
+div.width-50 div.legend.left{margin-left:28px;}
+.inputbox[name*="[required]"][data-value="-1"] {border-color:#e9594d; color:#e9594d;}
+.inputbox[name*="[required]"][data-value="1"] {color:#e9594d;}
+
+div.pane1 div.legend.left,div.pane2 div.legend.left{
+	color: #0088CC;
+	font-weight: 700;
+	position:relative;
+	padding-top:16px;
+	padding-left:42px;
+}

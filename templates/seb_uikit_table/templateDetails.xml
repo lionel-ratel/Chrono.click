@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="template" version="2.5" method="upgrade">
+	<name>seb_uikit_table</name>
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>January 2011</creationDate>
+	<description>SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+	<version>1.0.1</version>
+	
+	<files>
+		<folder>css</folder>
+		<folder>fields</folder>
+		<folder>images</folder>
+		<folder>includes</folder>
+		<folder>languages</folder>
+		<folder>positions</folder>
+		<folder>variations</folder>
+		
+		<filename>config.php</filename>
+		<filename>index.php</filename>
+		<filename>template_picker.png</filename>
+		<filename>template_preview.png</filename>
+		<filename>template_thumbnail.png</filename>
+		<filename>templateDetails.xml</filename>
+		<filename>index.html</filename>
+	</files>
+	
+	<languages folder="languages">
+		<language tag="en-GB">en-GB/en-GB.tpl_seb_uikit_table.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.tpl_seb_uikit_table.ini</language>
+	</languages>
+	
+	<positions>
+		<position>column-a</position>
+		<position>column-b</position>
+		<position>column-c</position>
+		<position>column-d</position>
+		<position>column-e</position>
+		<position>column-f</position>
+		<position>column-g</position>
+		<position>column-h</position>
+		<position>column-i</position>
+		<position>column-j</position>
+		<position>column-k</position>
+		<position>column-l</position>
+		<position>column-m</position>
+		<position>column-n</position>
+		<position>column-o</position>
+		<position>column-p</position>
+		<position>column-q</position>
+		<position>column-r</position>
+		<position>column-s</position>
+		<position>column-t</position>
+		<position>column-u</position>
+		<position>column-v</position>
+		<position>column-w</position>
+		<position>column-x</position>
+		<position>column-y</position>
+		<position>column-z</position>
+		<position>hidden</position>
+	</positions>
+	
+	<config addfieldpath="/libraries/cck/construction/field">
+		<fields name="params">
+			<fieldset name="fields" label="TPL_SEB_UIKIT_TABLE_LEGEND_STYLE">
+				<field name="cck_client_item" type="hidden" default="0" />
+				<field name="class_table" type="cck" construction="core_class_table" default="uk-table" label="TPL_SEB_UIKIT_TABLE_CLASS_TABLE" description="" class="inputbox" />
+				<field name="table_header" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_TABLE_HEADER" description="" class="inputbox">
+					<option value="0">TPL_SEB_UIKIT_TABLE_TABLE_HEADER_ABOVE</option>
+					<option value="-1">TPL_SEB_UIKIT_TABLE_TABLE_HEADER_BELOW</option>
+					<option value="1">TPL_SEB_UIKIT_TABLE_TABLE_HEADER_BOTH</option>
+				</field>
+				<field name="table_columns" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_TABLE_EMPTY_COLUMNS" description="" class="inputbox">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="divider" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_DIVIDER" description="" class="inputbox">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="hover" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_HOVER" description="" class="inputbox">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="stripped" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_STRIPPED" description="" class="inputbox">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="sortable" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_SORTABLE" description="" class="inputbox">
+					<option value="0">JNO</option>
+					<option value="1">TPL_SEB_UIKIT_HANDLE_FULL</option>
+					<option value="2">TPL_SEB_UIKIT_HANDLE_COLUMN</option>
+				</field>
+				<field name="vertical_align" type="list" default="0" label="TPL_SEB_UIKIT_TABLE_VERTICAL_ALIGN" description="" class="inputbox">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

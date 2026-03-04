@@ -1,0 +1,11 @@
+.yo-quicklink-menu {
+    -webkit-mask: url(icon.svg) 50% 50% / 100% no-repeat;
+    mask: url(icon.svg) 50% 50% / 100% no-repeat;
+    background-color: currentColor;
+    aspect-ratio: 1 / 1;
+}
+
+.yo-quicklink-cpanel {
+    width: 46px;
+    height: 32px;
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="tables">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<table>
+		<name>#__cck_store_join_%prefix%_%name%</name>
+	</table>
+	<indexes>
+		<index1 column_name="id" index_type="BTREE" seq_in_type="1">PRIMARY</index1>
+		<index2 column_name="id2" index_type="BTREE" seq_in_type="2">PRIMARY</index2>
+	</indexes>
+	<fields>
+		<field1 type="int(11)" default="">id</field1>
+		<field2 type="int(11)" default="">id2</field2>
+		<field3 type="int(11)" default="0">ordering</field3>
+	</fields>
+</cck>

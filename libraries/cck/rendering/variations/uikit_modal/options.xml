@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldpath="/libraries/cck/construction/field">
+	<fieldset name="modal" label="VAR_UIKIT_MODAL_LEGEND" class="adminformlist adminformlist-1col">
+		<field name="modal_title" type="text" default="" label="VAR_UIKIT_MODAL_TITLE" class="inputbox input-xxlarge" />
+		<field name="modal_class" type="text" default="" label="VAR_UIKIT_MODAL_CLASS" class="inputbox input-xxlarge" />
+		<field name="modal_close" type="cck" construction="core_dev_select" cck_options="Yes=1||No=0" default="1" label="VAR_UIKIT_MODAL_CLOSE" class="inputbox input-xxlarge" />
+		<field name="modal_center" type="cck" construction="core_dev_select" cck_options="Yes=1||No=0" default="0" label="VAR_UIKIT_MODAL_CENTER_VERTICALLY" class="inputbox input-xxlarge" />
+		<field name="modal_size" type="cck" construction="core_dev_select" cck_options="Default=default||Expand=expand||Full=full" default="default" label="VAR_UIKIT_MODAL_SIZE" class="inputbox input-xxlarge" />
+		<field name="modal_overflow" type="cck" construction="core_dev_select" cck_options="No=0||Yes=1" default="0" label="VAR_UIKIT_MODAL_OVERFLOW" class="inputbox input-xxlarge" />
+	</fieldset>
+</form>

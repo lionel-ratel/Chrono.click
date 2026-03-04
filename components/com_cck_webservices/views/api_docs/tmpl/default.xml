@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CCK_WEBSERVICES_API_DOCS_VIEW_DEFAULT_TITLE" option="COM_CCK_WEBSERVICES_API_DOCS_VIEW_DEFAULT_OPTION">
+		<help key = "..." />
+		<message><![CDATA[COM_CCK_WEBSERVICES_API_DOCS_VIEW_DEFAULT_DESC]]></message>
+	</layout>
+
+	<!-- Parameters object. -->
+	<fields name="params" addfieldpath="/libraries/cck/construction/field">
+		<fieldset name="basic" label="COM_CCK_WEBSERVICES_CONFIG_FIELDSET_BASIC_OPTIONS">
+			<field name="resources_menu_item" type="menuitem" label="COM_CCK_CONFIG_RESOURCES_MENU_ITEM" description="COM_CCK_CONFIG_RESOURCES_MENU_ITEM_DESC" class="inputbox">
+				<option value="">COM_CCK_INHERITED</option>
+			</field>
+			<field name="resources_version" type="list" default="1" label="COM_CCK_CONFIG_RESOURCES_VERSION" description="COM_CCK_CONFIG_RESOURCES_VERSION_DESC" class="btn-group btn-group-yesno">
+				<option value="1">v1</option>
+				<option value="2">v2</option>
+			</field>
+			<field name="show_page_title" type="cck" construction="core_show_hide" default="" cck_selectlabel="Use Global"
+				   label="COM_CCK_CONFIG_SHOW_FORM_TITLE" description="COM_CCK_CONFIG_SHOW_FORM_TITLE_DESC" class="inputbox" />
+			<field name="tag_page_title" type="cck" construction="core_tag_title" default="" label="" description="" class="inputbox" />
+			<field name="class_page_title" type="cck" construction="core_class_title" default="" label="" description="" class="inputbox" cck_attributes="placeholder='J(Class)'" />
+			<field name="cckjs" type="cckjs" label="" description=""
+				   js_appendto="jform_params_show_page_title=J(as tag),#jform_params_tag_page_title,J(with class),#jform_params_class_page_title"
+				   js_isvisiblewhen="div#jform_params_cckjs-more='jform_params_show_page_title','1',false" js_format="html" hidden="true" />
+			<field name="display_page_title" type="cck" construction="core_dev_select" cck_options="Custom Text=1||Menu Item=0||Translated Text=3" cck_selectlabel="Inherited" default="" label="LIB_CCK_TITLE" description="" class="inputbox" />
+			<field name="title_page_title" type="cck" construction="core_dev_text" default="" label="" description="" class="inputbox" cck_attributes="placeholder='J(Title)'" js_appendto="jform_params_display_page_title=#jform_params_title_page_title" js_isvisiblewhen="div#jform_params_title_page_title-more='jform_params_display_page_title','1,3',false" js_format="html" hidden="true" />
+		</fieldset>
+	</fields>
+</metadata>

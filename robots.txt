@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /*.js*
+Allow: /*.css*
+Allow: /*.png*
+Allow: /*.jpg*
+Allow: /*.gif*
+
+Disallow: /administrator/
+Disallow: /api/
+Disallow: /bin/
+Disallow: /cache/com_cck/*
+Disallow: /cache/template/*
+Disallow: /cli/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /installation/
+Disallow: /language/
+Disallow: /layouts/
+Disallow: /libraries/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /tmp/
+
+Disallow: /se-connecter
+Disallow: /se-connecter?p=reset
+Disallow: /*component*
+Disallow: *?catid
+Disallow: *option=com_cck*
+Disallow: *format=raw&task=ajax*
+Disallow: *task=ajax&format=raw*
+
+Allow: /cache/com_cck_toolbox/*

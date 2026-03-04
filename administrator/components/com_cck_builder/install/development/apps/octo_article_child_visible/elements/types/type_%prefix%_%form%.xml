@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cck type="types">
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<description>SEBLOD 3.x - www.seblod.com</description>
+	<type>
+		<id />
+		<asset_id />
+		<title>%Form%</title>
+		<name>%prefix%_%form%</name>
+		<alias />
+		<folder>more/%target%/%prefix%_%name%</folder>
+		<template_admin>seb_minima</template_admin>
+		<template_site>seb_minima</template_site>
+		<template_content>seb_minima</template_content>
+		<template_intro>seb_minima</template_intro>
+		<description />
+		<indexed>none</indexed>
+		<published>1</published>
+		<options_admin>{&quot;message_style&quot;:&quot;message&quot;,&quot;message&quot;:&quot;&quot;,&quot;data_integrity_excluded&quot;:&quot;&quot;,&quot;message_style_no_access&quot;:&quot;error&quot;,&quot;action_no_access&quot;:&quot;redirection&quot;,&quot;message_no_access&quot;:&quot;&quot;,&quot;redirection_url_no_access&quot;:&quot;index.php?option=com_users&amp;view=login&quot;,&quot;stages&quot;:&quot;1&quot;,&quot;validation_position&quot;:&quot;&quot;,&quot;validation_scroll&quot;:&quot;&quot;,&quot;validation_color&quot;:&quot;&quot;,&quot;validation_background_color&quot;:&quot;&quot;}</options_admin>
+		<options_site />
+		<options_content>{&quot;sef&quot;:&quot;&quot;,&quot;title&quot;:&quot;o_article_page_titles&quot;,&quot;desc&quot;:&quot;o_article_meta_descriptions&quot;,&quot;metatitle&quot;:&quot;o_article_titles&quot;,&quot;metadesc&quot;:&quot;o_article_snippets&quot;}</options_content>
+		<options_intro />
+		<admin_form>1</admin_form>
+		<location />
+		<locked>1</locked>
+		<parent>%parent%</parent>
+		<parent_inherit>1</parent_inherit>
+		<permissions />
+		<storage_location>joomla_article</storage_location>
+		<stylesheets />
+		<version>1</version>
+		<checked_out>0</checked_out>
+		<checked_out_time>0000-00-00 00:00:00</checked_out_time>
+		<access>3</access>
+		<created_date>2020-02-06 15:17:20</created_date>
+		<created_user_id>467</created_user_id>
+		<modified_date>0000-00-00 00:00:00</modified_date>
+		<modified_user_id>0</modified_user_id>
+	</type>
+	<acl>{&quot;core.create&quot;:{&quot;%core_user_group%&quot;:true},&quot;core.create.max.parent&quot;:{&quot;8&quot;:0},&quot;core.create.max.parent.author&quot;:{&quot;8&quot;:0},&quot;core.create.max.author&quot;:{&quot;8&quot;:0},&quot;core.edit&quot;:{&quot;%core_user_group%&quot;:true},&quot;core.edit.own&quot;:{&quot;%core_user_group%&quot;:true},&quot;core.process&quot;:{&quot;%core_user_group%&quot;:true}}</acl>
+	<fields>
+		<field1 client="content" ordering="1" label="" variation="" variation_override="" required="" required_alert="" validation="" validation_options="" link="cck_form" link_options="{&quot;form&quot;:&quot;&quot;,&quot;itemid&quot;:&quot;&quot;,&quot;form_edition&quot;:&quot;1&quot;,&quot;form_edition_stage&quot;:&quot;&quot;,&quot;form_fieldname&quot;:&quot;&quot;,&quot;redirection&quot;:&quot;&quot;,&quot;redirection_custom&quot;:&quot;&quot;,&quot;attributes&quot;:&quot;&quot;,&quot;class&quot;:&quot;o-edit&quot;,&quot;target&quot;:&quot;&quot;,&quot;target_params&quot;:&quot;&quot;,&quot;rel&quot;:&quot;&quot;,&quot;title&quot;:&quot;&quot;,&quot;title_custom&quot;:&quot;&quot;,&quot;state&quot;:&quot;1&quot;,&quot;tmpl&quot;:&quot;&quot;,&quot;custom&quot;:&quot;&quot;,&quot;no_access&quot;:&quot;0&quot;}" live="" live_options="" live_value="" markup="none" markup_class="" typo="" typo_label="0" typo_options="" stage="0" access="1" restriction="" restriction_options="" computation="" computation_options="" conditional="" conditional_options="" position="mainbody">o_icon_edit</field1>
+	</fields>
+	<positions>
+		<position1 client="admin" legend="" variation="" variation_options="" width="" height="" css="">_post_</position1>
+		<position2 client="content" legend="" variation="" variation_options="" width="" height="" css="">_post_</position2>
+		<position3 client="content" legend="" variation="" variation_options="" width="" height="" css="">mainbody</position3>
+	</positions>
+</cck>

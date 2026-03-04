@@ -1,0 +1,185 @@
+/**
+ * J!Dump
+ * @version      $Id$
+ * @package      jdump
+ * @copyright    Copyright (C) 2006-2018 Mathias Verraes. All rights reserved.
+ * @license      GNU/GPL
+ * @link         https://github.com/mathiasverraes/jdump
+ */
+/* about view */
+.jdump-about code {
+  font-size: 14px;
+  color: white;
+  background-color:black;
+  margin-bottom: 26px;
+  margin-left:15px;
+  padding: 5px;
+}
+/* tree view */
+.dumpContainer {
+	font-size:16px;
+	border-radius: 5px;
+	background: #fdfdfd;
+}
+fieldset {
+	margin-bottom: 1em;
+	border: 1px #ccc solid;
+	padding: .2em;
+	text-align: left;
+}
+
+fieldset p {  margin: 1em 0;  }
+
+legend    {
+	color: #0B55C4;
+	font-weight: bold;
+}
+.dumpActions {
+  margin: 1em .3em;
+}
+.dumpButton {
+  background-color: #008CBA;
+  background-repeat: no-repeat;
+  border: none;
+  color: #fff;
+  padding: 1em 2em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: arial;
+  font-size: 0.8em;
+  margin: .25em .2em;
+  border-radius: 2px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+.dumpButton:hover {
+    color: #000;
+    opacity: 0.7;
+}
+.dumpLocked {
+  display: none;
+  cursor: default;
+}
+.dumpLocked:hover {
+    color: #fff;
+    opacity: 1;
+}
+.dumpIcon {
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  background-position: top left;
+  padding-right: .5em;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+}
+.dumpCollapseAll .dumpIcon {
+	background-image: url(../images/shrink2.svg);
+}
+.dumpExpandAll .dumpIcon{
+	background-image: url(../images/enlarge2.svg);
+}
+.dumpRefresh .dumpIcon {
+	background-image: url(../images/redo2.svg);
+}
+.dumpLock .dumpIcon {
+  background-image: url(../images/unlocked.svg);
+}
+.dumpLocked .dumpIcon {
+  background-image: url(../images/lock.svg);
+}
+.dumpNothing {
+  margin-bottom: 1em;
+}
+.dumpTree {
+	margin-bottom: 2em;
+}
+.dumpTree img {
+ margin-left: .2em;
+ width: 20px;
+ height: 20px;
+ cursor: pointer;
+}
+.dumpFooter {
+  margin-left: .2em;
+  margin-bottom: 0;
+  font-size: .6em;
+}
+.dumpType {
+	font-size: smaller;
+	color: gray
+}
+.dumpString {
+	font-size: smaller;
+	color: gray
+}
+.dumpSource {
+	font-size: smaller;
+}
+
+/* Tooltips */
+.notify-alerts {
+	position: fixed;
+	top: 1em;
+	left: 50%;
+	z-index: 1031;
+	margin-left: 100px;
+	transition: all .5s ease;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+.alert {
+	display: block;
+	min-width: 250px;
+	padding: .5rem;
+	margin-bottom: 1rem;
+	border: 1px solid #bee5eb;
+	box-shadow: 7px 7px 5px 0px rgba(0, 0, 0, 0.3);
+	border-radius: 0.25rem;
+	opacity: 0;
+	transition: opacity 2000ms linear;
+}
+#system-message-container .info {
+	background-color: #dff0d8;
+	color: #3c763d;
+	cursor: pointer;
+}
+button.close {
+  float: right;
+}
+.alert-heading {
+  margin: 0 0 .5em 0;
+}
+.alert-message label{
+  margin: 0 0 .3em;
+  font-weight: bold;
+}
+.alert-message p{
+  margin: 0 0 .3em 0;
+  white-space: nowrap;
+}
+
+/*dhtmlgoodies_tree*/
+.dhtmlgoodies_tree{
+  margin:0px;
+  padding:0px;
+}
+.dhtmlgoodies_tree ul{	/* Sub menu groups */
+  margin-left:20px;	/* Left spacing */
+  padding-left:0px;
+  display:none;	/* Initially hide sub nodes */
+}
+.dhtmlgoodies_tree li{	/* Nodes */
+  list-style-type:none;
+  vertical-align:middle;
+}
+.dhtmlgoodies_tree li a{	/* Node links */
+  color:#000;
+  text-decoration:none;
+  font-family:arial;
+  font-size:0.8em;
+  padding-left:2px;
+}
+
+

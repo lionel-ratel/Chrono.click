@@ -1,0 +1,36 @@
+/**
+* @version 			SEBLOD WebServices 1.x
+* @package			SEBLOD WebServices Add-on for SEBLOD 3.x
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+**/
+
+#api-resources .api-resource{margin-bottom:8px;}
+#api-resources .accordion-heading{height:100%;}
+#api-resources .accordion-heading .accordion-toggle{padding:0;}
+#api-resources .accordion-heading .accordion-toggle a{height:100%;}
+#api-resources .accordion-heading .accordion-toggle span{display:inline-block; padding:8px;}
+#api-resources span.method{color:#ffffff; width:60px; text-align:center; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
+#api-resources span.title{color:#000000; font-weight: bold; margin-left:16px;}
+#api-resources span.uri{color:#000000; font-weight: normal;}
+
+#api-resources .api-resource.method-delete span.method{background-color: #e74c3c;}
+#api-resources .api-resource.method-get span.method{background-color: #2ecc71;}
+#api-resources .api-resource.method-patch span.method,
+#api-resources .api-resource.method-post span.method,
+#api-resources .api-resource.method-put span.method{background-color: #3498db;}
+
+#api-resources h2.small{margin:8px 0;}
+#api-resources .request h2.small{margin-top:0;}
+#api-resources .response h2.small{margin-top:16px;}
+#api-resources pre{margin:0;}
+
+#api-resources .table td{vertical-align: middle;}
+#api-resources .table tr:last-child td{border-bottom:0;}
+#api-resources .actions{float:right;}
+#api-resources .api-reset{cursor:pointer;}
+#api-resources .tab-content{float:none; margin:0;}
+#api-resources .tab-content em{display:table; padding: 0 0 12px 8px; width: 100%;}
+
+#api-resources [class^="o-tabs"]{grid-template-columns:repeat(6,1fr);}

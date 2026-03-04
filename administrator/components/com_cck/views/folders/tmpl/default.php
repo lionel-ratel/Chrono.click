@@ -1,0 +1,263 @@
+<?php
+/**
+* @version 			SEBLOD 3.x Core ~ $Id: default.php sebastienheraud $
+* @package			SEBLOD (App Builder & CCK) // SEBLOD nano (Form Builder)
+* @url				https://www.seblod.com
+* @editor			Octopoos - www.octopoos.com
+* @copyright		Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.
+* @license 			GNU General Public License version 2 or later; see _LICENSE.php
+**/
+
+defined( '_JEXEC' ) or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
+$action			=	'<span class="icon-download"></span>';
+$action_attr	=	' class="app-download btn btn-micro hasTooltip" title="'.Text::_( 'COM_CCK_DOWNLOAD_THIS_APP' ).'"';
+$uix			=	JCck::getUIX();
+$css			=	array();
+$doc			=	Factory::getDocument();
+$hasToolbox		=	JCckToolbox::getConfig()->def( 'KO' ) ? false : true;
+$hasWebservices	=	JCckWebservice::getConfig()->params->def( 'KO' ) ? false : true;
+$images			=	array( '0'=>'16/icon-16-download.png', '1'=>'24/icon-24-download.png' );
+$user			=	Factory::getUser();
+$userId			=	$user->id;
+$listOrder		=	$this->state->get( 'list.ordering' );
+$listDir		=	$this->state->get( 'list.direction' );
+$link2			=	'index.php?option='.$this->option.'&task=folder.export&id=';
+$top			=	'content';
+
+$config			=	JCckDev::init( array( '42', 'button_submit', 'checkbox', 'radio', 'select_dynamic', 'select_numeric', 'select_simple', 'text' ), true, array( 'vName' => '' ) );
+$cck			=	JCckDev::preload( array( 'core_filter_input', 'core_filter_go', 'core_filter_search', 'core_filter_clear',
+										 	 'core_state_filter', 'core_depth_filter', 'core_app_stuff' ) );
+Text::script( 'COM_CCK_CONFIRM_DELETE' );
+Helper_Include::addDependencies( $this->getName(), $this->getLayout() );
+?>
+
+<form action="<?php echo Route::_( 'index.php?option='.$this->option.'&view='.$this->getName() ); ?>" method="post" id="adminForm" name="adminForm">
+<?php if ( !empty( $this->sidebar ) ) { ?>
+	<div id="j-sidebar-container" class="span2 top-bar">
+		<?php echo $this->sidebar; ?>
+	</div>
+	<div id="j-main-container" class="span10">
+<?php } else { ?>
+	<div id="j-main-container">
+<?php } ?>
+
+<?php include_once __DIR__.'/default_filter.php'; ?>
+<div class="<?php echo $this->css['items']; ?>">
+	<?php
+	if ( $uix == 'compact' ) {
+		include_once __DIR__.'/default_compact.php';
+	} else {
+    ?>
+	<table class="<?php echo $this->css['table']; ?>">
+	<thead>
+		<tr class="half">
+			<th width="60" class="center hidden-phone nowrap"><?php Helper_Display::quickSlideTo( 'pagination-bottom', 'down' ); ?></th>
+			<th width="30" class="center hidden-phone no-pad"><?php echo HTMLHelper::_('grid.checkall'); ?></th>
+			<th class="center caret-fix" colspan="2">
+				<?php
+				echo HTMLHelper::_( 'grid.sort', '<span class="icon-menu-2" style="float:left; position:relative; top:4px; left:8px;"></span>', 'a.lft', $listDir, $listOrder );
+                echo HTMLHelper::_( 'grid.sort', 'COM_CCK_TITLE', 'a.title', $listDir, $listOrder );
+				?>
+			</th>
+			<th width="10%" class="center hidden-phone nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'COM_CCK_COLOR', 'a.color', $listDir, $listOrder ); ?></th>
+			<th width="7%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-form hasTooltip large" title="'.Text::_( 'COM_CCK_FORMS' ).'"></span>'; ?></th>
+            <th width="5%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-plugin hasTooltip large" title="'.Text::_( 'COM_CCK_FIELDS' ).'"></span>'; ?></th>
+			<th width="5%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-search hasTooltip large" title="'.Text::_( 'COM_CCK_LISTS' ).'"></span>'; ?></th>
+			<th width="5%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-template hasTooltip large" title="'.Text::_( 'COM_CCK_TEMPLATES' ).'"></span>'; ?></th>
+			<th width="5%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-addon hasTooltip large" title="'.Text::_( 'COM_CCK_PROCESSINGS' ).'"></span>'; ?></th>
+			<th width="5%" class="center hidden-phone nowrap"><?php echo '<span class="icon-cck-addon hasTooltip large" title="'.Text::_( 'COM_CCK_RESOURCES' ).'"></span>'; ?></th>
+			<th width="8%" class="center nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'COM_CCK_STATUS', 'a.published', $listDir, $listOrder ); ?></th>
+			<th width="32" class="center hidden-phone nowrap"><?php echo HTMLHelper::_( 'grid.sort', 'COM_CCK_ID', 'a.id', $listDir, $listOrder ); ?></th>
+		</tr>
+	</thead>
+    <tbody>
+	<?php
+	foreach ( $this->items as $i=>$item ) {
+		$checkedOut		= 	! ( $item->checked_out == $userId || $item->checked_out == 0 );
+		$canCheckin		=	$user->authorise( 'core.manage', 'com_checkin' ) || $item->checked_out == $userId || $item->checked_out == 0;
+		$canChange		=	$user->authorise( 'core.edit.state', CCK_COM.'.folder.'.$item->id ) && $canCheckin;
+		$canEdit		=	$user->authorise( 'core.edit', CCK_COM.'.folder.'.$item->id );
+		$canEditOwn		=	'';
+
+		$checked_out	=	( $item->checked_out ) ? HTMLHelper::_( 'jgrid.checkedout', $i, $item->editor, $item->checked_out_time, $this->vName.'s.', $canCheckin )."\n" : '';
+		$last			=	( $item->id == 1 ) ? ' last' : '';
+		$link 			=	Route::_( 'index.php?option='.$this->option.'&task=folder.edit&id='. $item->id );
+		$linkTemplate	=	Route::_( 'index.php?option='.$this->option.'&view='._C1_NAME.'&folder_id='.$item->id );
+		$linkType		=	Route::_( 'index.php?option='.$this->option.'&view='._C2_NAME.'&folder_id='.$item->id );
+		$linkField		=	Route::_( 'index.php?option='.$this->option.'&view='._C3_NAME.'&folder_id='.$item->id );
+		$linkSearch		=	Route::_( 'index.php?option='.$this->option.'&view='._C4_NAME.'&folder_id='.$item->id );
+
+		if ( $hasToolbox ) {
+			$classProcessing	=	'';
+			$linkProcessing		=	Route::_( 'index.php?option=com_cck_toolbox&view=processings&folder_id='.$item->id );
+		} else {
+			$classProcessing	=	' disabled';
+			$linkProcessing		=	'javascript:void(0);';
+		}
+		if ( $hasWebservices ) {
+			$classResource		=	'';
+			$linkResource		=	Route::_( 'index.php?option=com_cck_webservices&view=resources&folder_id='.$item->id );
+		} else {
+			$classResource		=	' disabled';
+			$linkResource		=	'javascript:void(0);';
+		}
+		$linkFilter		=	Route::_( 'index.php?option='.$this->option.'&view='.$this->getName().'&folder_id='.$item->id );
+
+		$img			=	$images[$item->home];
+		$action_attr2	=	( $item->home ) ? str_replace( 'btn-micro', 'btn-primary btn-micro', $action_attr ) : $action_attr;
+		Helper_Admin::addFolderClass( $css, $item->id, $item->color, $item->colorchar, '60' );
+
+		$elements		=	explode( ',', $item->elements );
+		$elements		=	array_flip( $elements );
+		?>
+        <tr class="row<?php echo $i % 2; ?><?php echo $last; ?>">
+			<td class="center hidden-phone"><?php Helper_Display::quickSlideTo( 'pagination-bottom', $i + 1 ); ?></td>
+			<td class="center hidden-phone no-pad"><?php Helper_Display::quickCheckbox( $i, $item); ?></td>
+            <td width="30px" class="center hidden-phone dropdown-col">
+            	<?php
+				HTMLHelper::_( '.cckactionsdropdown.addCustomLinkItem', Text::_( 'COM_CCK_DOWNLOAD_THIS_APP' ), 'download', 'cb_link'.$i, 'javascript: void(0);', 'app-download'.( $item->home ? ' kik' : '' ), 'data-id="'.$item->id.'"' );
+
+				echo HTMLHelper::_( '.cckactionsdropdown.render', $this->escape( $item->title ) );
+            	?>
+			</td>
+			<td>
+				<div class="title-left" id="title-<?php echo $item->id; ?>">
+					<?php
+					if ( ( $canEdit && ! $checkedOut ) ) {
+                        if ( $item->id == 1 || $item->id == 2 ) { ?>
+                            <?php echo $checked_out; ?><a href="<?php echo $link; ?>"><?php echo Text::_( 'COM_CCK_'.str_replace( ' ', '_', $item->title ) ); ?></a>
+                            <?php echo '<div class="small">'.strtolower( $item->name ).'</div>'; ?>
+                        <?php } else { ?>
+                            <?php echo str_repeat( '<span class="gtr2">\n</span>', $item->depth ).$checked_out; ?><a href="<?php echo $link; ?>"><?php echo $item->title; ?></a>
+                            <?php echo '<div>'.str_repeat( '<span class="gtr2">\n</span>', $item->depth ).'<span class="small">'.$item->name.'</span></div>'; ?>
+                        <?php }
+                    } else {
+                        if ( $item->id == 1 || $item->id == 2 ) {
+                            echo $checked_out.$item->title
+                             .	 '<div class="small">'.strtolower( Text::_( $item->name ) ).'</div>';
+                        } else {
+                            echo str_repeat( '<span class="gtr2">\n</span>', $item->depth ).$checked_out.$item->title
+                             .	 '<div>'.str_repeat( '<span class="gtr2">\n</span>', $item->depth ).'<span class="small">'.$item->name.'</span></div>';
+                        }
+                    }
+                    ?>
+				</div>
+			</td>
+			<td align="center">
+                <a href="<?php echo $linkFilter; ?>" style="text-decoration: none;" class="hidden-phone">
+                    <div class="<?php echo ( $item->color || ( $item->colorchar && $item->introchar ) ) ? 'folderColor'.$item->id : ''; ?>">
+                    <strong><?php echo $item->introchar; ?></strong>
+                    </div>
+                </a>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->types_nb ) ? '<a class="'.$this->css['btn-count'].'" href="'.$linkType.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_FORMS' ).'">'
+											   . '<span>'.$item->types_nb.'</span>'
+											   . '</a>' : ( isset( $elements['type'] ) ? '-' : '' ); ?>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->fields_nb ) ? '<a class="'.$this->css['btn-count'].'" href="'.$linkField.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_FIELDS' ).'">'
+												. '<span>'.$item->fields_nb.'</span>'
+												. '</a>' : ( isset( $elements['field'] ) ? '-' : '' ); ?>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->searchs_nb ) ? '<a class="'.$this->css['btn-count'].'" href="'.$linkSearch.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_LISTS' ).'">'
+												 . '<span>'.$item->searchs_nb.'</span>'
+												 . '</a>' : ( isset( $elements['search'] ) ? '-' : '' ); ?>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->templates_nb ) ? '<a class="'.$this->css['btn-count'].'" href="'.$linkTemplate.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_TEMPLATES' ).'">'
+												   . '<span>'.$item->templates_nb.'</span>'
+												   . '</a>' : ( isset( $elements['template'] ) ? '-' : '' ); ?>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->processings_nb ) ? '<a class="'.$this->css['btn-count'].$classProcessing.'" href="'.$linkProcessing.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_PROCESSINGS' ).'">'
+												   . '<span>'.$item->processings_nb.'</span>'
+												   . '</a>' : ( $item->id != 2 ? '-' : '' ); ?>
+			</td>
+			<td width="5%" class="center hidden-phone">
+				<?php echo ( $item->resources_nb ) ? '<a class="'.$this->css['btn-count'].$classResource.'" href="'.$linkResource.'" style="text-decoration: none;" title="'.Text::_( 'COM_CCK_FILTER_RESOURCES' ).'">'
+												   . '<span>'.$item->resources_nb.'</span>'
+												   . '</a>' : ( $item->id != 2 ? '-' : '' ); ?>
+			</td>
+			<td class="center no-pad">
+				<div class="status">
+					<?php
+					echo HTMLHelper::_( 'jgrid.published', $item->published, $i, $this->vName.'s.', $canChange, 'cb' );
+
+					Helper_Display::quickJGrid( 'featured', $item->featured, $i, false );
+					?>
+				</div>
+			</td>
+			<td class="center hidden-phone"><?php Helper_Display::quickSlideTo( $top, $item->id ); ?></td>
+		</tr>
+		<?php
+	}
+	?>
+    </tbody>
+    <?php if ( (int)$this->pagination->pagesTotal > 1 ) { ?>
+	<tfoot>
+		<tr height="40px;">
+			<td class="center hidden-phone"><?php Helper_Display::quickSlideTo( $top, 'up' ); ?></td>
+			<td class="center" colspan="10" id="pagination-bottom"><?php echo $this->pagination->getListFooter(); ?></td>
+			<td class="center hidden-phone"><?php Helper_Display::quickSlideTo( $top, 'up' ); ?></td>
+		</tr>
+	</tfoot>
+	<?php } ?>
+	</table>
+    <?php } ?>
+</div>
+<?php
+if ( $uix != 'compact' ) {
+	include_once __DIR__.'/default_app.php';
+}
+?>
+<div class="clr"></div>
+<div>
+    <input type="hidden" name="task" value="" />
+    <input type="hidden" name="boxchecked" value="0" />
+    <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+    <input type="hidden" name="filter_order_Dir" value="<?php echo $listDir; ?>" />
+    <?php echo HTMLHelper::_('form.token'); ?>
+</div>
+
+<?php
+Helper_Include::addStyleDeclaration( implode( '', $css ) );
+
+$js	=	'
+		(function ($){
+			Joomla.orderTable = function()
+			{
+				table = document.getElementById("sortTable");
+				direction = document.getElementById("directionTable");
+				order = table.options[table.selectedIndex].value;
+				if (order != "'.$listOrder.'") {
+					dirn = "asc";
+				} else {
+					dirn = direction.options[direction.selectedIndex].value;
+				}
+				Joomla.tableOrdering(order, dirn, "");
+			}
+			Joomla.submitbutton = function(task, cid) {
+				if (task == "'.$this->vName.'s.delete") {
+					if (confirm(Joomla.JText._("COM_CCK_CONFIRM_DELETE"))) {
+						Joomla.submitform(task);
+					} else {
+						return false;
+					}
+				}
+				Joomla.submitform(task);
+			}
+		})(jQuery);
+		';
+$doc->addScriptDeclaration( $js );
+?>
+</div>
+</form>
+<?php Helper_Display::quickCopyright(); ?>
