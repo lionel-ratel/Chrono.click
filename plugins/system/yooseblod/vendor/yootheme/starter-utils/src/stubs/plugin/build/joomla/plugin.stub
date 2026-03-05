@@ -1,0 +1,42 @@
+<?php
+
+defined('_JEXEC') || exit();
+
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\Event\SubscriberInterface;
+use YOOtheme\Application;
+
+class {{PLUGIN_CLASS}} extends CMSPlugin implements SubscriberInterface
+{
+    /**
+     * @var CMSApplication
+     */
+    public $app;
+
+    /**
+     * CMS events the plugin will listen to.
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['onAfterInitialise' => 'onAfterInitialise'];
+    }
+
+    /**
+     * Use 'onAfterInitialise' event.
+     */
+    public function onAfterInitialise()
+    {
+        // Check if the YOOtheme app class exists
+        if (!class_exists(Application::class, false)) {
+            return;
+        }
+
+        // include autoload
+        require __DIR__ . '/vendor/autoload.php';
+
+        // Load module from the same directory
+        $app = Application::getInstance();
+        $app->load(__DIR__ . '/modules/*/bootstrap.php');
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "packages": [
+        {
+            "name": "yootheme/starter-utils",
+            "version": "1.0.12",
+            "version_normalized": "1.0.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yootheme/starter-utils.git",
+                "reference": "274d04ee2a203ff839f6419d4d719d0324ec03ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yootheme/starter-utils/zipball/274d04ee2a203ff839f6419d4d719d0324ec03ed",
+                "reference": "274d04ee2a203ff839f6419d4d719d0324ec03ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.7",
+                "phpstan/phpstan": "^1.11"
+            },
+            "time": "2025-01-28T12:06:38+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "YOOtheme\\Starter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "YOOtheme Pro - Starter Utilities",
+            "homepage": "https://yootheme.com",
+            "keywords": [
+                "joomla",
+                "wordpress",
+                "yootheme"
+            ],
+            "support": {
+                "issues": "https://github.com/yootheme/starter-utils/issues",
+                "source": "https://github.com/yootheme/starter-utils"
+            },
+            "install-path": "../yootheme/starter-utils"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": [
+        "yootheme/starter-utils"
+    ]
+}
