@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension version="3.6" type="file" method="upgrade">
+	<name>files_cck</name>
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<version>4.0</version>
+	<creationDate>May 2019</creationDate>
+	<description>SEBLOD 3.x - www.seblod.com // by Octopoos - www.octopoos.com</description>
+
+	<fileset>
+		<files target="administrator/components/com_cck">
+			<file>_README.php</file>
+		</files>
+	</fileset>
+</extension>

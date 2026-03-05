@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="file" version="2.5" method="upgrade">
+	<name>seb_markup</name>
+	<author>Octopoos</author>
+	<authorEmail>contact@seblod.com</authorEmail>
+	<authorUrl>https://www.seblod.com</authorUrl>
+	<copyright>Copyright (C) 2009 - 2018 SEBLOD. All Rights Reserved.</copyright>
+	<license>GNU General Public License version 2 or later.</license>
+	<creationDate>December 2022</creationDate>
+	<description>SEBLOD 3.x Position Variation - www.seblod.com</description>
+	<version>1.0.0</version>
+	<fileset>
+		<files target="libraries/cck/rendering/variations">
+			<folder>seb_markup</folder>
+		</files>
+	</fileset>
+</extension>
